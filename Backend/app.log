@@ -78417,3 +78417,1451 @@ TypeError: unhashable type: 'IntVar'
 2025-10-20 21:33:02,324 [INFO] schedule: Schedule retrieved: {'schedule': [{'schedule_id': 102, 'year': 2, 'period': '10:00 AM - 11:00 AM', 'day': 'Monday', 'program': 'BSIT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'ITP224', 'session': 'Lecture', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 43, 'year': 2, 'period': '10:30 AM - 12:00 PM', 'day': 'Monday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '517', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 78, 'year': 2, 'period': '11:00 AM - 12:00 PM', 'day': 'Monday', 'program': 'BSCS', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'CSP224', 'session': 'Lecture', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 13, 'year': 2, 'period': '11:00 AM - 12:30 PM', 'day': 'Monday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '508', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 67, 'year': 2, 'period': '11:00 AM - 12:30 PM', 'day': 'Monday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '507', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 86, 'year': 2, 'period': '12:00 PM - 1:00 PM', 'day': 'Monday', 'program': 'BSEMC-DAT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 75, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Monday', 'program': 'BSCS', 'title': 'Social Issues and Professional Practice in Computing', 'room': '412', 'courseCode': 'CSP224', 'session': 'Lecture', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 83, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Monday', 'program': 'BSEMC-DAT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '413', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 93, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Monday', 'program': 'BSEMC-GD', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 94, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Monday', 'program': 'BSEMC-GD', 'title': 'Social Issues and Professional Practice in Computing', 'room': '506', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 98, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Monday', 'program': 'BSEMC-GD', 'title': 'Social Issues and Professional Practice in Computing', 'room': '409', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 11, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Monday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '504', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 29, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Monday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '518', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 31, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Monday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '510', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 55, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Monday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '507', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 65, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Monday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '508', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 80, 'year': 2, 'period': '9:00 AM - 10:00 AM', 'day': 'Monday', 'program': 'BSCS', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'CSP224', 'session': 'Lecture', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 19, 'year': 2, 'period': '9:00 AM - 10:30 AM', 'day': 'Monday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '517', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 42, 'year': 2, 'period': '9:00 AM - 10:30 AM', 'day': 'Monday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '521', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 90, 'year': 2, 'period': '9:30 AM - 10:30 AM', 'day': 'Monday', 'program': 'BSEMC-DAT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '413', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 2, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Monday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '508', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 54, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Monday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '507', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 77, 'year': 2, 'period': '10:00 AM - 11:00 AM', 'day': 'Tuesday', 'program': 'BSCS', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'CSP224', 'session': 'Lecture', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 85, 'year': 2, 'period': '11:00 AM - 12:00 PM', 'day': 'Tuesday', 'program': 'BSEMC-DAT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 14, 'year': 2, 'period': '11:00 AM - 12:30 PM', 'day': 'Tuesday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '508', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 56, 'year': 2, 'period': '11:00 AM - 12:30 PM', 'day': 'Tuesday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '507', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 92, 'year': 2, 'period': '12:00 PM - 1:00 PM', 'day': 'Tuesday', 'program': 'BSEMC-GD', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 74, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Tuesday', 'program': 'BSCS', 'title': 'Social Issues and Professional Practice in Computing', 'room': '412', 'courseCode': 'CSP224', 'session': 'Lecture', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 82, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Tuesday', 'program': 'BSEMC-DAT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '413', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 97, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Tuesday', 'program': 'BSEMC-GD', 'title': 'Social Issues and Professional Practice in Computing', 'room': '409', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 101, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Tuesday', 'program': 'BSIT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'ITP224', 'session': 'Lecture', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 9, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Tuesday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '504', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 28, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Tuesday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '518', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 32, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Tuesday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '510', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 40, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Tuesday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '521', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 44, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Tuesday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '517', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 64, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Tuesday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '508', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 68, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Tuesday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '507', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 79, 'year': 2, 'period': '9:00 AM - 10:00 AM', 'day': 'Tuesday', 'program': 'BSCS', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'CSP224', 'session': 'Lecture', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 89, 'year': 2, 'period': '9:30 AM - 10:30 AM', 'day': 'Tuesday', 'program': 'BSEMC-DAT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '413', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 1, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Tuesday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '508', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 20, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Tuesday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '517', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 53, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Tuesday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '507', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 91, 'year': 2, 'period': '10:00 AM - 11:00 AM', 'day': 'Wednesday', 'program': 'BSEMC-GD', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 3, 'year': 2, 'period': '11:00 AM - 12:30 PM', 'day': 'Wednesday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '508', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 57, 'year': 2, 'period': '11:00 AM - 12:30 PM', 'day': 'Wednesday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '507', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 73, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Wednesday', 'program': 'BSCS', 'title': 'Social Issues and Professional Practice in Computing', 'room': '412', 'courseCode': 'CSP224', 'session': 'Lecture', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 76, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Wednesday', 'program': 'BSCS', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'CSP224', 'session': 'Lecture', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 15, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Wednesday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '508', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 21, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Wednesday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '517', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 25, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Wednesday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '518', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 33, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Wednesday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '510', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 38, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Wednesday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '521', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 69, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Wednesday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '507', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 100, 'year': 2, 'period': '9:00 AM - 10:00 AM', 'day': 'Wednesday', 'program': 'BSIT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'ITP224', 'session': 'Lecture', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 10, 'year': 2, 'period': '9:00 AM - 10:30 AM', 'day': 'Wednesday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '504', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 45, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Wednesday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '517', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 52, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Wednesday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '507', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 66, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Wednesday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '508', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 51, 'year': 2, 'period': '11:00 AM - 12:30 PM', 'day': 'Thursday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '507', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 63, 'year': 2, 'period': '11:00 AM - 12:30 PM', 'day': 'Thursday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '508', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 81, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Thursday', 'program': 'BSCS', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'CSP224', 'session': 'Lecture', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 84, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Thursday', 'program': 'BSEMC-DAT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '413', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 105, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Thursday', 'program': 'BSIT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '506', 'courseCode': 'ITP224', 'session': 'Lecture', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 106, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Thursday', 'program': 'BSIT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '408', 'courseCode': 'ITP224', 'session': 'Lecture', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 4, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Thursday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '508', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 8, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Thursday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '504', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 27, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Thursday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '518', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 34, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Thursday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '510', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 41, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Thursday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '521', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 46, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Thursday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '517', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 58, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Thursday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '507', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 88, 'year': 2, 'period': '9:30 AM - 10:30 AM', 'day': 'Thursday', 'program': 'BSEMC-DAT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '413', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 16, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Thursday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '508', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 23, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Thursday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '517', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 70, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Thursday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '507', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 17, 'year': 2, 'period': '11:00 AM - 12:30 PM', 'day': 'Friday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '508', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 50, 'year': 2, 'period': '11:00 AM - 12:30 PM', 'day': 'Friday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '507', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 87, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Friday', 'program': 'BSEMC-DAT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '407', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 96, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Friday', 'program': 'BSEMC-GD', 'title': 'Social Issues and Professional Practice in Computing', 'room': '506', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 99, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Friday', 'program': 'BSEMC-GD', 'title': 'Social Issues and Professional Practice in Computing', 'room': '409', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 108, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Friday', 'program': 'BSIT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '408', 'courseCode': 'ITP224', 'session': 'Lecture', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 7, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Friday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '504', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 24, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Friday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '517', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 36, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Friday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '510', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 39, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Friday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '521', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 60, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Friday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '507', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 62, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Friday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '508', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 30, 'year': 2, 'period': '9:00 AM - 10:30 AM', 'day': 'Friday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '518', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 104, 'year': 2, 'period': '9:30 AM - 10:30 AM', 'day': 'Friday', 'program': 'BSIT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '506', 'courseCode': 'ITP224', 'session': 'Lecture', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 6, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Friday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '508', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 48, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Friday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '517', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 72, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Friday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '507', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 61, 'year': 2, 'period': '11:00 AM - 12:30 PM', 'day': 'Saturday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '508', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 71, 'year': 2, 'period': '11:00 AM - 12:30 PM', 'day': 'Saturday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '507', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 103, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Saturday', 'program': 'BSIT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '506', 'courseCode': 'ITP224', 'session': 'Lecture', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 107, 'year': 2, 'period': '8:00 AM - 9:00 AM', 'day': 'Saturday', 'program': 'BSIT', 'title': 'Social Issues and Professional Practice in Computing', 'room': '408', 'courseCode': 'ITP224', 'session': 'Lecture', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 5, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Saturday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '508', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 12, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Saturday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '504', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 26, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Saturday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '518', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 35, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Saturday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '510', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 37, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Saturday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '521', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 47, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Saturday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '517', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 49, 'year': 2, 'period': '8:00 AM - 9:30 AM', 'day': 'Saturday', 'program': 'BSEMC-GD', 'title': 'EMC Practicum 1', 'room': '507', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 95, 'year': 2, 'period': '9:30 AM - 10:30 AM', 'day': 'Saturday', 'program': 'BSEMC-GD', 'title': 'Social Issues and Professional Practice in Computing', 'room': '506', 'courseCode': 'EMC224', 'session': 'Lecture', 'block': 'B', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 18, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Saturday', 'program': 'BSCS', 'title': 'CS Practicum 1', 'room': '508', 'courseCode': 'CSP131', 'session': 'Laboratory', 'block': 'C', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 22, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Saturday', 'program': 'BSEMC-DAT', 'title': 'EMC Practicum 1', 'room': '517', 'courseCode': 'EMC131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}, {'schedule_id': 59, 'year': 2, 'period': '9:30 AM - 11:00 AM', 'day': 'Saturday', 'program': 'BSIT', 'title': 'IT PRACTICUM 1', 'room': '507', 'courseCode': 'ITP131', 'session': 'Laboratory', 'block': 'A', 'overlapDetails': {'reasons': [], 'hasOverlap': False, 'conflictingEvents': []}}], 'schedule_name': '2025-2026 1st sem'}
 2025-10-20 21:33:30,351 [INFO] schedgeneration: Phase 2 (Yr2) done: 273 sessions scheduled
 2025-10-20 21:33:30,428 [INFO] schedgeneration: Phase 3/4 (Yr3): 25 courses (diff: 1.65, time: 476s)
+2025-11-02 15:43:05,076 [WARNING] auth: Login failed: Admin not found
+2025-11-02 15:43:05,094 [ERROR] auth: HTTP error in login: Invalid credentials
+2025-11-02 15:45:18,963 [INFO] schedule: Started schedule generation process_id=eaa3fece-9abd-4700-8451-05265295aba3
+2025-11-02 15:45:20,652 [INFO] schedgeneration: Phase 1/4 (Yr1): 33 courses (diff: 1.78, time: 256s)
+2025-11-02 15:46:19,935 [INFO] schedgeneration: Phase 1 (Yr1) done: 440 sessions scheduled
+2025-11-02 15:46:19,969 [INFO] schedgeneration: Phase 2/4 (Yr2): 30 courses (diff: 1.51, time: 326s)
+2025-11-02 15:47:14,263 [INFO] schedgeneration: Phase 2 (Yr2) done: 273 sessions scheduled
+2025-11-02 15:47:14,315 [INFO] schedgeneration: Phase 3/4 (Yr3): 25 courses (diff: 1.65, time: 476s)
+2025-11-02 15:49:07,971 [INFO] schedgeneration: Phase 3 (Yr3) done: 234 sessions scheduled
+2025-11-02 15:49:08,016 [INFO] schedgeneration: Phase 4/4 (Yr4): 4 courses (diff: 2.00, time: 720s)
+2025-11-02 15:49:29,035 [INFO] schedgeneration: Phase 4 (Yr4) done: 216 sessions scheduled
+2025-11-02 15:49:29,099 [INFO] schedgeneration: Generated schedule 1163 events
+2025-11-02 15:49:35,725 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 15:49:36,009 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-02 15:49:38,909 [INFO] schedule: Found 5 Schedules
+2025-11-02 15:49:39,234 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-02 15:49:41,654 [INFO] schedule: Found 5 Schedules
+2025-11-02 15:49:41,656 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 15:50:40,022 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 15:50:44,029 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 15:50:57,471 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 15:51:04,042 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 15:51:06,642 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 15:51:09,126 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 15:51:28,149 [ERROR] override: HTTP error in override_event: Override causes conflict with event 119 on Monday
+2025-11-02 15:51:30,716 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 15:51:37,865 [ERROR] override: HTTP error in override_event: Override causes conflict with event 654 on Monday
+2025-11-02 15:51:41,144 [ERROR] override: HTTP error in override_event: Override causes conflict with event 654 on Monday
+2025-11-02 15:51:44,679 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 16:07:46,150 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-02 16:07:53,895 [INFO] schedule: Found 5 Schedules
+2025-11-02 16:07:53,935 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 16:08:34,563 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 16:08:34,685 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-02 16:08:36,522 [INFO] schedule: Found 5 Schedules
+2025-11-02 16:18:01,960 [ERROR] faculty: HTTP error in assign_faculty: Event not found
+2025-11-02 16:18:09,200 [ERROR] faculty: HTTP error in assign_faculty: Event not found
+2025-11-02 16:18:14,240 [ERROR] faculty: HTTP error in assign_faculty: Event not found
+2025-11-02 16:20:37,482 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-02 16:20:42,855 [INFO] schedule: Found 5 Schedules
+2025-11-02 16:20:43,151 [INFO] schedule: Started schedule generation process_id=cf724870-fd6c-4ee0-8567-a33888bc0cc2
+2025-11-02 16:20:45,689 [INFO] schedgeneration: Phase 1/4 (Yr1): 33 courses (diff: 1.78, time: 256s)
+2025-11-02 16:21:17,331 [INFO] schedgeneration: Phase 1 (Yr1) done: 440 sessions scheduled
+2025-11-02 16:21:17,346 [INFO] schedgeneration: Phase 2/4 (Yr2): 30 courses (diff: 1.51, time: 326s)
+2025-11-02 16:22:01,497 [INFO] schedgeneration: Phase 2 (Yr2) done: 273 sessions scheduled
+2025-11-02 16:22:01,614 [INFO] schedgeneration: Phase 3/4 (Yr3): 25 courses (diff: 1.65, time: 476s)
+2025-11-02 16:23:58,787 [INFO] schedule: Started schedule generation process_id=7fbe717e-717b-4884-bd3e-ca539b3d90aa
+2025-11-02 16:24:01,353 [INFO] schedgeneration: Phase 1/4 (Yr1): 33 courses (diff: 1.78, time: 256s)
+2025-11-02 16:25:48,238 [INFO] schedgeneration: Phase 1 (Yr1) done: 440 sessions scheduled
+2025-11-02 16:25:48,352 [INFO] schedgeneration: Phase 2/4 (Yr2): 30 courses (diff: 1.51, time: 326s)
+2025-11-02 16:26:49,156 [INFO] schedgeneration: Phase 2 (Yr2) done: 273 sessions scheduled
+2025-11-02 16:26:49,211 [INFO] schedgeneration: Phase 3/4 (Yr3): 25 courses (diff: 1.65, time: 476s)
+2025-11-02 16:29:26,207 [INFO] schedgeneration: Phase 3 (Yr3) done: 234 sessions scheduled
+2025-11-02 16:29:26,263 [INFO] schedgeneration: Phase 4/4 (Yr4): 4 courses (diff: 2.00, time: 720s)
+2025-11-02 16:29:52,147 [INFO] schedgeneration: Phase 4 (Yr4) done: 216 sessions scheduled
+2025-11-02 16:29:52,211 [INFO] schedgeneration: Generated schedule 1163 events
+2025-11-02 16:29:56,705 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-02 16:30:01,584 [INFO] schedule: Found 5 Schedules
+2025-11-02 16:30:01,588 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 16:30:01,773 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-02 16:30:04,029 [INFO] schedule: Found 5 Schedules
+2025-11-02 16:30:04,383 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 16:31:08,841 [ERROR] faculty: Event not found for schedule_id: 69
+2025-11-02 16:31:08,843 [ERROR] faculty: Available schedule_dict keys (first 10): ['3', '8', '69-A', '69-B', '127', '139-A', '139-B', '185', '186', '292']
+2025-11-02 16:31:08,843 [ERROR] faculty: HTTP error in assign_faculty: Event not found with ID: 69
+2025-11-02 16:38:36,319 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 16:38:36,580 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-02 16:38:45,541 [INFO] schedule: Found 5 Schedules
+2025-11-02 16:40:35,756 [INFO] schedule: Started schedule generation process_id=69b6a98b-075a-4b0d-8625-dd577ce701ac
+2025-11-02 16:40:37,310 [INFO] schedgeneration: Phase 1/4 (Yr1): 33 courses (diff: 1.78, time: 256s)
+2025-11-02 16:41:26,028 [INFO] schedgeneration: Phase 1 (Yr1) done: 440 sessions scheduled
+2025-11-02 16:41:26,074 [INFO] schedgeneration: Phase 2/4 (Yr2): 30 courses (diff: 1.51, time: 326s)
+2025-11-02 16:42:11,071 [INFO] schedgeneration: Phase 2 (Yr2) done: 273 sessions scheduled
+2025-11-02 16:42:11,107 [INFO] schedgeneration: Phase 3/4 (Yr3): 25 courses (diff: 1.65, time: 476s)
+2025-11-02 16:43:36,593 [INFO] schedgeneration: Phase 3 (Yr3) done: 234 sessions scheduled
+2025-11-02 16:43:36,638 [INFO] schedgeneration: Phase 4/4 (Yr4): 4 courses (diff: 2.00, time: 720s)
+2025-11-02 16:43:52,042 [INFO] schedgeneration: Phase 4 (Yr4) done: 216 sessions scheduled
+2025-11-02 16:43:52,090 [INFO] schedgeneration: Generated schedule 1163 events
+2025-11-02 16:44:02,190 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-02 16:44:05,259 [INFO] schedule: Found 5 Schedules
+2025-11-02 16:44:05,287 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 16:44:05,791 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-02 16:44:08,117 [INFO] schedule: Found 5 Schedules
+2025-11-02 16:44:08,122 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 16:44:25,547 [INFO] faculty: Assigning faculty Hazel Espinorio to group: ('GEC 212', 'BSEMC-GD', 'C')
+2025-11-02 16:44:25,549 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-02 16:44:25,551 [INFO] faculty: Assigned Hazel Espinorio to event 42 (Block C)
+2025-11-02 16:44:25,551 [INFO] faculty: Assigned Hazel Espinorio to event 43 (Block C)
+2025-11-02 16:44:25,551 [INFO] faculty: Assigned Hazel Espinorio to event 44 (Block C)
+2025-11-02 16:44:30,925 [INFO] faculty: Assigning faculty Kenneth Bautista to group: ('MAT304', 'BSCS', 'A')
+2025-11-02 16:44:30,931 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-02 16:44:30,934 [INFO] faculty: Assigned Kenneth Bautista to event 111-A (Block A)
+2025-11-02 16:44:30,944 [INFO] faculty: Assigned Kenneth Bautista to event 112-A (Block A)
+2025-11-02 16:44:30,944 [INFO] faculty: Assigned Kenneth Bautista to event 113-A (Block A)
+2025-11-02 16:44:42,126 [INFO] faculty: Unassigning group: MAT304, BSCS, A
+2025-11-02 16:44:42,128 [INFO] faculty: Found 3 events to unassign (including merged classes)
+2025-11-02 16:44:49,535 [INFO] faculty: Unassigning group: MAT304, BSCS, B
+2025-11-02 16:44:49,536 [INFO] faculty: Found 3 events to unassign (including merged classes)
+2025-11-02 16:44:55,478 [INFO] faculty: Assigning faculty Kenneth Bautista to group: ('MAT304', 'BSCS', 'A')
+2025-11-02 16:44:55,480 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-02 16:44:55,480 [INFO] faculty: Assigned Kenneth Bautista to event 111-A (Block A)
+2025-11-02 16:44:55,481 [INFO] faculty: Assigned Kenneth Bautista to event 112-A (Block A)
+2025-11-02 16:44:55,482 [INFO] faculty: Assigned Kenneth Bautista to event 113-A (Block A)
+2025-11-02 16:45:08,686 [INFO] faculty: Unassigning group: MAT304, BSCS, A
+2025-11-02 16:45:08,687 [INFO] faculty: Found 3 events to unassign (including merged classes)
+2025-11-02 16:45:19,144 [INFO] faculty: Unassigning group: MAT304, BSCS, B
+2025-11-02 16:45:19,146 [INFO] faculty: Found 3 events to unassign (including merged classes)
+2025-11-02 16:45:28,954 [INFO] faculty: Assigning faculty Kenneth Bautista to group: ('MAT304', 'BSCS', 'A')
+2025-11-02 16:45:28,956 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-02 16:45:28,956 [INFO] faculty: Assigned Kenneth Bautista to event 111-A (Block A)
+2025-11-02 16:45:28,957 [INFO] faculty: Assigned Kenneth Bautista to event 112-A (Block A)
+2025-11-02 16:45:28,957 [INFO] faculty: Assigned Kenneth Bautista to event 113-A (Block A)
+2025-11-02 16:45:32,751 [INFO] faculty: Assigning faculty John Dom Pagot to group: ('NSTP102', 'BSCS', 'E')
+2025-11-02 16:45:32,753 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-02 16:45:32,754 [INFO] faculty: Assigned John Dom Pagot to event 126 (Block E)
+2025-11-02 16:45:32,754 [INFO] faculty: Assigned John Dom Pagot to event 127 (Block E)
+2025-11-02 16:45:32,755 [INFO] faculty: Assigned John Dom Pagot to event 128 (Block E)
+2025-11-02 16:45:36,894 [INFO] faculty: Assigning faculty Armilyn Martinez to group: ('PE 2', 'BSIT', 'C')
+2025-11-02 16:45:36,897 [INFO] faculty: Found 2 events in group (including merged classes)
+2025-11-02 16:45:36,897 [INFO] faculty: Assigned Armilyn Martinez to event 131-A (Block C)
+2025-11-02 16:45:36,898 [INFO] faculty: Assigned Armilyn Martinez to event 132-A (Block C)
+2025-11-02 16:45:43,042 [ERROR] override: HTTP error in override_event: Override causes conflict with event 42 on Monday
+2025-11-02 16:45:53,564 [ERROR] override: HTTP error in override_event: Override causes conflict with event 42 on Monday
+2025-11-02 16:45:57,411 [ERROR] override: HTTP error in override_event: Override causes conflict with event 42 on Monday
+2025-11-02 16:46:05,283 [ERROR] override: HTTP error in override_event: Override causes conflict with event 121-A on Monday
+2025-11-02 16:46:13,644 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 16:46:30,514 [ERROR] override: HTTP error in override_event: Override causes conflict with event 121-B on Monday
+2025-11-02 16:46:38,927 [ERROR] override: HTTP error in override_event: Override causes conflict with event 121-B on Monday
+2025-11-02 16:58:55,409 [INFO] faculty: Assigning faculty Johniel Zar Mendoza to group: ('MAT304', 'BSCS', 'A')
+2025-11-02 16:58:55,420 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-02 16:58:55,421 [INFO] faculty: Assigned Johniel Zar Mendoza to event 111-A (Block A)
+2025-11-02 16:58:55,422 [INFO] faculty: Assigned Johniel Zar Mendoza to event 112-A (Block A)
+2025-11-02 16:58:55,423 [INFO] faculty: Assigned Johniel Zar Mendoza to event 113-A (Block A)
+2025-11-02 17:14:20,422 [INFO] faculty: Assigning faculty Kenneth Bautista to group: ('PE 2', 'BSIT', 'C')
+2025-11-02 17:14:20,433 [INFO] faculty: Found 2 events in group (including merged classes)
+2025-11-02 17:14:20,434 [INFO] faculty: Assigned Kenneth Bautista to event 131-A (Block C)
+2025-11-02 17:14:20,435 [INFO] faculty: Assigned Kenneth Bautista to event 132-A (Block C)
+2025-11-02 17:14:32,905 [INFO] faculty: Assigning faculty Armilyn Martinez to group: ('EMC121', 'BSEMC-DAT', 'A')
+2025-11-02 17:14:32,907 [INFO] faculty: Found 4 events in group (including merged classes)
+2025-11-02 17:14:32,908 [INFO] faculty: Assigned Armilyn Martinez to event 180-A (Block A)
+2025-11-02 17:14:32,909 [INFO] faculty: Assigned Armilyn Martinez to event 181-A (Block A)
+2025-11-02 17:14:32,909 [INFO] faculty: Assigned Armilyn Martinez to event 185 (Block A)
+2025-11-02 17:14:32,909 [INFO] faculty: Assigned Armilyn Martinez to event 184 (Block A)
+2025-11-02 17:25:26,879 [INFO] faculty: Assigning faculty Hazel Espinorio to group: ('ITC122', 'BSIT', 'A')
+2025-11-02 17:25:26,885 [INFO] faculty: Found 4 events in group (including merged classes)
+2025-11-02 17:25:26,887 [INFO] faculty: Assigned Hazel Espinorio to event 271-A (Block A)
+2025-11-02 17:25:26,889 [INFO] faculty: Assigned Hazel Espinorio to event 277 (Block A)
+2025-11-02 17:25:26,891 [INFO] faculty: Assigned Hazel Espinorio to event 276 (Block A)
+2025-11-02 17:25:26,891 [INFO] faculty: Assigned Hazel Espinorio to event 270-A (Block A)
+2025-11-02 17:26:21,291 [ERROR] override: HTTP error in override_event: Override causes conflict with event 271-B on Monday
+2025-11-02 17:26:24,241 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 17:26:27,388 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 17:26:29,637 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 17:26:35,722 [ERROR] override: HTTP error in override_event: Override causes conflict with event 42 on Monday
+2025-11-02 17:26:37,646 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 17:26:43,083 [ERROR] override: HTTP error in override_event: Override causes conflict with event 42 on Monday
+2025-11-02 17:26:44,872 [ERROR] override: HTTP error in override_event: Override causes conflict with event 42 on Monday
+2025-11-02 17:26:53,478 [ERROR] override: HTTP error in override_event: Override causes conflict with event 42 on Monday
+2025-11-02 17:26:55,080 [ERROR] override: HTTP error in override_event: Override causes conflict with event 42 on Monday
+2025-11-02 17:26:56,758 [ERROR] override: HTTP error in override_event: Override causes conflict with event 42 on Monday
+2025-11-02 17:35:45,273 [ERROR] override: HTTP error in override_event: Override causes conflict with event 719 on Monday
+2025-11-02 17:35:47,895 [ERROR] override: HTTP error in override_event: Override causes conflict with event 693 on Monday
+2025-11-02 17:35:49,360 [ERROR] override: HTTP error in override_event: Override causes conflict with event 693 on Monday
+2025-11-02 17:35:50,523 [ERROR] override: HTTP error in override_event: Override causes conflict with event 666 on Monday
+2025-11-02 17:35:52,079 [ERROR] override: HTTP error in override_event: Override causes conflict with event 666 on Monday
+2025-11-02 17:35:53,598 [ERROR] override: HTTP error in override_event: Override causes conflict with event 666 on Monday
+2025-11-02 17:35:54,885 [ERROR] override: HTTP error in override_event: Override causes conflict with event 790 on Monday
+2025-11-02 17:35:57,861 [ERROR] override: HTTP error in override_event: Override causes conflict with event 793 on Monday
+2025-11-02 17:35:59,920 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 17:48:30,856 [INFO] faculty: Assigning faculty Ronnie Luy to group: ('MAT304', 'BSCS', 'A')
+2025-11-02 17:48:30,879 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-02 17:48:30,881 [INFO] faculty: Assigned Ronnie Luy to event 111-A (Block A)
+2025-11-02 17:48:30,882 [INFO] faculty: Assigned Ronnie Luy to event 112-A (Block A)
+2025-11-02 17:48:30,882 [INFO] faculty: Assigned Ronnie Luy to event 113-A (Block A)
+2025-11-02 17:49:06,981 [ERROR] override: HTTP error in override_event: Override causes conflict with event 403 on Saturday
+2025-11-02 18:08:35,743 [ERROR] override: HTTP error in override_event: Override causes conflict with event 148-B on Monday
+2025-11-02 18:08:45,651 [ERROR] override: HTTP error in override_event: Override causes conflict with event 148-B on Monday
+2025-11-02 18:08:53,262 [ERROR] override: HTTP error in override_event: Override causes conflict with event 289 on Monday
+2025-11-02 18:09:02,082 [ERROR] override: HTTP error in override_event: Override causes conflict with event 81 on Monday
+2025-11-02 18:09:04,623 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 18:09:13,074 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 18:09:34,406 [ERROR] override: HTTP error in override_event: Override causes conflict with event 491 on Monday
+2025-11-02 18:09:42,594 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 18:09:48,544 [ERROR] override: HTTP error in override_event: Override causes conflict with event 659 on Monday
+2025-11-02 18:09:51,329 [ERROR] override: HTTP error in override_event: Override causes conflict with event 659 on Monday
+2025-11-02 18:09:54,211 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 18:09:58,530 [ERROR] override: HTTP error in override_event: Override causes conflict with event 659 on Monday
+2025-11-02 18:10:00,792 [ERROR] override: HTTP error in override_event: Override causes conflict with event 659 on Monday
+2025-11-02 18:10:02,885 [ERROR] override: HTTP error in override_event: Override causes conflict with event 659 on Monday
+2025-11-02 18:10:12,896 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 18:10:23,011 [ERROR] override: HTTP error in override_event: Override causes conflict with event 671 on Monday
+2025-11-02 18:10:25,525 [ERROR] override: HTTP error in override_event: Override causes conflict with event 671 on Monday
+2025-11-02 18:16:59,019 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-02 18:17:24,757 [ERROR] override: HTTP error in override_event: Override causes conflict with event 81 on Monday
+2025-11-02 18:17:32,704 [ERROR] override: HTTP error in override_event: Override causes conflict with event 81 on Monday
+2025-11-02 18:17:34,843 [ERROR] override: HTTP error in override_event: Override causes conflict with event 81 on Monday
+2025-11-02 18:17:48,990 [ERROR] override: HTTP error in override_event: Override causes conflict with event 719 on Monday
+2025-11-02 18:18:14,140 [ERROR] override: HTTP error in override_event: Override causes conflict with event 616 on Monday
+2025-11-02 18:18:22,048 [ERROR] override: HTTP error in override_event: Override causes conflict with event 793 on Monday
+2025-11-02 18:18:44,672 [ERROR] override: HTTP error in override_event: Override causes conflict with event 727 on Thursday
+2025-11-23 14:51:16,034 [INFO] schedule: Started schedule generation process_id=4459e85e-84b8-4778-9b12-be9f914d6de1
+2025-11-23 14:51:17,049 [INFO] schedgeneration: Phase 1/4 (Yr1): 33 courses (diff: 1.78, time: 256s)
+2025-11-23 14:51:54,795 [INFO] schedgeneration: Phase 1 (Yr1) done: 440 sessions scheduled
+2025-11-23 14:51:54,824 [INFO] schedgeneration: Phase 2/4 (Yr2): 30 courses (diff: 1.51, time: 326s)
+2025-11-23 14:52:36,651 [INFO] schedgeneration: Phase 2 (Yr2) done: 273 sessions scheduled
+2025-11-23 14:52:36,673 [INFO] schedgeneration: Phase 3/4 (Yr3): 25 courses (diff: 1.65, time: 476s)
+2025-11-23 14:53:50,491 [INFO] schedgeneration: Phase 3 (Yr3) done: 234 sessions scheduled
+2025-11-23 14:53:50,514 [INFO] schedgeneration: Phase 4/4 (Yr4): 4 courses (diff: 2.00, time: 720s)
+2025-11-23 14:54:04,542 [INFO] schedgeneration: Phase 4 (Yr4) done: 216 sessions scheduled
+2025-11-23 14:54:04,556 [INFO] schedgeneration: Generated schedule 1163 events
+2025-11-23 15:02:26,106 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 15:02:26,557 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 15:02:33,835 [INFO] schedule: Found 5 Schedules
+2025-11-23 15:02:37,562 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 15:02:41,028 [INFO] schedule: Found 5 Schedules
+2025-11-23 15:02:41,060 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 15:09:38,887 [INFO] schedule: Started schedule generation process_id=6941f1ea-b1c2-41f0-8b2f-22c83a3143c8
+2025-11-23 15:09:39,130 [INFO] schedgeneration: Phase 1/4 (Yr1): 33 courses (diff: 1.78, time: 256s)
+2025-11-23 15:10:18,379 [INFO] schedgeneration: Phase 1 (Yr1) done: 440 sessions scheduled
+2025-11-23 15:10:18,492 [INFO] schedgeneration: Phase 2/4 (Yr2): 30 courses (diff: 1.51, time: 326s)
+2025-11-23 15:10:46,541 [INFO] schedgeneration: Phase 2 (Yr2) done: 273 sessions scheduled
+2025-11-23 15:10:46,564 [INFO] schedgeneration: Phase 3/4 (Yr3): 25 courses (diff: 1.65, time: 476s)
+2025-11-23 15:11:39,265 [INFO] schedgeneration: Phase 3 (Yr3) done: 234 sessions scheduled
+2025-11-23 15:11:39,283 [INFO] schedgeneration: Phase 4/4 (Yr4): 4 courses (diff: 2.00, time: 720s)
+2025-11-23 15:11:49,362 [INFO] schedgeneration: Phase 4 (Yr4) done: 216 sessions scheduled
+2025-11-23 15:11:49,398 [INFO] schedgeneration: Generated schedule 1163 events
+2025-11-23 15:12:41,422 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 15:12:41,738 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 15:12:51,922 [INFO] schedule: Found 5 Schedules
+2025-11-23 15:12:51,943 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 15:12:52,111 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 15:12:54,006 [INFO] schedule: Found 5 Schedules
+2025-11-23 15:17:09,535 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 15:17:09,704 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 15:17:14,521 [INFO] schedule: Found 5 Schedules
+2025-11-23 15:17:14,530 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 15:17:14,622 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 15:17:16,686 [INFO] schedule: Found 5 Schedules
+2025-11-23 15:18:01,125 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 15:18:01,499 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 15:18:03,665 [INFO] schedule: Found 5 Schedules
+2025-11-23 15:31:27,282 [ERROR] override: HTTP error in override_event: Override causes conflict with event 81 on Monday
+2025-11-23 15:31:32,243 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 15:31:47,315 [ERROR] override: HTTP error in override_event: Override causes conflict with event 491 on Monday
+2025-11-23 15:31:54,273 [ERROR] override: HTTP error in override_event: Override causes conflict with event 356 on Monday
+2025-11-23 15:32:02,785 [ERROR] override: HTTP error in override_event: Override causes conflict with event 356 on Monday
+2025-11-23 15:32:07,726 [ERROR] override: HTTP error in override_event: Override causes conflict with event 356 on Monday
+2025-11-23 15:32:13,584 [ERROR] override: HTTP error in override_event: Override causes conflict with event 736 on Monday
+2025-11-23 15:32:16,731 [ERROR] override: HTTP error in override_event: Override causes conflict with event 736 on Monday
+2025-11-23 15:32:21,128 [ERROR] override: HTTP error in override_event: Override causes conflict with event 726 on Monday
+2025-11-23 15:32:23,958 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 15:32:25,921 [ERROR] override: HTTP error in override_event: Override causes conflict with event 726 on Monday
+2025-11-23 15:32:36,103 [ERROR] override: HTTP error in override_event: Override causes conflict with event 597 on Friday
+2025-11-23 15:32:38,161 [ERROR] override: HTTP error in override_event: Override causes conflict with event 597 on Friday
+2025-11-23 15:32:40,228 [ERROR] override: HTTP error in override_event: Override causes conflict with event 597 on Friday
+2025-11-23 15:32:42,806 [ERROR] override: HTTP error in override_event: Override causes conflict with event 372 on Friday
+2025-11-23 15:32:44,759 [ERROR] override: HTTP error in override_event: Override causes conflict with event 475 on Friday
+2025-11-23 15:33:33,389 [ERROR] override: HTTP error in override_event: Override causes conflict with event 597 on Friday
+2025-11-23 15:41:28,902 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 15:41:35,822 [ERROR] override: HTTP error in override_event: Override causes conflict with event 148-A on Monday
+2025-11-23 15:41:39,005 [ERROR] override: HTTP error in override_event: Override causes conflict with event 148-A on Monday
+2025-11-23 15:41:47,484 [ERROR] override: HTTP error in override_event: Override causes conflict with event 148-A on Monday
+2025-11-23 15:41:51,063 [ERROR] override: HTTP error in override_event: Override causes conflict with event 148-A on Monday
+2025-11-23 15:41:53,937 [ERROR] override: HTTP error in override_event: Override causes conflict with event 148-A on Monday
+2025-11-23 15:41:57,709 [ERROR] override: HTTP error in override_event: Override causes conflict with event 176-A on Monday
+2025-11-23 15:42:00,451 [ERROR] override: HTTP error in override_event: Override causes conflict with event 176-A on Monday
+2025-11-23 15:42:04,514 [ERROR] override: HTTP error in override_event: Override causes conflict with event 176-A on Monday
+2025-11-23 16:02:51,121 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:02:56,950 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:02:59,899 [ERROR] override: HTTP error in override_event: Override causes conflict with event 157-B on Monday
+2025-11-23 16:03:01,826 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:03:03,530 [ERROR] override: HTTP error in override_event: Override causes conflict with event 292 on Monday
+2025-11-23 16:15:17,573 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:15:32,064 [ERROR] override: HTTP error in override_event: Override causes conflict with event 148-A on Monday
+2025-11-23 16:15:46,053 [ERROR] override: HTTP error in override_event: Override causes conflict with event 590 on Monday
+2025-11-23 16:15:49,896 [ERROR] override: HTTP error in override_event: Override causes conflict with event 394 on Monday
+2025-11-23 16:15:51,519 [ERROR] override: HTTP error in override_event: Override causes conflict with event 381 on Monday
+2025-11-23 16:15:52,964 [ERROR] override: HTTP error in override_event: Override causes conflict with event 406 on Monday
+2025-11-23 16:15:54,347 [ERROR] override: HTTP error in override_event: Override causes conflict with event 302-B on Monday
+2025-11-23 16:15:55,601 [ERROR] override: HTTP error in override_event: Override causes conflict with event 533 on Monday
+2025-11-23 16:26:46,577 [ERROR] override: HTTP error in override_event: Override causes conflict with event 249 on Monday
+2025-11-23 16:26:47,775 [ERROR] override: HTTP error in override_event: Override causes conflict with event 249 on Monday
+2025-11-23 16:26:49,024 [ERROR] override: HTTP error in override_event: Override causes conflict with event 249 on Monday
+2025-11-23 16:32:33,309 [ERROR] override: HTTP error in override_event: Override causes conflict with event 370 on Monday
+2025-11-23 16:32:35,173 [ERROR] override: HTTP error in override_event: Override causes conflict with event 590 on Monday
+2025-11-23 16:33:11,518 [ERROR] override: HTTP error in override_event: Override causes conflict with event 381 on Monday
+2025-11-23 16:33:13,363 [ERROR] override: HTTP error in override_event: Override causes conflict with event 394 on Monday
+2025-11-23 16:33:14,646 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:33:16,170 [ERROR] override: HTTP error in override_event: Override causes conflict with event 631 on Monday
+2025-11-23 16:33:17,561 [ERROR] override: HTTP error in override_event: Override causes conflict with event 631 on Monday
+2025-11-23 16:33:18,604 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:33:19,710 [ERROR] override: HTTP error in override_event: Override causes conflict with event 584 on Monday
+2025-11-23 16:33:20,978 [ERROR] override: HTTP error in override_event: Override causes conflict with event 584 on Monday
+2025-11-23 16:33:22,027 [ERROR] override: HTTP error in override_event: Override causes conflict with event 643 on Monday
+2025-11-23 16:33:23,152 [ERROR] override: HTTP error in override_event: Override causes conflict with event 643 on Monday
+2025-11-23 16:33:24,039 [ERROR] override: HTTP error in override_event: Override causes conflict with event 643 on Monday
+2025-11-23 16:33:25,332 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:41:19,660 [ERROR] override: HTTP error in override_event: Override causes conflict with event 148-A on Monday
+2025-11-23 16:41:21,829 [ERROR] override: HTTP error in override_event: Override causes conflict with event 289 on Monday
+2025-11-23 16:41:23,281 [ERROR] override: HTTP error in override_event: Override causes conflict with event 289 on Monday
+2025-11-23 16:41:35,123 [ERROR] override: HTTP error in override_event: Override causes conflict with event 643 on Monday
+2025-11-23 16:41:36,844 [ERROR] override: HTTP error in override_event: Override causes conflict with event 387 on Monday
+2025-11-23 16:41:38,022 [ERROR] override: HTTP error in override_event: Override causes conflict with event 387 on Monday
+2025-11-23 16:41:39,284 [ERROR] override: HTTP error in override_event: Override causes conflict with event 584 on Monday
+2025-11-23 16:41:40,610 [ERROR] override: HTTP error in override_event: Override causes conflict with event 584 on Monday
+2025-11-23 16:41:41,883 [ERROR] override: HTTP error in override_event: Override causes conflict with event 535 on Monday
+2025-11-23 16:41:43,346 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:41:48,130 [ERROR] override: HTTP error in override_event: Override causes conflict with event 644 on Monday
+2025-11-23 16:41:49,619 [ERROR] override: HTTP error in override_event: Override causes conflict with event 644 on Monday
+2025-11-23 16:41:50,967 [ERROR] override: HTTP error in override_event: Override causes conflict with event 668 on Monday
+2025-11-23 16:41:53,244 [ERROR] override: HTTP error in override_event: Override causes conflict with event 668 on Monday
+2025-11-23 16:42:02,936 [ERROR] override: HTTP error in override_event: Override causes conflict with event 668 on Monday
+2025-11-23 16:42:04,757 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:42:07,115 [ERROR] override: HTTP error in override_event: Override causes conflict with event 644 on Monday
+2025-11-23 16:42:09,093 [ERROR] override: HTTP error in override_event: Override causes conflict with event 668 on Monday
+2025-11-23 16:42:10,696 [ERROR] override: HTTP error in override_event: Override causes conflict with event 668 on Monday
+2025-11-23 16:42:30,430 [ERROR] override: HTTP error in override_event: Override causes conflict with event 706 on Thursday
+2025-11-23 16:42:34,296 [ERROR] override: HTTP error in override_event: Override causes conflict with event 706 on Thursday
+2025-11-23 16:42:36,697 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:44:12,269 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:44:13,052 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 16:44:17,054 [INFO] schedule: Found 5 Schedules
+2025-11-23 16:44:17,088 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:44:17,242 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 16:44:19,086 [INFO] schedule: Found 5 Schedules
+2025-11-23 16:44:19,088 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:44:19,231 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 16:44:21,327 [INFO] schedule: Found 5 Schedules
+2025-11-23 16:44:21,333 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:46:11,454 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:46:13,406 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:46:18,534 [ERROR] override: HTTP error in override_event: Override causes conflict with event 292 on Monday
+2025-11-23 16:46:20,025 [ERROR] override: HTTP error in override_event: Override causes conflict with event 289 on Monday
+2025-11-23 16:52:09,719 [INFO] schedule: Started schedule generation process_id=3004d4fb-28bc-49c0-9eac-2cb73e3b4847
+2025-11-23 16:52:09,848 [INFO] schedgeneration: Phase 1/4 (Yr1): 33 courses (diff: 1.78, time: 256s)
+2025-11-23 16:53:09,882 [INFO] schedgeneration: Phase 1 (Yr1) done: 440 sessions scheduled
+2025-11-23 16:53:09,946 [INFO] schedgeneration: Phase 2/4 (Yr2): 30 courses (diff: 1.51, time: 326s)
+2025-11-23 16:53:55,456 [INFO] schedgeneration: Phase 2 (Yr2) done: 273 sessions scheduled
+2025-11-23 16:53:55,483 [INFO] schedgeneration: Phase 3/4 (Yr3): 25 courses (diff: 1.65, time: 476s)
+2025-11-23 16:55:29,879 [INFO] schedgeneration: Phase 3 (Yr3) done: 234 sessions scheduled
+2025-11-23 16:55:29,911 [INFO] schedgeneration: Phase 4/4 (Yr4): 4 courses (diff: 2.00, time: 720s)
+2025-11-23 16:55:46,872 [INFO] schedgeneration: Phase 4 (Yr4) done: 216 sessions scheduled
+2025-11-23 16:55:46,903 [INFO] schedgeneration: Generated schedule 1163 events
+2025-11-23 16:55:52,793 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:55:52,955 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 16:55:56,218 [INFO] schedule: Found 5 Schedules
+2025-11-23 16:55:56,236 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:55:56,334 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 16:55:58,100 [INFO] schedule: Found 5 Schedules
+2025-11-23 16:56:12,897 [INFO] faculty: Assigning faculty Hazel Espinorio to group: ('GEC 212', 'BSEMC-GD', 'C')
+2025-11-23 16:56:12,899 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-23 16:56:12,900 [INFO] faculty: Assigned Hazel Espinorio to event 42 (Block C)
+2025-11-23 16:56:12,901 [INFO] faculty: Assigned Hazel Espinorio to event 43 (Block C)
+2025-11-23 16:56:12,901 [INFO] faculty: Assigned Hazel Espinorio to event 44 (Block C)
+2025-11-23 16:57:05,002 [ERROR] override: HTTP error in override_event: Override causes conflict with event 289 on Monday
+2025-11-23 16:57:06,828 [ERROR] override: HTTP error in override_event: Override causes conflict with event 289 on Monday
+2025-11-23 16:57:08,094 [ERROR] override: HTTP error in override_event: Override causes conflict with event 289 on Monday
+2025-11-23 16:57:19,370 [ERROR] override: HTTP error in override_event: Override causes conflict with event 356 on Monday
+2025-11-23 16:57:21,009 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:57:22,020 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 16:57:27,062 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 17:07:55,136 [ERROR] override: HTTP error in override_event: Override causes conflict with event 42 on Monday
+2025-11-23 17:20:14,235 [INFO] schedule: Started schedule generation process_id=a47b9e09-f328-4daa-95ea-5e904f0fff5b
+2025-11-23 17:20:20,330 [INFO] schedgeneration: Phase 1/4 (Yr1): 33 courses (diff: 1.78, time: 256s)
+2025-11-23 17:21:23,689 [INFO] schedgeneration: Phase 1 (Yr1) done: 440 sessions scheduled
+2025-11-23 17:21:23,741 [INFO] schedgeneration: Phase 2/4 (Yr2): 30 courses (diff: 1.51, time: 326s)
+2025-11-23 17:22:15,038 [INFO] schedgeneration: Phase 2 (Yr2) done: 273 sessions scheduled
+2025-11-23 17:22:15,082 [INFO] schedgeneration: Phase 3/4 (Yr3): 25 courses (diff: 1.65, time: 476s)
+2025-11-23 17:23:47,736 [INFO] schedgeneration: Phase 3 (Yr3) done: 234 sessions scheduled
+2025-11-23 17:23:47,777 [INFO] schedgeneration: Phase 4/4 (Yr4): 4 courses (diff: 2.00, time: 720s)
+2025-11-23 17:24:04,093 [INFO] schedgeneration: Phase 4 (Yr4) done: 216 sessions scheduled
+2025-11-23 17:24:04,116 [INFO] schedgeneration: Generated schedule 1163 events
+2025-11-23 17:24:07,279 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 17:24:07,520 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 17:24:09,811 [INFO] schedule: Found 5 Schedules
+2025-11-23 17:24:09,848 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 17:24:10,340 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 17:24:12,662 [INFO] schedule: Found 5 Schedules
+2025-11-23 17:29:11,463 [INFO] override: Successfully overrode event 121-A to Monday 7:00 AM - 8:00 AM in 101
+2025-11-23 17:29:11,483 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 17:29:25,401 [INFO] override: Successfully overrode event 121-A to Monday 8:00 AM - 9:00 AM in 413
+2025-11-23 17:29:25,413 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 17:29:36,691 [INFO] override: Successfully overrode event 121-A to Monday 8:00 AM - 9:00 AM in 413
+2025-11-23 17:29:36,698 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 17:29:47,736 [INFO] override: Successfully overrode event 121-A to Monday 8:00 AM - 9:00 AM in 510
+2025-11-23 17:29:47,743 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 17:30:16,022 [INFO] override: Successfully overrode event 121-A to Monday 8:00 AM - 9:00 AM in 506
+2025-11-23 17:30:16,029 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 17:53:50,644 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 17:53:50,898 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 17:53:53,251 [INFO] schedule: Found 5 Schedules
+2025-11-23 17:53:53,277 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 17:53:53,470 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 17:53:55,333 [INFO] schedule: Found 5 Schedules
+2025-11-23 17:54:00,120 [INFO] faculty: Assigning faculty Hazel Espinorio to group: ('GEC 212', 'BSEMC-GD', 'C')
+2025-11-23 17:54:00,125 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-23 17:54:00,127 [INFO] faculty: Assigned Hazel Espinorio to event 42 (Block C)
+2025-11-23 17:54:00,128 [INFO] faculty: Assigned Hazel Espinorio to event 43 (Block C)
+2025-11-23 17:54:00,128 [INFO] faculty: Assigned Hazel Espinorio to event 44 (Block C)
+2025-11-23 18:34:10,805 [INFO] override: Successfully overrode event 491 to Monday 7:00 AM - 8:00 AM in 408
+2025-11-23 18:34:10,943 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:34:16,800 [INFO] override: Successfully overrode event 491 to Monday 10:30 AM - 11:30 AM in 408
+2025-11-23 18:34:16,883 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:34:18,402 [INFO] override: Successfully overrode event 491 to Monday 10:00 AM - 11:00 AM in 408
+2025-11-23 18:34:18,501 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:34:20,035 [INFO] override: Successfully overrode event 491 to Monday 9:00 AM - 10:00 AM in 510
+2025-11-23 18:34:20,130 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:34:22,114 [INFO] override: Successfully overrode event 491 to Monday 7:30 AM - 8:30 AM in 408
+2025-11-23 18:34:22,212 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:34:24,192 [INFO] override: Successfully overrode event 491 to Monday 9:00 AM - 10:00 AM in 510
+2025-11-23 18:34:24,287 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:34:43,469 [INFO] override: Successfully overrode event 119 to Monday 11:00 AM - 12:00 PM in 413
+2025-11-23 18:34:43,868 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:34:48,102 [INFO] override: Successfully overrode event 87-B to Monday 10:00 AM - 11:00 AM in 413
+2025-11-23 18:34:48,490 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:35:13,856 [INFO] override: Successfully overrode event 377 to Monday 12:00 PM - 1:00 PM in 510
+2025-11-23 18:35:13,943 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:35:15,471 [INFO] override: Successfully overrode event 119 to Monday 12:00 PM - 1:00 PM in 413
+2025-11-23 18:35:15,560 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:35:20,311 [INFO] override: Successfully overrode event 377 to Monday 2:00 PM - 3:00 PM in 510
+2025-11-23 18:35:20,400 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:35:21,752 [INFO] override: Successfully overrode event 736 to Monday 1:00 PM - 2:00 PM in 510
+2025-11-23 18:35:21,847 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:35:23,135 [INFO] override: Successfully overrode event 119 to Monday 2:00 PM - 3:00 PM in 413
+2025-11-23 18:35:23,223 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:39:33,247 [INFO] override: Successfully overrode event 275-B to Monday 11:00 AM - 12:00 PM in 413
+2025-11-23 18:39:33,340 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:52:21,578 [INFO] override: Successfully overrode event 491 to Monday 9:00 AM - 10:00 AM in 408
+2025-11-23 18:52:21,663 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:52:41,826 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:52:42,105 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 18:52:46,141 [INFO] schedule: Found 5 Schedules
+2025-11-23 18:52:46,166 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 18:52:50,359 [INFO] schedule: Found 5 Schedules
+2025-11-23 18:52:50,362 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:53:42,066 [INFO] override: Successfully overrode event 87-A to Monday 11:00 AM - 12:00 PM in 408
+2025-11-23 18:53:42,171 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:53:46,666 [INFO] override: Successfully overrode event 491 to Monday 10:00 AM - 11:00 AM in 510
+2025-11-23 18:53:46,746 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:58:08,794 [INFO] override: Successfully overrode event 121-A to Monday 9:30 AM - 10:30 AM in 506
+2025-11-23 18:58:08,869 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:58:11,381 [INFO] override: Successfully overrode event 292 to Monday 8:00 AM - 9:00 AM in 506
+2025-11-23 18:58:11,463 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:58:13,852 [INFO] override: Successfully overrode event 292 to Monday 7:00 AM - 8:00 AM in 506
+2025-11-23 18:58:13,978 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:58:16,289 [INFO] override: Successfully overrode event 121-A to Monday 8:00 AM - 9:00 AM in 506
+2025-11-23 18:58:16,381 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:58:19,985 [INFO] override: Successfully overrode event 121-B to Monday 9:00 AM - 10:00 AM in 506
+2025-11-23 18:58:20,060 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:58:23,387 [INFO] override: Successfully overrode event 356 to Monday 10:30 AM - 11:30 AM in 506
+2025-11-23 18:58:23,501 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:58:25,024 [INFO] override: Successfully overrode event 356 to Monday 10:00 AM - 11:00 AM in 506
+2025-11-23 18:58:25,141 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:58:28,092 [INFO] override: Successfully overrode event 659 to Monday 11:00 AM - 12:00 PM in 506
+2025-11-23 18:58:28,171 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:58:31,380 [INFO] override: Successfully overrode event 519 to Monday 12:00 PM - 1:00 PM in 506
+2025-11-23 18:58:31,499 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:58:34,324 [INFO] override: Successfully overrode event 87-A to Monday 1:00 PM - 2:00 PM in 506
+2025-11-23 18:58:34,407 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:58:36,494 [INFO] override: Successfully overrode event 726 to Monday 2:00 PM - 3:00 PM in 506
+2025-11-23 18:58:36,617 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:58:39,424 [INFO] override: Successfully overrode event 736 to Monday 3:30 PM - 4:30 PM in 506
+2025-11-23 18:58:39,564 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:58:43,024 [INFO] override: Successfully overrode event 736 to Monday 3:00 PM - 4:00 PM in 506
+2025-11-23 18:58:43,415 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:58:45,753 [INFO] override: Successfully overrode event 377 to Monday 4:00 PM - 5:00 PM in 506
+2025-11-23 18:58:46,082 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:04,682 [INFO] override: Successfully overrode event 119 to Monday 5:30 PM - 6:30 PM in 506
+2025-11-23 18:59:04,819 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:06,256 [INFO] override: Successfully overrode event 119 to Monday 5:00 PM - 6:00 PM in 506
+2025-11-23 18:59:06,379 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:17,796 [INFO] override: Successfully overrode event 275-B to Monday 6:00 PM - 7:00 PM in 506
+2025-11-23 18:59:17,874 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:22,319 [INFO] override: Successfully overrode event 119 to Monday 4:00 PM - 5:00 PM in 408
+2025-11-23 18:59:22,442 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:26,103 [INFO] override: Successfully overrode event 275-B to Monday 2:30 PM - 3:30 PM in 413
+2025-11-23 18:59:26,225 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:27,850 [INFO] override: Successfully overrode event 736 to Monday 12:30 PM - 1:30 PM in 408
+2025-11-23 18:59:27,966 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:29,717 [INFO] override: Successfully overrode event 519 to Monday 12:30 PM - 1:30 PM in 510
+2025-11-23 18:59:29,845 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:31,607 [INFO] override: Successfully overrode event 121-B to Monday 2:00 PM - 3:00 PM in 413
+2025-11-23 18:59:31,724 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:33,991 [INFO] override: Successfully overrode event 121-B to Monday 1:30 PM - 2:30 PM in 413
+2025-11-23 18:59:34,112 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:38,608 [INFO] override: Successfully overrode event 121-B to Monday 12:00 PM - 1:00 PM in 510
+2025-11-23 18:59:38,689 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:46,866 [INFO] override: Successfully overrode event 519 to Monday 12:00 PM - 1:00 PM in 413
+2025-11-23 18:59:46,954 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:49,166 [INFO] override: Successfully overrode event 736 to Monday 12:00 PM - 1:00 PM in 408
+2025-11-23 18:59:49,304 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:51,756 [INFO] override: Successfully overrode event 87-A to Monday 11:30 AM - 12:30 PM in 408
+2025-11-23 18:59:51,843 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:53,909 [INFO] override: Successfully overrode event 87-A to Monday 10:30 AM - 11:30 AM in 408
+2025-11-23 18:59:54,045 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:57,429 [INFO] override: Successfully overrode event 87-A to Monday 11:00 AM - 12:00 PM in 510
+2025-11-23 18:59:57,511 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 18:59:59,027 [INFO] override: Successfully overrode event 87-A to Monday 11:00 AM - 12:00 PM in 408
+2025-11-23 18:59:59,108 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 19:00:03,549 [INFO] override: Successfully overrode event 356 to Monday 10:00 AM - 11:00 AM in 408
+2025-11-23 19:00:03,647 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 19:00:08,314 [INFO] override: Successfully overrode event 659 to Monday 10:30 AM - 11:30 AM in 407
+2025-11-23 19:00:08,395 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 19:00:10,524 [INFO] override: Successfully overrode event 726 to Monday 9:30 AM - 10:30 AM in 407
+2025-11-23 19:00:10,603 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 19:00:13,786 [INFO] override: Successfully overrode event 377 to Monday 12:00 PM - 1:00 PM in 407
+2025-11-23 19:00:13,866 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 19:00:52,977 [INFO] override: Successfully overrode event 292 to Monday 8:00 AM - 9:00 AM in 407
+2025-11-23 19:00:53,315 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 19:07:35,585 [INFO] override: Successfully overrode event 119 to Monday 2:30 PM - 3:30 PM in 408
+2025-11-23 19:07:35,750 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:21:19,871 [INFO] schedule: Started schedule generation process_id=f876dfe1-a1cd-4a58-a5aa-59af04677ffd
+2025-11-23 23:21:21,629 [INFO] schedgeneration: Phase 1/4 (Yr1): 33 courses (diff: 1.78, time: 256s)
+2025-11-23 23:22:04,607 [INFO] schedgeneration: Phase 1 (Yr1) done: 440 sessions scheduled
+2025-11-23 23:22:04,751 [INFO] schedgeneration: Phase 2/4 (Yr2): 30 courses (diff: 1.51, time: 326s)
+2025-11-23 23:23:18,999 [INFO] schedgeneration: Phase 2 (Yr2) done: 273 sessions scheduled
+2025-11-23 23:23:19,197 [INFO] schedgeneration: Phase 3/4 (Yr3): 25 courses (diff: 1.65, time: 476s)
+2025-11-23 23:25:11,633 [INFO] schedgeneration: Phase 3 (Yr3) done: 234 sessions scheduled
+2025-11-23 23:25:11,677 [INFO] schedgeneration: Phase 4/4 (Yr4): 4 courses (diff: 2.00, time: 720s)
+2025-11-23 23:25:30,256 [INFO] schedgeneration: Phase 4 (Yr4) done: 216 sessions scheduled
+2025-11-23 23:25:30,279 [INFO] schedgeneration: Generated schedule 1163 events
+2025-11-23 23:26:10,305 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:26:10,507 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 23:27:10,139 [INFO] schedule: Found 5 Schedules
+2025-11-23 23:27:10,351 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:27:11,403 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 23:28:11,107 [INFO] schedule: Found 5 Schedules
+2025-11-23 23:28:11,818 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 23:28:33,546 [INFO] schedule: Found 5 Schedules
+2025-11-23 23:28:34,377 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 23:29:36,417 [ERROR] schedule: Unexpected error in list_final_schedules
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 116, in __next__
+    return next(self._wrapped)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 543, in __next__
+    return self._next()
+           ~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 969, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "ping timeout"
+	debug_error_string = "UNKNOWN:Error received from peer ipv6:%5B2404:6800:4017:805::200a%5D:443 {grpc_message:"ping timeout", grpc_status:14, created_time:"2025-11-23T15:29:36.2545902+00:00"}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 411, in _make_stream
+    response = next(response_iterator, None)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 119, in __next__
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ServiceUnavailable: 503 ping timeout
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\Backend\app\routers\schedule.py", line 112, in list_final_schedules
+    schedule_names = [doc.id for doc in docs]
+                                        ^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\stream_generator.py", line 58, in __next__
+    return self._generator.__next__()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 413, in _make_stream
+    if self._retry_query_after_exception(exc, retry, transaction):
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 264, in _retry_query_after_exception
+    retry = gapic_callable._retry
+            ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: '_UnaryStreamMultiCallable' object has no attribute '_retry'
+2025-11-23 23:29:37,683 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:29:37,831 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:29:38,000 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 23:30:19,408 [ERROR] schedule: Unexpected error in list_final_schedules
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 116, in __next__
+    return next(self._wrapped)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 543, in __next__
+    return self._next()
+           ~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 969, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "IOCP/Socket: Connection aborted (An established connection was aborted by the software in your host machine.
+ -- 10053)"
+	debug_error_string = "UNKNOWN:Error received from peer ipv6:%5B2404:6800:4017:801::200a%5D:443 {grpc_message:"IOCP/Socket: Connection aborted (An established connection was aborted by the software in your host machine.\r\n -- 10053)", grpc_status:14, created_time:"2025-11-23T15:30:19.0066515+00:00"}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 411, in _make_stream
+    response = next(response_iterator, None)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 119, in __next__
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ServiceUnavailable: 503 IOCP/Socket: Connection aborted (An established connection was aborted by the software in your host machine.
+ -- 10053)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\Backend\app\routers\schedule.py", line 112, in list_final_schedules
+    schedule_names = [doc.id for doc in docs]
+                                        ^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\stream_generator.py", line 58, in __next__
+    return self._generator.__next__()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 413, in _make_stream
+    if self._retry_query_after_exception(exc, retry, transaction):
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 264, in _retry_query_after_exception
+    retry = gapic_callable._retry
+            ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: '_UnaryStreamMultiCallable' object has no attribute '_retry'
+2025-11-23 23:30:19,641 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:30:20,025 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 23:30:23,700 [INFO] schedule: Found 5 Schedules
+2025-11-23 23:30:23,705 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:30:24,142 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 23:30:26,274 [INFO] schedule: Found 5 Schedules
+2025-11-23 23:30:26,282 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 23:30:28,434 [INFO] schedule: Found 5 Schedules
+2025-11-23 23:30:28,437 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:30:28,674 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:30:28,966 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-23 23:30:31,866 [INFO] schedule: Found 5 Schedules
+2025-11-23 23:30:31,893 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:48:18,895 [INFO] override: Successfully overrode event 491 to Monday 10:00 AM - 11:00 AM in 414
+2025-11-23 23:48:18,947 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:48:22,727 [INFO] override: Successfully overrode event 137-A to Monday 7:00 AM - 8:00 AM in 414
+2025-11-23 23:48:22,809 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:48:30,893 [INFO] override: Successfully overrode event 45-B to Monday 9:00 AM - 10:00 AM in 510
+2025-11-23 23:48:30,992 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:48:38,481 [INFO] override: Successfully overrode event 97-A to Monday 9:30 AM - 10:30 AM in 506
+2025-11-23 23:48:38,588 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:48:47,970 [INFO] override: Successfully overrode event 97-A to Monday 9:30 AM - 10:30 AM in 410
+2025-11-23 23:48:48,078 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:48:56,426 [INFO] override: Successfully overrode event 97-A to Monday 9:30 AM - 10:30 AM in 506
+2025-11-23 23:48:56,533 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-23 23:56:08,458 [INFO] override: Successfully overrode event 377 to Monday 11:30 AM - 12:30 PM in 407
+2025-11-23 23:56:08,577 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 00:07:31,491 [INFO] override: Successfully overrode event 491 to Monday 9:00 AM - 10:00 AM in 506
+2025-11-24 00:07:31,595 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 00:41:42,645 [INFO] override: Successfully overrode event 369 to Monday 12:30 PM - 2:00 PM in 519
+2025-11-24 00:41:42,695 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 00:41:44,707 [INFO] override: Successfully overrode event 541 to Monday 12:00 PM - 1:30 PM in 519
+2025-11-24 00:41:44,751 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 00:41:50,609 [INFO] override: Successfully overrode event 541 to Monday 10:00 AM - 11:30 AM in 519
+2025-11-24 00:41:50,658 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 00:41:54,057 [INFO] override: Successfully overrode event 678 to Monday 12:00 PM - 1:30 PM in 519
+2025-11-24 00:41:54,100 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 00:42:42,418 [INFO] faculty: Assigning faculty Hazel Espinorio to group: ('MAT304', 'BSCS', 'A')
+2025-11-24 00:42:42,422 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-24 00:42:42,425 [INFO] faculty: Assigned Hazel Espinorio to event 111-A (Block A)
+2025-11-24 00:42:42,425 [INFO] faculty: Assigned Hazel Espinorio to event 112-A (Block A)
+2025-11-24 00:42:42,427 [INFO] faculty: Assigned Hazel Espinorio to event 113-A (Block A)
+2025-11-24 00:46:28,856 [INFO] faculty: Assigning faculty Kenneth Bautista to group: ('GEC 212', 'BSEMC-GD', 'C')
+2025-11-24 00:46:28,874 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-24 00:46:28,876 [INFO] faculty: Assigned Kenneth Bautista to event 42 (Block C)
+2025-11-24 00:46:28,877 [INFO] faculty: Assigned Kenneth Bautista to event 43 (Block C)
+2025-11-24 00:46:28,878 [INFO] faculty: Assigned Kenneth Bautista to event 44 (Block C)
+2025-11-24 00:46:37,216 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 00:46:37,862 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-24 00:51:27,729 [ERROR] schedule: Unexpected error in list_final_schedules
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 170, in error_remapped_callable
+    return _StreamingResponseIterator(
+        result, prefetch_first_result=prefetch_first
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 92, in __init__
+    self._stored_first_result = next(self._wrapped)
+                                ~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 543, in __next__
+    return self._next()
+           ~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 969, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv6:%5B2404:6800:4017:804::200a%5D:443: tcp handshaker shutdown"
+	debug_error_string = "UNKNOWN:Error received from peer  {created_time:"2025-11-23T16:51:27.6308858+00:00", grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv6:%5B2404:6800:4017:804::200a%5D:443: tcp handshaker shutdown"}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 144, in retry_target
+    result = target()
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 174, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ServiceUnavailable: 503 failed to connect to all addresses; last error: UNKNOWN: ipv6:%5B2404:6800:4017:804::200a%5D:443: tcp handshaker shutdown
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\Backend\app\routers\schedule.py", line 112, in list_final_schedules
+    schedule_names = [doc.id for doc in docs]
+                                        ^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\stream_generator.py", line 58, in __next__
+    return self._generator.__next__()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 400, in _make_stream
+    response_iterator, expected_prefix = self._get_stream_iterator(
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        transaction,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        explain_options,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 250, in _get_stream_iterator
+    response_iterator = self._client._firestore_api.run_query(
+        request=request,
+        metadata=self._client._rpc_metadata,
+        **kwargs,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\services\firestore\client.py", line 1608, in run_query
+    response = rpc(
+        request,
+    ...<2 lines>...
+        metadata=metadata,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\gapic_v1\method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 293, in retry_wrapped_func
+    return retry_target(
+        target,
+    ...<3 lines>...
+        on_error=on_error,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 153, in retry_target
+    _retry_error_helper(
+    ~~~~~~~~~~~~~~~~~~~^
+        exc,
+        ^^^^
+    ...<6 lines>...
+        timeout,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_base.py", line 221, in _retry_error_helper
+    raise final_exc from source_exc
+google.api_core.exceptions.RetryError: Timeout of 300.0s exceeded, last exception: 503 failed to connect to all addresses; last error: UNKNOWN: ipv6:%5B2404:6800:4017:804::200a%5D:443: tcp handshaker shutdown
+2025-11-24 00:51:29,003 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 00:51:29,181 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-24 00:56:27,652 [ERROR] schedule: Unexpected error in list_final_schedules
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 170, in error_remapped_callable
+    return _StreamingResponseIterator(
+        result, prefetch_first_result=prefetch_first
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 92, in __init__
+    self._stored_first_result = next(self._wrapped)
+                                ~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 543, in __next__
+    return self._next()
+           ~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 952, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.220.234:443: tcp handshaker shutdown"
+	debug_error_string = "UNKNOWN:Error received from peer  {created_time:"2025-11-23T16:56:27.5683799+00:00", grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.220.234:443: tcp handshaker shutdown"}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 144, in retry_target
+    result = target()
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 174, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ServiceUnavailable: 503 failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.220.234:443: tcp handshaker shutdown
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\Backend\app\routers\schedule.py", line 112, in list_final_schedules
+    schedule_names = [doc.id for doc in docs]
+                                        ^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\stream_generator.py", line 58, in __next__
+    return self._generator.__next__()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 400, in _make_stream
+    response_iterator, expected_prefix = self._get_stream_iterator(
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        transaction,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        explain_options,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 250, in _get_stream_iterator
+    response_iterator = self._client._firestore_api.run_query(
+        request=request,
+        metadata=self._client._rpc_metadata,
+        **kwargs,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\services\firestore\client.py", line 1608, in run_query
+    response = rpc(
+        request,
+    ...<2 lines>...
+        metadata=metadata,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\gapic_v1\method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 293, in retry_wrapped_func
+    return retry_target(
+        target,
+    ...<3 lines>...
+        on_error=on_error,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 153, in retry_target
+    _retry_error_helper(
+    ~~~~~~~~~~~~~~~~~~~^
+        exc,
+        ^^^^
+    ...<6 lines>...
+        timeout,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_base.py", line 221, in _retry_error_helper
+    raise final_exc from source_exc
+google.api_core.exceptions.RetryError: Timeout of 300.0s exceeded, last exception: 503 failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.220.234:443: tcp handshaker shutdown
+2025-11-24 00:56:27,803 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-24 01:01:15,915 [ERROR] schedule: Unexpected error in list_final_schedules
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 170, in error_remapped_callable
+    return _StreamingResponseIterator(
+        result, prefetch_first_result=prefetch_first
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 92, in __init__
+    self._stored_first_result = next(self._wrapped)
+                                ~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 543, in __next__
+    return self._next()
+           ~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 969, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.220.234:443: tcp handshaker shutdown"
+	debug_error_string = "UNKNOWN:Error received from peer  {created_time:"2025-11-23T17:01:15.8297764+00:00", grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.220.234:443: tcp handshaker shutdown"}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 144, in retry_target
+    result = target()
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 174, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ServiceUnavailable: 503 failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.220.234:443: tcp handshaker shutdown
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\Backend\app\routers\schedule.py", line 112, in list_final_schedules
+    schedule_names = [doc.id for doc in docs]
+                                        ^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\stream_generator.py", line 58, in __next__
+    return self._generator.__next__()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 400, in _make_stream
+    response_iterator, expected_prefix = self._get_stream_iterator(
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        transaction,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        explain_options,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 250, in _get_stream_iterator
+    response_iterator = self._client._firestore_api.run_query(
+        request=request,
+        metadata=self._client._rpc_metadata,
+        **kwargs,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\services\firestore\client.py", line 1608, in run_query
+    response = rpc(
+        request,
+    ...<2 lines>...
+        metadata=metadata,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\gapic_v1\method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 293, in retry_wrapped_func
+    return retry_target(
+        target,
+    ...<3 lines>...
+        on_error=on_error,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 153, in retry_target
+    _retry_error_helper(
+    ~~~~~~~~~~~~~~~~~~~^
+        exc,
+        ^^^^
+    ...<6 lines>...
+        timeout,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_base.py", line 221, in _retry_error_helper
+    raise final_exc from source_exc
+google.api_core.exceptions.RetryError: Timeout of 300.0s exceeded, last exception: 503 failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.220.234:443: tcp handshaker shutdown
+2025-11-24 01:01:15,985 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-24 01:05:27,701 [ERROR] schedule: Unexpected error in list_final_schedules
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 170, in error_remapped_callable
+    return _StreamingResponseIterator(
+        result, prefetch_first_result=prefetch_first
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 92, in __init__
+    self._stored_first_result = next(self._wrapped)
+                                ~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 543, in __next__
+    return self._next()
+           ~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 969, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.221.42:443: tcp handshaker shutdown"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.221.42:443: tcp handshaker shutdown", grpc_status:14, created_time:"2025-11-23T17:05:27.6294881+00:00"}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 144, in retry_target
+    result = target()
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 174, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ServiceUnavailable: 503 failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.221.42:443: tcp handshaker shutdown
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\Backend\app\routers\schedule.py", line 112, in list_final_schedules
+    schedule_names = [doc.id for doc in docs]
+                                        ^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\stream_generator.py", line 58, in __next__
+    return self._generator.__next__()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 400, in _make_stream
+    response_iterator, expected_prefix = self._get_stream_iterator(
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        transaction,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        explain_options,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 250, in _get_stream_iterator
+    response_iterator = self._client._firestore_api.run_query(
+        request=request,
+        metadata=self._client._rpc_metadata,
+        **kwargs,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\services\firestore\client.py", line 1608, in run_query
+    response = rpc(
+        request,
+    ...<2 lines>...
+        metadata=metadata,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\gapic_v1\method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 293, in retry_wrapped_func
+    return retry_target(
+        target,
+    ...<3 lines>...
+        on_error=on_error,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 153, in retry_target
+    _retry_error_helper(
+    ~~~~~~~~~~~~~~~~~~~^
+        exc,
+        ^^^^
+    ...<6 lines>...
+        timeout,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_base.py", line 221, in _retry_error_helper
+    raise final_exc from source_exc
+google.api_core.exceptions.RetryError: Timeout of 300.0s exceeded, last exception: 503 failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.221.42:443: tcp handshaker shutdown
+2025-11-24 01:05:27,771 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 01:05:27,920 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-24 01:10:24,870 [ERROR] schedule: Unexpected error in list_final_schedules
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 170, in error_remapped_callable
+    return _StreamingResponseIterator(
+        result, prefetch_first_result=prefetch_first
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 92, in __init__
+    self._stored_first_result = next(self._wrapped)
+                                ~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 543, in __next__
+    return self._next()
+           ~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 969, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.221.42:443: tcp handshaker shutdown"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.221.42:443: tcp handshaker shutdown", grpc_status:14, created_time:"2025-11-23T17:10:24.7657516+00:00"}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 144, in retry_target
+    result = target()
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 174, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ServiceUnavailable: 503 failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.221.42:443: tcp handshaker shutdown
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\Backend\app\routers\schedule.py", line 112, in list_final_schedules
+    schedule_names = [doc.id for doc in docs]
+                                        ^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\stream_generator.py", line 58, in __next__
+    return self._generator.__next__()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 400, in _make_stream
+    response_iterator, expected_prefix = self._get_stream_iterator(
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        transaction,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        explain_options,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 250, in _get_stream_iterator
+    response_iterator = self._client._firestore_api.run_query(
+        request=request,
+        metadata=self._client._rpc_metadata,
+        **kwargs,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\services\firestore\client.py", line 1608, in run_query
+    response = rpc(
+        request,
+    ...<2 lines>...
+        metadata=metadata,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\gapic_v1\method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 293, in retry_wrapped_func
+    return retry_target(
+        target,
+    ...<3 lines>...
+        on_error=on_error,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 153, in retry_target
+    _retry_error_helper(
+    ~~~~~~~~~~~~~~~~~~~^
+        exc,
+        ^^^^
+    ...<6 lines>...
+        timeout,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_base.py", line 221, in _retry_error_helper
+    raise final_exc from source_exc
+google.api_core.exceptions.RetryError: Timeout of 300.0s exceeded, last exception: 503 failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.221.42:443: tcp handshaker shutdown
+2025-11-24 01:10:24,924 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-24 01:19:41,056 [ERROR] schedule: Unexpected error in list_final_schedules
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 170, in error_remapped_callable
+    return _StreamingResponseIterator(
+        result, prefetch_first_result=prefetch_first
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 92, in __init__
+    self._stored_first_result = next(self._wrapped)
+                                ~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 543, in __next__
+    return self._next()
+           ~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\grpc\_channel.py", line 969, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.221.10:443: socket is null"
+	debug_error_string = "UNKNOWN:Error received from peer  {created_time:"2025-11-23T17:19:40.9513679+00:00", grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.221.10:443: socket is null"}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 144, in retry_target
+    result = target()
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 174, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ServiceUnavailable: 503 failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.221.10:443: socket is null
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\Backend\app\routers\schedule.py", line 112, in list_final_schedules
+    schedule_names = [doc.id for doc in docs]
+                                        ^^^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\stream_generator.py", line 58, in __next__
+    return self._generator.__next__()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 400, in _make_stream
+    response_iterator, expected_prefix = self._get_stream_iterator(
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        transaction,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        explain_options,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\query.py", line 250, in _get_stream_iterator
+    response_iterator = self._client._firestore_api.run_query(
+        request=request,
+        metadata=self._client._rpc_metadata,
+        **kwargs,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\cloud\firestore_v1\services\firestore\client.py", line 1608, in run_query
+    response = rpc(
+        request,
+    ...<2 lines>...
+        metadata=metadata,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\gapic_v1\method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 293, in retry_wrapped_func
+    return retry_target(
+        target,
+    ...<3 lines>...
+        on_error=on_error,
+    )
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 153, in retry_target
+    _retry_error_helper(
+    ~~~~~~~~~~~~~~~~~~~^
+        exc,
+        ^^^^
+    ...<6 lines>...
+        timeout,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Downloads\OptiSchedule-main\venv\Lib\site-packages\google\api_core\retry\retry_base.py", line 221, in _retry_error_helper
+    raise final_exc from source_exc
+google.api_core.exceptions.RetryError: Timeout of 300.0s exceeded, last exception: 503 failed to connect to all addresses; last error: UNKNOWN: ipv4:142.251.221.10:443: socket is null
+2025-11-24 01:19:41,677 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 01:19:42,134 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 01:19:42,541 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 01:19:43,040 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-24 04:54:01,548 [INFO] schedule: Found 5 Schedules
+2025-11-24 04:54:01,564 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-24 04:54:03,809 [INFO] schedule: Found 5 Schedules
+2025-11-24 05:02:25,375 [INFO] schedule: Started schedule generation process_id=55cd86d7-b328-4786-b8f9-105fdbd743f9
+2025-11-24 05:02:27,770 [INFO] schedgeneration: Phase 1/4 (Yr1): 33 courses (diff: 1.78, time: 256s)
+2025-11-24 05:02:59,377 [INFO] schedgeneration: Phase 1 (Yr1) done: 440 sessions scheduled
+2025-11-24 05:02:59,398 [INFO] schedgeneration: Phase 2/4 (Yr2): 30 courses (diff: 1.51, time: 326s)
+2025-11-24 05:03:37,455 [INFO] schedgeneration: Phase 2 (Yr2) done: 273 sessions scheduled
+2025-11-24 05:03:37,478 [INFO] schedgeneration: Phase 3/4 (Yr3): 25 courses (diff: 1.65, time: 476s)
+2025-11-24 05:04:50,162 [INFO] schedgeneration: Phase 3 (Yr3) done: 234 sessions scheduled
+2025-11-24 05:04:50,184 [INFO] schedgeneration: Phase 4/4 (Yr4): 4 courses (diff: 2.00, time: 720s)
+2025-11-24 05:05:04,326 [INFO] schedgeneration: Phase 4 (Yr4) done: 216 sessions scheduled
+2025-11-24 05:05:04,342 [INFO] schedgeneration: Generated schedule 1163 events
+2025-11-24 05:05:39,705 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 05:05:41,789 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-24 05:05:44,089 [INFO] schedule: Found 5 Schedules
+2025-11-24 05:05:44,098 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 05:05:44,191 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-24 05:05:46,566 [INFO] schedule: Found 5 Schedules
+2025-11-24 05:20:12,243 [INFO] override: Successfully overrode event 275-B to Monday 12:00 PM - 1:00 PM in 101
+2025-11-24 05:20:12,416 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 05:20:17,436 [INFO] override: Successfully overrode event 377 to Monday 11:00 AM - 12:00 PM in 506
+2025-11-24 05:20:17,530 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 05:20:19,732 [INFO] override: Successfully overrode event 377 to Monday 12:00 PM - 1:00 PM in 506
+2025-11-24 05:20:19,884 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 05:24:26,521 [INFO] faculty: Assigning faculty Hazel Espinorio to group: ('GEC 212', 'BSEMC-GD', 'C')
+2025-11-24 05:24:26,526 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-24 05:24:26,529 [INFO] faculty: Assigned Hazel Espinorio to event 42 (Block C)
+2025-11-24 05:24:26,530 [INFO] faculty: Assigned Hazel Espinorio to event 43 (Block C)
+2025-11-24 05:24:26,531 [INFO] faculty: Assigned Hazel Espinorio to event 44 (Block C)
+2025-11-24 05:24:33,255 [INFO] faculty: Assigning faculty Kenneth Bautista to group: ('MAT304', 'BSCS', 'A')
+2025-11-24 05:24:33,258 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-24 05:24:33,259 [INFO] faculty: Assigned Kenneth Bautista to event 111-A (Block A)
+2025-11-24 05:24:33,260 [INFO] faculty: Assigned Kenneth Bautista to event 112-A (Block A)
+2025-11-24 05:24:33,262 [INFO] faculty: Assigned Kenneth Bautista to event 113-A (Block A)
+2025-11-24 06:12:58,912 [INFO] override: Successfully overrode event 275-A to Monday 10:30 AM - 11:30 AM in 101
+2025-11-24 06:12:59,009 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:13:01,891 [INFO] override: Successfully overrode event 275-A to Monday 10:00 AM - 11:00 AM in 101
+2025-11-24 06:13:02,046 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:13:07,181 [INFO] override: Successfully overrode event 119 to Monday 7:00 AM - 8:00 AM in 505
+2025-11-24 06:13:07,246 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:13:17,273 [INFO] override: Successfully overrode event 180-A to Monday 7:00 AM - 8:00 AM in 413
+2025-11-24 06:13:17,401 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:13:26,217 [INFO] override: Successfully overrode event 491 to Monday 7:00 AM - 8:00 AM in 413
+2025-11-24 06:13:26,348 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:13:30,586 [INFO] override: Successfully overrode event 180-A to Monday 9:00 AM - 10:00 AM in 413
+2025-11-24 06:13:30,667 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:13:33,537 [INFO] override: Successfully overrode event 180-B to Monday 11:00 AM - 12:00 PM in 101
+2025-11-24 06:13:33,729 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:13:38,994 [INFO] override: Successfully overrode event 275-A to Monday 7:00 AM - 8:00 AM in 413
+2025-11-24 06:13:39,099 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:13:52,431 [INFO] override: Successfully overrode event 377 to Monday 12:30 PM - 1:30 PM in 506
+2025-11-24 06:13:52,469 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:14:03,972 [INFO] override: Successfully overrode event 661 to Monday 10:00 AM - 11:30 AM in 521
+2025-11-24 06:14:04,019 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:14:06,120 [INFO] override: Successfully overrode event 661 to Monday 9:30 AM - 11:00 AM in 521
+2025-11-24 06:14:06,158 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:14:07,583 [INFO] override: Successfully overrode event 661 to Monday 9:00 AM - 10:30 AM in 521
+2025-11-24 06:14:07,617 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:14:09,897 [INFO] override: Successfully overrode event 661 to Monday 8:30 AM - 10:00 AM in 521
+2025-11-24 06:14:09,940 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:14:23,374 [INFO] override: Successfully overrode event 711 to Monday 7:30 AM - 8:30 AM in 520
+2025-11-24 06:14:23,435 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:14:28,469 [INFO] override: Successfully overrode event 711 to Monday 7:00 AM - 8:00 AM in 407
+2025-11-24 06:14:28,531 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:25:41,475 [INFO] override: Successfully overrode event 180-A to Monday 8:00 AM - 9:00 AM in 413
+2025-11-24 06:25:41,543 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:25:46,106 [INFO] override: Successfully overrode event 180-B to Monday 10:00 AM - 11:00 AM in 413
+2025-11-24 06:25:46,244 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:25:50,511 [INFO] override: Successfully overrode event 275-B to Monday 8:00 AM - 9:00 AM in 413
+2025-11-24 06:25:50,613 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:25:53,345 [INFO] override: Successfully overrode event 87-B to Monday 8:30 AM - 9:30 AM in 413
+2025-11-24 06:25:53,523 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:25:58,563 [INFO] override: Successfully overrode event 87-A to Monday 8:30 AM - 9:30 AM in 413
+2025-11-24 06:25:58,879 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:26:02,480 [INFO] override: Successfully overrode event 180-B to Monday 9:30 AM - 10:30 AM in 413
+2025-11-24 06:26:02,640 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:26:05,312 [INFO] override: Successfully overrode event 180-B to Monday 8:30 AM - 9:30 AM in 413
+2025-11-24 06:26:05,489 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:26:09,831 [INFO] override: Successfully overrode event 180-B to Monday 8:30 AM - 9:30 AM in 413
+2025-11-24 06:26:10,013 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:26:13,254 [INFO] override: Successfully overrode event 97-B to Monday 8:30 AM - 9:30 AM in 413
+2025-11-24 06:26:13,425 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:26:16,411 [INFO] override: Successfully overrode event 97-A to Monday 8:30 AM - 9:30 AM in 413
+2025-11-24 06:26:16,562 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:26:41,228 [INFO] override: Successfully overrode event 356 to Monday 11:30 AM - 12:30 PM in 414
+2025-11-24 06:26:41,346 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:26:48,320 [INFO] override: Successfully overrode event 377 to Monday 1:00 PM - 2:00 PM in 414
+2025-11-24 06:26:48,456 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:41:41,616 [INFO] override: Successfully overrode event 119 to Monday 7:30 AM - 8:30 AM in 505
+2025-11-24 06:41:41,735 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:41:45,468 [INFO] override: Successfully overrode event 119 to Monday 7:00 AM - 8:00 AM in 505
+2025-11-24 06:41:45,668 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:47:22,287 [INFO] override: Successfully overrode event 119 to Monday 7:00 AM - 8:00 AM in 505
+2025-11-24 06:47:22,471 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:47:26,608 [INFO] override: Successfully overrode event 97-A to Monday 11:00 AM - 12:00 PM in 413
+2025-11-24 06:47:26,692 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:47:46,067 [INFO] override: Successfully overrode event 87-A to Monday 10:00 AM - 11:00 AM in 413
+2025-11-24 06:47:46,132 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:47:49,421 [INFO] override: Successfully overrode event 87-B to Monday 10:30 AM - 11:30 AM in 101
+2025-11-24 06:47:49,496 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:47:51,787 [INFO] override: Successfully overrode event 180-B to Monday 10:30 AM - 11:30 AM in 413
+2025-11-24 06:47:51,925 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:48:00,561 [INFO] override: Successfully overrode event 180-B to Monday 12:30 PM - 1:30 PM in 101
+2025-11-24 06:48:00,695 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:48:09,276 [INFO] override: Successfully overrode event 45-B to Monday 10:00 AM - 11:00 AM in 506
+2025-11-24 06:48:09,309 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:48:14,023 [INFO] override: Successfully overrode event 97-B to Monday 11:30 AM - 12:30 PM in 506
+2025-11-24 06:48:14,034 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:48:17,863 [INFO] override: Successfully overrode event 45-A to Monday 9:30 AM - 10:30 AM in 414
+2025-11-24 06:48:17,921 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:48:20,683 [INFO] override: Successfully overrode event 275-B to Monday 9:00 AM - 10:00 AM in 413
+2025-11-24 06:48:20,761 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:48:26,265 [INFO] override: Successfully overrode event 275-B to Monday 8:00 AM - 9:00 AM in 413
+2025-11-24 06:48:26,381 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:48:30,375 [INFO] override: Successfully overrode event 87-A to Monday 8:00 AM - 9:00 AM in 413
+2025-11-24 06:48:30,522 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:48:33,516 [INFO] override: Successfully overrode event 97-A to Monday 8:00 AM - 9:00 AM in 413
+2025-11-24 06:48:33,683 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:48:36,176 [INFO] override: Successfully overrode event 45-B to Monday 8:00 AM - 9:00 AM in 413
+2025-11-24 06:48:36,310 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:48:41,217 [INFO] override: Successfully overrode event 97-B to Monday 8:00 AM - 9:00 AM in 413
+2025-11-24 06:48:41,332 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:48:44,264 [INFO] override: Successfully overrode event 45-A to Monday 8:00 AM - 9:00 AM in 413
+2025-11-24 06:48:44,433 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:49:00,619 [INFO] override: Successfully overrode event 87-B to Monday 8:00 AM - 9:00 AM in 413
+2025-11-24 06:49:00,712 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:49:03,899 [INFO] override: Successfully overrode event 180-B to Monday 8:00 AM - 9:00 AM in 413
+2025-11-24 06:49:04,076 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:49:13,736 [INFO] override: Successfully overrode event 180-A to Monday 9:30 AM - 10:30 AM in 413
+2025-11-24 06:49:13,806 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:49:15,558 [INFO] override: Successfully overrode event 87-A to Monday 11:00 AM - 12:00 PM in 101
+2025-11-24 06:49:15,659 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:49:17,419 [INFO] override: Successfully overrode event 87-B to Monday 11:00 AM - 12:00 PM in 413
+2025-11-24 06:49:17,497 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:49:19,311 [INFO] override: Successfully overrode event 97-B to Monday 10:00 AM - 11:00 AM in 506
+2025-11-24 06:49:19,405 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:49:24,042 [INFO] override: Successfully overrode event 97-A to Monday 9:30 AM - 10:30 AM in 414
+2025-11-24 06:49:24,100 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:49:26,696 [INFO] override: Successfully overrode event 45-B to Monday 12:00 PM - 1:00 PM in 506
+2025-11-24 06:49:26,784 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 06:49:31,024 [INFO] override: Successfully overrode event 275-B to Monday 1:00 PM - 2:00 PM in 101
+2025-11-24 06:49:31,094 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 07:05:45,261 [INFO] override: Successfully overrode event 45-A to Monday 7:30 AM - 8:30 AM in 506
+2025-11-24 07:05:45,377 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 07:05:52,620 [INFO] override: Successfully overrode event 45-A to Monday 7:00 AM - 8:00 AM in 506
+2025-11-24 07:05:52,725 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 07:06:01,448 [INFO] override: Successfully overrode event 491 to Monday 9:00 AM - 10:00 AM in 410
+2025-11-24 07:06:01,513 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 07:06:03,528 [INFO] override: Successfully overrode event 87-B to Monday 11:00 AM - 12:00 PM in 101
+2025-11-24 07:06:03,639 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 07:06:13,376 [INFO] override: Successfully overrode event 659 to Monday 10:30 AM - 11:30 AM in 410
+2025-11-24 07:06:13,445 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 07:06:59,899 [INFO] override: Successfully overrode event 519 to Monday 10:30 AM - 11:30 AM in 414
+2025-11-24 07:06:59,964 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 07:07:04,951 [INFO] override: Successfully overrode event 377 to Monday 12:30 PM - 1:30 PM in 413
+2025-11-24 07:07:05,007 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 07:27:47,917 [INFO] faculty: Unassigning group: MAT304, BSCS, A
+2025-11-24 07:27:47,951 [INFO] faculty: Found 3 events to unassign (including merged classes)
+2025-11-24 07:27:53,476 [INFO] faculty: Assigning faculty Kenneth Bautista to group: ('MAT304', 'BSCS', 'A')
+2025-11-24 07:27:53,480 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-24 07:27:53,482 [INFO] faculty: Assigned Kenneth Bautista to event 111-A (Block A)
+2025-11-24 07:27:53,482 [INFO] faculty: Assigned Kenneth Bautista to event 112-A (Block A)
+2025-11-24 07:27:53,483 [INFO] faculty: Assigned Kenneth Bautista to event 113-A (Block A)
+2025-11-24 07:45:53,696 [INFO] faculty: Assigning faculty John Dom Pagot to group: ('PE 2', 'BSIT', 'C')
+2025-11-24 07:45:53,740 [INFO] faculty: Found 2 events in group (including merged classes)
+2025-11-24 07:45:53,742 [INFO] faculty: Assigned John Dom Pagot to event 131-A (Block C)
+2025-11-24 07:45:53,742 [INFO] faculty: Assigned John Dom Pagot to event 132-A (Block C)
+2025-11-24 07:58:58,556 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 07:58:59,352 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-24 07:59:03,046 [INFO] schedule: Found 5 Schedules
+2025-11-24 07:59:03,120 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 07:59:03,389 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-24 07:59:05,858 [INFO] schedule: Found 5 Schedules
+2025-11-24 08:00:07,472 [INFO] override: Successfully overrode event 97-B to Monday 9:30 AM - 10:30 AM in 413
+2025-11-24 08:00:07,534 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:00:31,391 [INFO] override: Successfully overrode event 180-A to Monday 11:00 AM - 12:00 PM in 413
+2025-11-24 08:00:31,453 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:12:31,960 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:12:32,404 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-24 08:12:34,635 [INFO] schedule: Found 5 Schedules
+2025-11-24 08:12:34,658 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-24 08:12:36,520 [INFO] schedule: Found 5 Schedules
+2025-11-24 08:12:36,523 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:18:45,621 [INFO] override: Successfully overrode event 180-B to Monday 9:30 AM - 10:30 AM in 413
+2025-11-24 08:18:45,699 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:18:52,492 [INFO] override: Successfully overrode event 275-A to Monday 9:30 AM - 10:30 AM in 413
+2025-11-24 08:18:52,550 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:19:19,606 [INFO] override: Successfully overrode event 97-B to Monday 8:00 AM - 9:00 AM in 413
+2025-11-24 08:19:19,663 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:19:20,834 [INFO] override: Successfully overrode event 275-A to Monday 10:00 AM - 11:00 AM in 506
+2025-11-24 08:19:20,888 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:19:45,938 [INFO] override: Successfully overrode event 97-B to Monday 9:30 AM - 10:30 AM in 413
+2025-11-24 08:19:46,044 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:19:54,948 [INFO] override: Successfully overrode event 97-B to Monday 9:00 AM - 10:00 AM in 413
+2025-11-24 08:19:55,003 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:19:56,140 [INFO] override: Successfully overrode event 97-B to Monday 8:30 AM - 9:30 AM in 413
+2025-11-24 08:19:56,195 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:27:55,268 [INFO] override: Successfully overrode event 97-B to Monday 7:00 AM - 8:00 AM in 413
+2025-11-24 08:27:55,319 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:27:56,714 [INFO] override: Successfully overrode event 45-A to Monday 7:30 AM - 8:30 AM in 413
+2025-11-24 08:27:56,815 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:49:50,598 [INFO] override: Successfully overrode event 45-A to Monday 8:30 AM - 9:30 AM in 413
+2025-11-24 08:49:50,663 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:49:53,185 [INFO] override: Successfully overrode event 45-A to Monday 8:00 AM - 9:00 AM in 413
+2025-11-24 08:49:53,261 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:50:11,184 [INFO] override: Successfully overrode event 631 to Monday 6:30 PM - 8:00 PM in 518
+2025-11-24 08:50:11,222 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:50:12,703 [INFO] override: Successfully overrode event 535 to Monday 4:00 PM - 5:30 PM in 518
+2025-11-24 08:50:12,742 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:52:46,542 [INFO] override: Successfully overrode event 195 to Friday 2:30 PM - 4:00 PM in 518
+2025-11-24 08:52:46,552 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:53:10,256 [INFO] override: Successfully overrode event 197 to Friday 1:30 PM - 3:00 PM in 518
+2025-11-24 08:53:10,353 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:53:11,798 [INFO] override: Successfully overrode event 197 to Friday 2:30 PM - 4:00 PM in 518
+2025-11-24 08:53:11,936 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:53:15,746 [INFO] override: Successfully overrode event 197 to Friday 3:00 PM - 4:30 PM in 518
+2025-11-24 08:53:15,876 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 08:53:25,230 [INFO] override: Successfully overrode event 197 to Friday 2:30 PM - 4:00 PM in 518
+2025-11-24 08:53:25,323 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:08:49,817 [INFO] override: Successfully overrode event 111-A to Monday 6:00 AM - 7:00 AM in 505
+2025-11-24 09:08:49,852 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:11:11,099 [INFO] override: Successfully overrode event 111-A to Monday 7:00 AM - 8:00 AM in 505
+2025-11-24 09:11:11,182 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:17:23,778 [INFO] override: Successfully overrode event 111-A to Monday 7:00 AM - 8:00 AM in 505
+2025-11-24 09:17:23,796 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:17:50,312 [INFO] override: Successfully overrode event 42 to Monday 7:00 AM - 8:00 AM in 412
+2025-11-24 09:17:50,323 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:28:50,089 [INFO] override: Successfully overrode event 111-A to Monday 7:00 AM - 8:00 AM in 411
+2025-11-24 09:28:50,116 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:29:15,509 [INFO] override: Successfully overrode event 126 to Monday 7:00 AM - 8:00 AM in 101
+2025-11-24 09:29:15,520 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:29:55,807 [INFO] override: Successfully overrode event 111-B to Monday 8:00 AM - 9:00 AM in 410
+2025-11-24 09:29:55,819 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:30:15,864 [INFO] override: Successfully overrode event 131-A to Monday 7:00 AM - 8:00 AM in 414
+2025-11-24 09:30:15,881 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:30:24,118 [INFO] override: Successfully overrode event 131-A to Monday 7:00 AM - 8:00 AM in 506
+2025-11-24 09:30:24,126 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:30:55,950 [INFO] override: Successfully overrode event 161-A to Monday 8:00 AM - 9:00 AM in 510
+2025-11-24 09:30:55,965 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:37:32,335 [INFO] override: Successfully overrode event 126 to Monday 10:00 AM - 11:00 AM in 101
+2025-11-24 09:37:32,393 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:37:35,094 [INFO] override: Successfully overrode event 289 to Monday 7:00 AM - 8:00 AM in 505
+2025-11-24 09:37:35,186 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:37:36,974 [INFO] override: Successfully overrode event 161-B to Monday 7:00 AM - 8:00 AM in 505
+2025-11-24 09:37:37,065 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:37:39,432 [INFO] override: Successfully overrode event 97-B to Monday 7:00 AM - 8:00 AM in 505
+2025-11-24 09:37:39,493 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:37:40,890 [INFO] override: Successfully overrode event 45-A to Monday 7:00 AM - 8:00 AM in 505
+2025-11-24 09:37:40,988 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:42:40,424 [INFO] override: Successfully overrode event 275-A to Monday 7:00 AM - 8:00 AM in 413
+2025-11-24 09:42:40,502 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:42:52,874 [INFO] override: Successfully overrode event 271-B to Monday 7:00 AM - 8:00 AM in 413
+2025-11-24 09:42:52,975 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:43:14,648 [INFO] override: Successfully overrode event 271-A to Monday 7:30 AM - 8:30 AM in 413
+2025-11-24 09:43:14,698 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:43:18,624 [INFO] override: Successfully overrode event 271-A to Monday 7:00 AM - 8:00 AM in 413
+2025-11-24 09:43:18,675 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:43:22,826 [INFO] override: Successfully overrode event 148-B to Monday 7:00 AM - 8:00 AM in 413
+2025-11-24 09:43:22,879 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:43:28,770 [INFO] override: Successfully overrode event 148-B to Monday 8:00 AM - 9:00 AM in 101
+2025-11-24 09:43:28,827 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:43:32,862 [INFO] override: Successfully overrode event 275-A to Monday 7:00 AM - 8:00 AM in 101
+2025-11-24 09:43:32,916 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:43:34,291 [INFO] override: Successfully overrode event 271-B to Monday 7:00 AM - 8:00 AM in 101
+2025-11-24 09:43:34,343 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:43:35,463 [INFO] override: Successfully overrode event 271-A to Monday 7:00 AM - 8:00 AM in 101
+2025-11-24 09:43:35,560 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:44:03,332 [INFO] override: Successfully overrode event 350-A to Monday 7:00 AM - 8:00 AM in 506
+2025-11-24 09:44:03,345 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-24 09:44:16,223 [INFO] faculty: Assigning faculty Armilyn Martinez to group: ('GEC 208', 'BSIT', 'A')
+2025-11-24 09:44:16,227 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-24 09:44:16,228 [INFO] faculty: Assigned Armilyn Martinez to event 350-A (Block A)
+2025-11-24 09:44:16,229 [INFO] faculty: Assigned Armilyn Martinez to event 352-A (Block A)
+2025-11-24 09:44:16,229 [INFO] faculty: Assigned Armilyn Martinez to event 351-A (Block A)

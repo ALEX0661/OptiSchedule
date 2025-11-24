@@ -1,7 +1,6 @@
 import React from 'react';
-import { computeGroupKey } from '../utils/scheduleHelpers';
+import { computeGroupKey, isMergedClass, getBaseScheduleId } from '../utils/scheduleHelpers';
 import "../styles/ScheduleManagement.css";
-
 
 const toMinutes = timeStr => {
   const [time, meridiem] = timeStr.split(' ');
@@ -10,7 +9,6 @@ const toMinutes = timeStr => {
   if (meridiem === "AM" && hours === 12) hours = 0;
   return hours * 60 + minutes;
 };
-
 
 const mergeConsecutiveEvents = events => {
   const eventsCopy = JSON.parse(JSON.stringify(events));
@@ -73,7 +71,6 @@ const mergeConsecutiveEvents = events => {
   return mergedEvents;
 };
 
-
 const dayMapping = {
   "Monday": "M",
   "Tuesday": "T",
@@ -90,16 +87,13 @@ const FacultyModal = ({ faculty, assignedEvents, onClose, onRequestUnassignGroup
   
   if (!faculty) return null;
 
-  
   const mergedDaysEvents = assignedEvents && assignedEvents.length > 0 ? (() => {
-    
     const sortedEvents = assignedEvents.slice().sort((a, b) => {
       const aStart = toMinutes(a.period.split(' - ')[0]);
       const bStart = toMinutes(b.period.split(' - ')[0]);
       return aStart - bStart;
     });
 
-    
     const mergedEventsMap = sortedEvents.reduce((acc, event) => {
       const key = `${event.courseCode}-${event.session}-${event.program}-${event.year}-${event.block}-${event.room}-${event.faculty}-${event.period}`;
       const dayAbbrev = dayMapping[event.day] || event.day;
@@ -119,18 +113,15 @@ const FacultyModal = ({ faculty, assignedEvents, onClose, onRequestUnassignGroup
     });
   })() : [];
 
-  
   const finalMergedEvents = mergedDaysEvents.length > 0 ? mergeConsecutiveEvents(mergedDaysEvents) : [];
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="faculty-modal" onClick={e => e.stopPropagation()}>
-        {/* Green header */}
         <div className="faculty-modal-header">
           {faculty?.name || '—'}
         </div>
 
-        {/* Inner content with original padding */}
         <div className="faculty-modal-content">
           <div className="faculty-info-grid">
             <div className="info-card">
@@ -179,32 +170,53 @@ const FacultyModal = ({ faculty, assignedEvents, onClose, onRequestUnassignGroup
                   </tr>
                 </thead>
                 <tbody>
-                  {finalMergedEvents.map(event => (
-                    <tr key={event.schedule_id}>
-                      <td>{event.session}</td>
-                      <td>{event.program}</td>
-                      <td>{event.block}</td>
-                      <td>{event.year}</td>
-                      <td>{event.title} ({event.courseCode})</td>
-                      <td>{event.day}</td>
-                      <td>{event.period}</td>
-                      <td>{event.room}</td>
-                      <td>
-                        <button
-                          className="unassign-btn"
-                          onClick={() => {
-                            const groupKey = computeGroupKey(event);
-                            const groupEvents = assignedEvents.filter(
-                              e => computeGroupKey(e) === groupKey
-                            );
-                            onRequestUnassignGroup(groupKey, groupEvents);
-                          }}
-                        >
-                          Unassign
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  {finalMergedEvents.map(event => {
+                    // NEW: Check if this is a merged class
+                    const isMerged = isMergedClass(event);
+                    
+                    return (
+                      <tr key={event.schedule_id}>
+                        <td>{event.session}</td>
+                        <td>{event.program}</td>
+                        <td>
+                          {event.block}
+                          {isMerged && (
+                            <span 
+                              style={{ 
+                                marginLeft: '5px', 
+                                fontSize: '0.8em',
+                                color: '#007bff',
+                                fontWeight: 'bold'
+                              }}
+                              title="Merged class"
+                            >
+                              🔗
+                            </span>
+                          )}
+                        </td>
+                        <td>{event.year}</td>
+                        <td>{event.title} ({event.courseCode})</td>
+                        <td>{event.day}</td>
+                        <td>{event.period}</td>
+                        <td>{event.room}</td>
+                        <td>
+                          <button
+                            className="unassign-btn"
+                            onClick={() => {
+                              const groupKey = computeGroupKey(event);
+                              const groupEvents = assignedEvents.filter(
+                                e => computeGroupKey(e) === groupKey
+                              );
+                              onRequestUnassignGroup(groupKey, groupEvents);
+                            }}
+                            title={isMerged ? "Unassign all merged blocks" : "Unassign this group"}
+                          >
+                            Unassign
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

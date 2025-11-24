@@ -20,7 +20,12 @@ import UnassignConfirmationModal from '../components/UnassignConfirmationModal';
 import SuccessModal from '../components/SuccessModal';
 import ConfirmationModal from '../components/ConfirmationModal';
 import RoomView from '../components/RoomView';
-import { computeGroupKey } from '../utils/scheduleHelpers';
+import { 
+  computeGroupKey, 
+  getMergedClassEvents, 
+  isMergedClass,
+  computeExtendedGroupKey 
+} from '../utils/scheduleHelpers';
 import '../styles/ScheduleManagement.css';
 import '../styles/FacultyPanel.css';
 
@@ -226,35 +231,97 @@ const ScheduleManagement = () => {
     }
   };
 
-  const handleToggleGroupSelection = (event) => {
-    const groupKey = computeGroupKey(event);
-    if (selectedGroup && selectedGroup.groupKey === groupKey) {
-      setSelectedGroup(null);
-    } else {
-      const groupEvents = (schedule || []).filter((e) => computeGroupKey(e) === groupKey);
-      setSelectedGroup({ groupKey, groupEvents });
-    }
-  };
+  // UPDATED: Handle merged classes when toggling group selection
+// In ScheduleManagement.js, update handleToggleGroupSelection:
 
-  const handleAssignFaculty = async (facultyObj) => {
-    if (!selectedGroup) return;
-    try {
-      const firstEvent = selectedGroup.groupEvents[0];
-      const response = await assignFacultyToEvent(firstEvent.schedule_id, facultyObj.id);
-      if (response.status === 'success') {
-        setSchedule((prevSchedule) =>
-          (prevSchedule || []).map((event) =>
-            computeGroupKey(event) === selectedGroup.groupKey
-              ? { ...event, faculty: facultyObj.name }
-              : event
-          )
-        );
-        setSelectedGroup(null);
-      }
-    } catch (error) {
-      console.error('Error assigning faculty:', error);
+const handleToggleGroupSelection = (event) => {
+  console.log('Toggling group selection for event:', event);
+  console.log('Event schedule_id:', event.schedule_id);
+  
+  // Get all events in the merged class (if applicable)
+  const mergedEvents = getMergedClassEvents(schedule, event);
+  console.log('Merged events found:', mergedEvents);
+  
+  // Compute the extended group key that includes merged blocks
+  const extendedGroupKey = computeExtendedGroupKey(event, schedule);
+  console.log('Extended group key:', extendedGroupKey);
+  
+  if (selectedGroup && selectedGroup.groupKey === extendedGroupKey) {
+    setSelectedGroup(null);
+  } else {
+    // Collect all events for this group, including both lecture and lab
+    let groupEvents = [];
+    
+    mergedEvents.forEach(mergedEvent => {
+      const individualGroupKey = computeGroupKey(mergedEvent);
+      const eventsForBlock = (schedule || []).filter((e) => computeGroupKey(e) === individualGroupKey);
+      groupEvents = [...groupEvents, ...eventsForBlock];
+    });
+    
+    // Remove duplicates based on schedule_id
+    const uniqueGroupEvents = groupEvents.filter((event, index, self) =>
+      index === self.findIndex((e) => e.schedule_id === event.schedule_id)
+    );
+    
+    console.log('Group events collected:', uniqueGroupEvents);
+    console.log('Group events schedule_ids:', uniqueGroupEvents.map(e => e.schedule_id));
+    
+    setSelectedGroup({ 
+      groupKey: extendedGroupKey, 
+      groupEvents: uniqueGroupEvents,
+      isMerged: mergedEvents.length > 1,
+      mergedBlocks: mergedEvents.map(e => e.block)
+    });
+    
+    console.log('Selected group with merged classes:', {
+      groupKey: extendedGroupKey,
+      eventCount: uniqueGroupEvents.length,
+      isMerged: mergedEvents.length > 1,
+      blocks: mergedEvents.map(e => e.block),
+      scheduleIds: uniqueGroupEvents.map(e => e.schedule_id)
+    });
+  }
+};
+  // UPDATED: Handle faculty assignment for merged classes
+// UPDATED: Handle faculty assignment for merged classes
+const handleAssignFaculty = async (facultyObj) => {
+  if (!selectedGroup) return;
+  try {
+    const firstEvent = selectedGroup.groupEvents[0];
+    
+    // For merged classes, use the actual schedule_id with suffix (69-A or 69-B)
+    // The backend will handle finding the event and grouping by baseCourseCode
+    let validScheduleId = firstEvent.schedule_id;
+    
+    console.log('Assigning faculty with schedule_id:', validScheduleId);
+    console.log('Selected group:', selectedGroup);
+    console.log('First event:', firstEvent);
+    
+    const response = await assignFacultyToEvent(validScheduleId, facultyObj.id);
+    if (response.status === 'success') {
+      setSchedule((prevSchedule) =>
+        (prevSchedule || []).map((event) => {
+          // Check if this event is part of the selected group
+          const isInGroup = selectedGroup.groupEvents.some(
+            ge => ge.schedule_id === event.schedule_id
+          );
+          return isInGroup ? { ...event, faculty: facultyObj.name } : event;
+        })
+      );
+      setSelectedGroup(null);
+      setSuccessModalData({ 
+        message: `Faculty assigned successfully${selectedGroup.isMerged ? ' to merged classes' : ''}.`, 
+        type: 'success' 
+      });
     }
-  };
+  } catch (error) {
+    console.error('Error assigning faculty:', error);
+    setSuccessModalData({ 
+      message: 'Error assigning faculty: ' + (error.response?.data?.detail || error.message), 
+      type: 'error' 
+    });
+  }
+};
 
   const handleOverride = (scheduleId) => {
     const event = (schedule || []).find((e) => e.schedule_id === scheduleId);
@@ -373,6 +440,7 @@ const ScheduleManagement = () => {
             existingSchedules={existingSchedules}
             fetchError={scheduleError}
             onToggleViewMode={toggleViewMode}
+            schedule={schedule}
           />
           {loading && (
             <div className="loading-overlay">
@@ -437,6 +505,7 @@ const ScheduleManagement = () => {
               })
               .catch((err) => {
                 console.error('Error unassigning faculty:', err);
+                setSuccessModalData({ message: 'Error unassigning faculty.', type: 'error' });
                 setUnassignModalData(null);
               });
           }}

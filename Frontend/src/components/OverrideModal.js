@@ -8,9 +8,14 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
   const [endTime, setEndTime] = useState("");
   const [selectedDay, setSelectedDay] = useState("");
   const [availableRooms, setAvailableRooms] = useState([]);
+  const [occupiedRooms, setOccupiedRooms] = useState([]);
   const [allRooms, setAllRooms] = useState({ lecture: [], lab: [] });
   const [hasOverlap, setHasOverlap] = useState(false);
   const [warningMessage, setWarningMessage] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [conflictingEvents, setConflictingEvents] = useState([]);
+  const [pendingSaveData, setPendingSaveData] = useState(null);
+  const [isOccupiedRoom, setIsOccupiedRoom] = useState(false);
 
   const fixedDuration = event.session.toLowerCase() === "lecture" ? 60 : 90;
 
@@ -33,6 +38,19 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
     }
   };
 
+  const snapTo30Min = (timeStr) => {
+    if (!timeStr || timeStr === "") return "";
+    const [hours, minutes] = timeStr.split(":").map(Number);
+    const snappedMin = Math.round(minutes / 30) * 30;
+    let newHours = hours;
+    let newMin = snappedMin;
+    if (snappedMin === 60) {
+      newHours = (hours + 1) % 24;
+      newMin = 0;
+    }
+    return `${newHours.toString().padStart(2, "0")}:${newMin.toString().padStart(2, "0")}`;
+  };
+
   const convertTo24 = (timeStr) => {
     const parts = timeStr.split(" ");
     if (parts.length < 2) return timeStr;
@@ -46,6 +64,14 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
   const timeToMinutes = (timeStr) => {
     const [hours, minutes] = timeStr.split(":").map(Number);
     return hours * 60 + minutes;
+  };
+
+  const minutesToTime12Hour = (minutes) => {
+    const hours = Math.floor(minutes / 60) % 24;
+    const mins = minutes % 60;
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12;
+    return `${displayHours}:${mins.toString().padStart(2, '0')} ${period}`;
   };
 
   const updateFields = useCallback(
@@ -73,57 +99,113 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
       const filteredRooms = (Array.isArray(relevantRooms) ? relevantRooms : []).filter(
         (room) => !usedRooms.has(room)
       );
+      const occupied = (Array.isArray(relevantRooms) ? relevantRooms : []).filter(
+        (room) => usedRooms.has(room)
+      );
       setAvailableRooms(filteredRooms);
+      setOccupiedRooms(occupied);
     },
     [event, schedule, allRooms, fixedDuration]
   );
 
-  const checkForOverlap = useCallback(() => {
+  const determineConflictType = (conflictEvent, newStartMinutes, newEndMinutes, dayToCheck, newRoom) => {
+    const conflicts = [];
+    const [evStart, evEnd] = parsePeriod(conflictEvent.period);
+    
+    // Check time overlap
+    const hasTimeOverlap = !(newEndMinutes <= evStart || newStartMinutes >= evEnd);
+    
+    // Check if same section (program, year, block)
+    const isSameSection = conflictEvent.program === event.program &&
+                          conflictEvent.block === event.block &&
+                          conflictEvent.year === event.year;
+    
+    // Check if same faculty
+    const isSameFaculty = event.faculty && conflictEvent.faculty === event.faculty;
+    
+    // Check if same room
+    const isSameRoom = conflictEvent.room === newRoom;
+    
+    if (hasTimeOverlap) {
+      if (isSameSection) conflicts.push("Section Time Conflict");
+      if (isSameFaculty) conflicts.push("Instructor Time Conflict");
+      if (isSameRoom) conflicts.push("Room Conflict");
+    }
+    
+    return conflicts.length > 0 ? conflicts.join(" + ") : "Unknown Conflict";
+  };
+
+  const checkForOverlap = useCallback((selectedRoom = null) => {
     if (!startTime) return;
     const newStartMinutes = timeToMinutes(startTime);
     const newEndMinutes = newStartMinutes + fixedDuration;
     let overlapFound = false;
+    const conflicts = [];
     const dayToCheck = selectedDay || event.day;
+    const roomToCheck = selectedRoom || document.querySelector('input[name="override-room"]:checked')?.value || "";
 
     schedule.forEach((ev) => {
       if (ev.schedule_id === event.schedule_id) return;
-      if (
-        ev.program === event.program &&
-        ev.block === event.block &&
-        ev.year === event.year &&
-        ev.day === dayToCheck
-      ) {
-        const [evStart, evEnd] = parsePeriod(ev.period);
-        console.log(`Checking overlap: ${event.title} (${newStartMinutes}-${newEndMinutes}) vs ${ev.title} (${evStart}-${evEnd})`);
-        if (!(newEndMinutes <= evStart || newStartMinutes >= evEnd)) {
+      
+      const [evStart, evEnd] = parsePeriod(ev.period);
+      const hasTimeOverlap = !(newEndMinutes <= evStart || newStartMinutes >= evEnd);
+      
+      if (ev.day === dayToCheck && hasTimeOverlap) {
+        // Check for section conflict
+        if (ev.program === event.program &&
+            ev.block === event.block &&
+            ev.year === event.year) {
           overlapFound = true;
-          console.log(`Overlap detected with ${ev.title}`);
+          const conflictType = determineConflictType(ev, newStartMinutes, newEndMinutes, dayToCheck, roomToCheck);
+          if (!conflicts.find(c => c.schedule_id === ev.schedule_id)) {
+            conflicts.push({ ...ev, conflictType });
+          }
+        }
+        
+        // Check for faculty conflict
+        if (event.faculty && ev.faculty === event.faculty) {
+          if (!conflicts.find(c => c.schedule_id === ev.schedule_id)) {
+            overlapFound = true;
+            const conflictType = determineConflictType(ev, newStartMinutes, newEndMinutes, dayToCheck, roomToCheck);
+            conflicts.push({ ...ev, conflictType });
+          } else {
+            // Update existing conflict type to include faculty
+            const existingConflict = conflicts.find(c => c.schedule_id === ev.schedule_id);
+            if (existingConflict) {
+              existingConflict.conflictType = determineConflictType(ev, newStartMinutes, newEndMinutes, dayToCheck, roomToCheck);
+            }
+          }
+        }
+        
+        // Check for room conflict
+        if (roomToCheck && ev.room === roomToCheck) {
+          if (!conflicts.find(c => c.schedule_id === ev.schedule_id)) {
+            overlapFound = true;
+            const conflictType = determineConflictType(ev, newStartMinutes, newEndMinutes, dayToCheck, roomToCheck);
+            conflicts.push({ ...ev, conflictType });
+          } else {
+            // Update existing conflict type to include room
+            const existingConflict = conflicts.find(c => c.schedule_id === ev.schedule_id);
+            if (existingConflict) {
+              existingConflict.conflictType = determineConflictType(ev, newStartMinutes, newEndMinutes, dayToCheck, roomToCheck);
+            }
+          }
         }
       }
     });
-
-    if (event.faculty) {
-      schedule.forEach((ev) => {
-        if (ev.schedule_id === event.schedule_id) return;
-        if (ev.day === dayToCheck && ev.faculty === event.faculty) {
-          const [evStart, evEnd] = parsePeriod(ev.period);
-          if (!(newEndMinutes <= evStart || newStartMinutes >= evEnd)) {
-            overlapFound = true;
-            console.log(`Faculty overlap detected with ${ev.title}`);
-          }
-        }
-      });
-    }
+    
     setHasOverlap(overlapFound);
+    setConflictingEvents(conflicts);
   }, [startTime, fixedDuration, schedule, event, selectedDay]);
 
   useEffect(() => {
     if (event) {
       const [startStr] = event.period.split(" - ");
       const convertedStart = convertTo24(startStr);
-      setStartTime(convertedStart);
+      const snappedStart = snapTo30Min(convertedStart);
+      setStartTime(snappedStart);
       setSelectedDay(event.day || "");
-      updateFields(convertedStart, event.day || "");
+      updateFields(snappedStart, event.day || "");
     }
   }, [event, updateFields]);
 
@@ -133,16 +215,27 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
 
   const handleStartTimeChange = (e) => {
     const newStart = e.target.value;
-    setStartTime(newStart);
-    updateFields(newStart, selectedDay || event.day);
-    setWarningMessage(""); // Clear warning when start time changes
+    const snapped = snapTo30Min(newStart);
+    setStartTime(snapped);
+    updateFields(snapped, selectedDay || event.day);
+    setWarningMessage("");
   };
 
   const handleDayChange = (e) => {
     const newDay = e.target.value;
     setSelectedDay(newDay);
     updateFields(startTime, newDay);
-    setWarningMessage(""); // Clear warning when day changes
+    setWarningMessage("");
+  };
+
+  const handleRoomChange = () => {
+    const selectedRoomRadio = document.querySelector('input[name="override-room"]:checked');
+    if (selectedRoomRadio) {
+      const selectedRoom = selectedRoomRadio.value;
+      const isOccupied = occupiedRooms.includes(selectedRoom);
+      setIsOccupiedRoom(isOccupied);
+      checkForOverlap(selectedRoom);
+    }
   };
 
   const handleSave = () => {
@@ -152,77 +245,320 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
       setWarningMessage("Please select a start time and a room.");
       return;
     }
-    setWarningMessage(""); // Clear warning on successful save attempt
-    onSave({
+    
+    const saveData = {
       schedule_id: event.schedule_id,
       new_start: startTime,
       new_room: newRoom,
       new_day: selectedDay || event.day,
-    });
+    };
+
+    // Check if occupied room or has conflicts
+    const isOccupied = occupiedRooms.includes(newRoom);
+    if (isOccupied || (hasOverlap && conflictingEvents.length > 0)) {
+      setPendingSaveData(saveData);
+      setShowConfirmModal(true);
+    } else {
+      setWarningMessage("");
+      onSave(saveData);
+    }
+  };
+
+  const handleConfirmOverride = () => {
+    setShowConfirmModal(false);
+    setWarningMessage("");
+    if (pendingSaveData) {
+      onSave(pendingSaveData);
+    }
+  };
+
+  const handleCancelOverride = () => {
+    setShowConfirmModal(false);
+    setPendingSaveData(null);
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="override-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="override-header">
-          <h3>Manual Adjustment</h3>
-        </div>
-        <div className="override-content">
-          <div className="override-field">
-            <label htmlFor="override-day">Select Day:</label>
-            <select id="override-day" value={selectedDay} onChange={handleDayChange}>
-              <option value="">(Auto)</option>
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-              <option value="Saturday">Saturday</option>
-              <option value="Sunday">Sunday</option>
-            </select>
+    <>
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="override-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="override-header">
+            <h3>Manual Adjustment</h3>
           </div>
-          <div className="override-field">
-            <label htmlFor="override-start">Start Time:</label>
-            <input type="time" id="override-start" value={startTime} onChange={handleStartTimeChange} />
-          </div>
-          <div className="override-field">
-            <label htmlFor="override-end">End Time:</label>
-            <input type="time" id="override-end" value={endTime} readOnly />
-          </div>
-          <div className="override-field">
-            <label>Available Rooms:</label>
-            <div id="override-room-container">
-              {availableRooms.length > 0 ? (
-                availableRooms.map((room) => (
-                  <label key={room} className="room-label">
-                    <input type="radio" name="override-room" value={room} defaultChecked={room === availableRooms[0]} />
-                    {room}
-                  </label>
-                ))
-              ) : (
-                <span>No rooms available</span>
-              )}
+          <div className="override-content">
+            <div className="override-field">
+              <label htmlFor="override-day">Select Day:</label>
+              <select id="override-day" value={selectedDay} onChange={handleDayChange}>
+                <option value="">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+              </select>
             </div>
+            <div className="override-field">
+              <label htmlFor="override-start">Start Time:</label>
+              <input 
+                type="time" 
+                id="override-start" 
+                value={startTime} 
+                onChange={handleStartTimeChange} 
+                step="1800"
+                list="time-options"
+              />
+              <datalist id="time-options">
+                <option value="07:00" />
+                <option value="07:30" />
+                <option value="08:00" />
+                <option value="08:30" />
+                <option value="09:00" />
+                <option value="09:30" />
+                <option value="10:00" />
+                <option value="10:30" />
+                <option value="11:00" />
+                <option value="11:30" />
+                <option value="12:00" />
+                <option value="12:30" />
+                <option value="13:00" />
+                <option value="13:30" />
+                <option value="14:00" />
+                <option value="14:30" />
+                <option value="15:00" />
+                <option value="15:30" />
+                <option value="16:00" />
+                <option value="16:30" />
+                <option value="17:00" />
+                <option value="17:30" />
+                <option value="18:00" />
+                <option value="18:30" />
+                <option value="19:00" />
+                <option value="19:30" />
+                <option value="20:00" />
+              </datalist>
+            </div>
+            <div className="override-field">
+              <label htmlFor="override-end">End Time:</label>
+              <input type="time" id="override-end" value={endTime} readOnly />
+            </div>
+            <div className="override-field">
+              <label>Available Rooms:</label>
+              <div id="override-room-container">
+                {availableRooms.length > 0 ? (
+                  availableRooms.map((room) => (
+                    <label key={room} className="room-label">
+                      <input 
+                        type="radio" 
+                        name="override-room" 
+                        value={room} 
+                        defaultChecked={room === availableRooms[0]} 
+                        onChange={handleRoomChange}
+                      />
+                      {room}
+                    </label>
+                  ))
+                ) : (
+                  <span>No rooms available</span>
+                )}
+              </div>
+            </div>
+            {occupiedRooms.length > 0 && (
+              <div className="override-field">
+                <label style={{ color: "var(--red)" }}>Occupied Rooms:</label>
+                <div id="override-room-container">
+                  {occupiedRooms.map((room) => (
+                    <label key={room} className="room-label" style={{ color: "var(--red)", border: "1px solid var(--red)" }}>
+                      <input 
+                        type="radio" 
+                        name="override-room" 
+                        value={room}
+                        onChange={handleRoomChange}
+                      />
+                      {room}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
             {warningMessage && (
-              <div className="warning-message" style={{ color: "var(--red)", fontSize: "0.9em", marginTop: "5px" }}>
+              <div className="warning-message" style={{ 
+                color: "var(--red)", 
+                fontSize: "0.85em", 
+                marginTop: "10px",
+                padding: "8px",
+                backgroundColor: "rgba(198, 40, 40, 0.1)",
+                borderRadius: "var(--radius)",
+                border: "1px solid var(--red)"
+              }}>
                 {warningMessage}
               </div>
             )}
+            {hasOverlap && (
+              <div className="overlap-warning" style={{ 
+                color: "var(--red)", 
+                fontSize: "0.75em", 
+                marginTop: "10px",
+                padding: "10px",
+                backgroundColor: "rgba(198, 40, 40, 0.1)",
+                borderRadius: "var(--radius)",
+                border: "1px solid var(--red)",
+                display: "flex",
+                flexDirection: "column",
+                gap: "6px"
+              }}>
+                <div style={{ fontWeight: "800" }}>
+                  Schedule Conflict Detected
+                </div>
+              </div>
+            )}
           </div>
-          {hasOverlap && (
-            <div className="overlap-warning" style={{ color: "var(--red)", fontSize: "0.9em", marginTop: "10px" }}>
-              Warning: The selected time slot overlaps with another event for this program, year, and block. The overlapping events will be marked in red.
-            </div>
-          )}
-        </div>
-        <div className="override-actions">
-          <button onClick={handleSave}>
-            Save Adjustment
-          </button>
-          <button onClick={onClose}>Cancel</button>
+          <div className="override-actions">
+            <button onClick={handleSave}>
+              Save Adjustment
+            </button>
+            <button onClick={onClose}>Cancel</button>
+          </div>
         </div>
       </div>
-    </div>
+
+      {showConfirmModal && (
+        <div className="modal-overlay" onClick={handleCancelOverride}>
+          <div className="unassign-modal" onClick={e => e.stopPropagation()}>
+            <header className="unassign-modal-header">
+              <h2>Confirm Schedule Override</h2>
+              <p>
+                You are about to move <strong>{event.title} ({event.courseCode})</strong>{isOccupiedRoom && !hasOverlap ? ' to an occupied room' : hasOverlap ? ' to a time slot that conflicts with other classes' : ''}.
+              </p>
+            </header>
+            <div className="unassign-modal-content">
+              <div style={{ 
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "15px",
+                marginBottom: "15px"
+              }}>
+                <div style={{ 
+                  padding: "12px", 
+                  backgroundColor: "#fff3e0", 
+                  borderRadius: "var(--radius)",
+                  border: "2px solid #ff9800"
+                }}>
+                  <div style={{ fontWeight: "600", marginBottom: "8px", color: "#e65100", fontSize: "0.95em" }}>
+                    Current Schedule:
+                  </div>
+                  <div style={{ fontSize: "0.85em", lineHeight: "1.6", color: "#333" }}>
+                    <strong>{event.title} ({event.courseCode})</strong><br />
+                    <span style={{ color: "#666" }}>
+                      {event.session}
+                    </span>
+                  </div>
+                  <div style={{ 
+                    marginTop: "8px", 
+                    paddingTop: "8px", 
+                    borderTop: "1px solid #ffe0b2",
+                    fontSize: "0.85em"
+                  }}>
+                    <span style={{ color: "#666" }}>
+                      Program: <strong>{event.program}</strong><br />
+                      Year: <strong>{event.year}</strong><br />
+                      Block: <strong>{event.block}</strong><br />
+                      Day: <strong>{event.day}</strong><br />
+                      Time: <strong>{event.period}</strong><br />
+                      Room: <strong>{event.room || 'Not assigned'}</strong>
+                    </span>
+                  </div>
+                </div>
+
+                <div style={{ 
+                  padding: "12px", 
+                  backgroundColor: "#e8f5e9", 
+                  borderRadius: "var(--radius)",
+                  border: "2px solid var(--primary)"
+                }}>
+                  <div style={{ fontWeight: "600", marginBottom: "8px", color: "var(--primary-dark)", fontSize: "0.95em" }}>
+                    New Schedule:
+                  </div>
+                  <div style={{ fontSize: "0.85em", lineHeight: "1.6", color: "#333" }}>
+                    <strong>{event.title} ({event.courseCode})</strong><br />
+                    <span style={{ color: "#666" }}>
+                      {event.session}
+                    </span>
+                  </div>
+                  <div style={{ 
+                    marginTop: "8px", 
+                    paddingTop: "8px", 
+                    borderTop: "1px solid #c8e6c9",
+                    fontSize: "0.85em"
+                  }}>
+                    <span style={{ color: "#666" }}>
+                      Program: <strong>{event.program}</strong><br />
+                      Year: <strong>{event.year}</strong><br />
+                      Block: <strong>{event.block}</strong><br />
+                      Day: <strong>{selectedDay || event.day}</strong><br />
+                      Time: <strong>{minutesToTime12Hour(timeToMinutes(startTime))} - {minutesToTime12Hour(timeToMinutes(startTime) + fixedDuration)}</strong><br />
+                      Room: <strong>{pendingSaveData?.new_room || 'Not selected'}</strong>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {conflictingEvents.length > 0 && (
+                <>
+                  <p className="unassign-info" style={{ color: "var(--red)", fontWeight: "500" }}>
+                    The following classes will conflict with this change:
+                  </p>
+                  <div className="modal-table-container">
+                    <table className="assigned-events-table" style={{ fontSize: "0.85em" }}>
+                      <thead>
+                        <tr>
+                          <th style={{ padding: "8px 6px" }}>Session</th>
+                          <th style={{ padding: "8px 6px" }}>Course</th>
+                          <th style={{ padding: "8px 6px" }}>Program</th>
+                          <th style={{ padding: "8px 6px" }}>Year</th>
+                          <th style={{ padding: "8px 6px" }}>Block</th>
+                          <th style={{ padding: "8px 6px" }}>Room</th>
+                          <th style={{ padding: "8px 6px" }}>Day</th>
+                          <th style={{ padding: "8px 6px" }}>Time</th>
+                          <th style={{ padding: "8px 6px" }}>Conflict Type</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {conflictingEvents.map(conflict => (
+                          <tr key={conflict.schedule_id}>
+                            <td style={{ padding: "8px 6px" }}>{conflict.session || '-'}</td>
+                            <td style={{ padding: "8px 6px" }}>
+                              <strong>{conflict.title}</strong><br />
+                              <span style={{ fontSize: "0.9em", color: "#666" }}>({conflict.courseCode})</span>
+                            </td>
+                            <td style={{ padding: "8px 6px" }}>{conflict.program || '-'}</td>
+                            <td style={{ padding: "8px 6px" }}>{conflict.year || '-'}</td>
+                            <td style={{ padding: "8px 6px" }}>{conflict.block || '-'}</td>
+                            <td style={{ padding: "8px 6px" }}>{conflict.room || '-'}</td>
+                            <td style={{ padding: "8px 6px" }}>{conflict.day}</td>
+                            <td style={{ padding: "8px 6px", fontSize: "0.9em" }}>{conflict.period}</td>
+                            <td style={{ padding: "8px 6px", color: "var(--red)", fontWeight: "600", fontSize: "0.9em" }}>
+                              {conflict.conflictType}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
+            </div>
+            <footer className="unassign-modal-footer">
+              <button className="modal-btn cancel-btn" onClick={handleCancelOverride}>
+                Cancel
+              </button>
+              <button className="modal-btn confirm-btn" onClick={handleConfirmOverride}>
+                Confirm Override
+              </button>
+            </footer>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -26,24 +26,15 @@ async def override_event(request: OverrideRequest):
         new_end_minutes = new_start_minutes + fixed_duration
         new_day = request.new_day if request.new_day and request.new_day.lower() != "auto" else event.get("day")
     
-        # Check for conflicts with other events in the same section
-        for e in schedule_dict.values():
-            if e["schedule_id"] == request.schedule_id:
-                continue
-            if (e.get("program") == event.get("program") and 
-                e.get("block") == event.get("block") and 
-                e.get("year") == event.get("year") and 
-                e.get("day") == new_day):
-                e_start, e_end = get_start_end(e["period"])
-                if not (new_end_minutes <= e_start or new_start_minutes >= e_end):
-                    raise HTTPException(status_code=400, detail=f"Override causes conflict with event {e['schedule_id']} on {new_day}")
-    
+        # No conflict checking - frontend handles confirmation
+        # Just apply the override
         new_period = format_period(request.new_start, fixed_duration)
         event["period"] = new_period
         event["room"] = request.new_room
         event["day"] = new_day
         schedule_dict[request.schedule_id] = event
     
+        logger.info(f"Successfully overrode event {request.schedule_id} to {new_day} {new_period} in {request.new_room}")
         return {"status": "success", "event": event}
     except HTTPException as he:
         logger.error(f"HTTP error in override_event: {he.detail}")

@@ -18,6 +18,51 @@ export const computeGroupKey = (event) => {
   return `${baseCode}-${event.program}-${event.year}-${event.block}`;
 };
 
+// NEW: Function to extract base schedule ID (removes -A, -B suffixes for merged classes)
+export const getBaseScheduleId = (scheduleId) => {
+  if (typeof scheduleId === 'string' && scheduleId.match(/-[AB]$/)) {
+    return scheduleId.replace(/-[AB]$/, '');
+  }
+  return scheduleId;
+};
+
+// NEW: Function to check if an event is part of a merged class
+export const isMergedClass = (event) => {
+  const id = String(event.schedule_id);
+  return id.match(/-[AB]$/) !== null;
+};
+
+// NEW: Function to get all merged class events (both blocks)
+export const getMergedClassEvents = (schedule, event) => {
+  if (!isMergedClass(event)) {
+    return [event]; // Not a merged class, return just this event
+  }
+  
+  const baseId = getBaseScheduleId(event.schedule_id);
+  const mergedEvents = schedule.filter(e => {
+    const eBaseId = getBaseScheduleId(e.schedule_id);
+    return eBaseId === baseId && 
+           e.courseCode === event.courseCode &&
+           e.session === event.session &&
+           e.day === event.day &&
+           e.period === event.period;
+  });
+  
+  return mergedEvents;
+};
+
+// NEW: Function to compute group key including all merged blocks
+export const computeExtendedGroupKey = (event, schedule) => {
+  const mergedEvents = getMergedClassEvents(schedule, event);
+  if (mergedEvents.length > 1) {
+    // For merged classes, create a key that includes all blocks
+    const blocks = mergedEvents.map(e => e.block).sort().join('+');
+    const baseCode = event.baseCourseCode || event.courseCode.replace(/[AL]$/, '');
+    return `${baseCode}-${event.program}-${event.year}-${blocks}`;
+  }
+  return computeGroupKey(event);
+};
+
 export const calculateFacultyUnits = (facultyName, schedule) => {
   let units = 0;
   schedule.forEach((event) => {
@@ -65,7 +110,7 @@ export const parseTimeToMinutes = (timeStr) => {
   const match = timeStr.match(/^(\d{1,2}):(\d{2})(AM|PM)$/i);
   if (!match) return null;
 
-  let [hh, mm, meridiem] = match;
+  let [, hh, mm, meridiem] = match;
   let hours = parseInt(hh, 10);
   const minutes = parseInt(mm, 10);
   if (meridiem.toUpperCase() === "PM" && hours < 12) {
@@ -91,9 +136,10 @@ export const computeEventUnits = event => {
   const end = toMinutes(endStr);
   const durationHours = (end - start) / 60;
 
-  // count each day–token: M, T, W, Th, F, Sat, Sun
+  // count each day—token: M, T, W, Th, F, Sat, Sun
   const dayTokens = event.day.match(/M(?!h)|Th|T(?!h)|W|F|Sat|Sun/g) || [];
   const numDays = dayTokens.length;
 
   return durationHours * numDays;
 };
+
