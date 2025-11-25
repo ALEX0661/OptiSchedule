@@ -11,8 +11,8 @@
   --border-gray: #dddddd;
   --green: #4caf50;
   --green-dark: #388e3c;
-  --red: #c62828; /* Darkened from #f44336 to #c62828 for better visibility */
-  --red-dark: #b71c1c; /* Darkened from #d32f2f to #b71c1c for hover states */
+  --red: #c62828;
+  --red-dark: #b71c1c;
   --blue: #2196f3;
   --yellow: #FFC107;
   --radius: 8px; 
@@ -27,6 +27,7 @@
   font-family: 'Poppins', sans-serif;
 }
 
+/* --- Modal Base Styles --- */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -37,77 +38,88 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 11px; 
+  padding: 10px; 
   z-index: 2000;
 }
 
+/* --- UPDATED: Faculty Modal Container --- */
 .faculty-modal {
   background-color: var(--white);
   padding: 0;
   border-radius: var(--radius);
-  width: 64%;
-  max-width: 72vw;
-  max-height: 68vh;
-  overflow-y: auto;
-  box-shadow: 0 2px 13px rgba(0,0,0,0.16); 
+  /* Widen the modal to fit the fixed table layout comfortably */
+  width: 90%;
+  max-width: 850px;
+  /* Use flex column to handle internal scrolling */
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2); 
   position: relative;
-  scrollbar-width: thin; 
-  scrollbar-color: transparent transparent; 
-}
-
-.faculty-modal:hover,
-.faculty-modal:focus,
-.faculty-modal:active {
-  scrollbar-color: var(--primary) transparent; 
-}
-
-.faculty-modal::-webkit-scrollbar {
-  width: 5px;
-}
-
-.faculty-modal::-webkit-scrollbar-track {
-  background: transparent; 
-}
-
-.faculty-modal::-webkit-scrollbar-thumb {
-  background-color: transparent; 
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
-}
-
-.faculty-modal:hover::-webkit-scrollbar-thumb,
-.faculty-modal:focus::-webkit-scrollbar-thumb,
-.faculty-modal:active::-webkit-scrollbar-thumb {
-  background-color: var(--primary); 
 }
 
 .faculty-modal-header {
   background-color: var(--primary);
   color: var(--white);
-  padding: 11px; 
+  padding: 12px; 
   text-align: center;
-  font-size: 0.8rem; 
+  font-size: 0.9rem; 
   font-weight: 600;
+  border-radius: var(--radius) var(--radius) 0 0;
+  flex-shrink: 0;
 }
 
+/* --- UPDATED: Modal Content Area --- */
 .faculty-modal-content {
-  padding: 18px;
+  padding: 20px;
+  overflow-y: auto; /* Scroll content vertically if needed */
+  scrollbar-width: thin; 
+  scrollbar-color: transparent transparent; 
 }
 
+.faculty-modal-content:hover {
+  scrollbar-color: var(--primary) transparent; 
+}
+
+/* Scrollbar Styling */
+.faculty-modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+.faculty-modal-content::-webkit-scrollbar-track {
+  background: transparent; 
+}
+.faculty-modal-content::-webkit-scrollbar-thumb {
+  background-color: transparent; 
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+.faculty-modal-content:hover::-webkit-scrollbar-thumb {
+  background-color: var(--primary); 
+}
+
+/* --- Faculty Info Grid --- */
 .faculty-info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(176px, 1fr));
-  gap: 11px; 
-  margin-bottom: 18px; 
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px; 
+  margin-bottom: 20px; 
 }
 
+/* UPDATED: Centering Content inside Info Cards */
 .faculty-info-grid .info-card {
   background: linear-gradient(145deg, var(--light-gray), var(--white));
   border: 1px solid var(--border-gray);
   border-radius: var(--radius);
-  padding: 10px; 
+  padding: 10px 12px; 
   box-shadow: var(--card-shadow);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  /* Centering Logic */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .faculty-info-grid .info-card:hover {
@@ -116,39 +128,72 @@
 }
 
 .faculty-info-grid .info-card h4 {
-  font-size: 0.58rem; 
+  font-size: 0.65rem; 
   font-weight: 600;
   margin-bottom: 6px; 
   color: var(--primary-dark);
   border-bottom: 1px solid var(--border-gray);
-  padding-bottom: 2px; 
+  padding-bottom: 4px; 
+  text-transform: uppercase;
+  width: 100%; /* Ensure underline spans width even when centered */
 }
 
 .faculty-info-grid .info-card p {
-  font-size: 0.54rem; 
+  font-size: 0.75rem; 
   margin: 0;
   color: var(--dark-gray);
-  line-height: 0.9;
+  line-height: 1.2;
+}
+
+.modal-divider {
+  margin: 15px 0;
+  border: 0;
+  border-top: 1px solid var(--border-gray);
+}
+
+.section-title {
+  font-size: 0.95em;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+/* --- UPDATED: Assigned Events Table (Fixed Layout) --- */
+.modal-table-container {
+  width: 100%;
+  border: 1px solid var(--border-gray);
+  border-radius: 4px;
+  overflow: hidden; /* Clips corners */
+  margin-bottom: 15px;
 }
 
 .assigned-events-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 7px 0; 
-  font-size: 0.39em; 
+  margin: 0; 
+  /* Critical for fixing width issues */
+  table-layout: fixed; 
 }
 
 .assigned-events-table th,
 .assigned-events-table td {
-  padding: 4px 5px; 
-  border: 1px solid var(--border-gray);
+  padding: 8px 10px; 
+  border-bottom: 1px solid var(--border-gray);
   text-align: left;
+  font-size: 0.75rem;
+  vertical-align: middle;
+  /* Ensure text truncates instead of breaking layout */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .assigned-events-table thead th {
-  background-color: var(--light-gray);
-  top: 0;
-  font-weight: 500;
+  background-color: #f1f3f4;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .assigned-events-table tbody tr:nth-child(even) {
@@ -159,41 +204,104 @@
   background-color: var(--primary-light);
 }
 
-.unassign-btn {
-  background-color: var(--red);
-  color: var(--white);
-  border: none;
-  padding: 6px 9px; 
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-size: 0.58em; 
-  transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+/* --- UPDATED: Specific Cell Styles for Modal Table --- */
+.assigned-events-table .center-text {
+  text-align: center;
 }
 
-.unassign-btn:hover {
-  background-color: var(--red-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.12);
+/* Course Cell - Stacked Code and Title */
+.course-cell {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  overflow: hidden;
+}
+
+.course-cell .course-code {
+  font-weight: 700;
+  font-size: 0.7rem;
+  color: var(--primary-dark);
+}
+
+.course-cell .course-title {
+  font-size: 0.7rem;
+  color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Section Cell with Merged Icon */
+.section-cell {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.merged-icon {
+  font-size: 12px;
+  cursor: help;
+}
+
+/* Time Cell */
+.time-cell {
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* New Unassign Icon Button */
+.unassign-icon-btn {
+  background-color: rgba(198, 40, 40, 0.1);
+  color: var(--red);
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin: 0 auto;
+  transition: all 0.2s ease;
+}
+
+.unassign-icon-btn:hover {
+  background-color: var(--red);
+  color: white;
+  transform: scale(1.1);
+}
+
+.no-events {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+  font-style: italic;
+  background: #f9f9f9;
+  border-radius: 4px;
 }
 
 .close-btn {
   background-color: var(--green);
   color: var(--white);
   border: none;
-  padding: 6px 0; 
+  padding: 8px 0; 
   border-radius: var(--radius);
   cursor: pointer;
   transition: background 0.3s ease;
-  margin-top: 11px; 
+  margin-top: 10px; 
   width: 100%;
-  font-size: 0.54em; 
+  font-size: 0.85em; 
+  font-weight: 500;
 }
 
 .close-btn:hover {
   background-color: var(--green-dark);
 }
 
+/* --- Main Layout --- */
 .schedule-management-container {
   display: flex;
   flex-direction: column;
@@ -207,8 +315,6 @@
   padding: 11px 18px; 
   background-color: var(--light-gray);
   margin-right: 200px;
-
-
 }
 
 .left-panel {
@@ -218,6 +324,7 @@
   gap: 11px; 
 }
 
+/* --- Schedule Grid Styles --- */
 .schedule-card {
   overflow: hidden;
   padding: 0;
@@ -237,10 +344,6 @@
   flex-grow: 1;
 }
 
-.schedule-table td {
-    font-size: 0.7.5rem;
-}
-
 .schedule-table {
   width: 100%;
   border-collapse: collapse;
@@ -256,11 +359,25 @@
   border-bottom: 1px solid var(--border-gray);
   position: sticky;
   top: 0;
+  z-index: 10;
 }
 
 .schedule-table td {
   padding: 6px 7px; 
   border-bottom: 1px solid var(--border-gray);
+  position: relative;
+  font-size: 0.75rem;
+}
+
+/* Specific main schedule column widths */
+.schedule-table td:nth-child(2) {
+  max-width: 250px;
+  width: 250px;
+}
+.schedule-table th:nth-child(7),
+.schedule-table td:nth-child(7) {
+  min-width: 150px;
+  width: 150px;
 }
 
 .schedule-table tr:hover {
@@ -270,9 +387,16 @@
 .schedule-table tr.overlap-row {
   background-color: rgba(198, 40, 40, 0.25); 
 }
-
 .schedule-table tr.overlap-row:hover {
   background-color: rgba(198, 40, 40, 0.35); 
+}
+
+/* Merged Row Styles */
+.merged-row {
+  background-color: rgba(25, 118, 210, 0.08) !important;
+}
+.merged-row:hover {
+  background-color: rgba(25, 118, 210, 0.15) !important;
 }
 
 .course-info {
@@ -280,18 +404,19 @@
   flex-direction: column;
 }
 
-.course-title {
+.course-info .course-title {
   font-weight: 500;
 }
 
-.course-code {
+.course-info .course-code {
   font-size: 10px; 
   color: var(--dark-gray);
   margin-top: 2px;
 }
 
+/* --- Override Modal & Buttons --- */
 .override-btn {
-  background-color: var(--green); /*from blue nung una to green */
+  background-color: var(--green);
   color: var(--white);
   border: none;
   padding: 4px 7px; 
@@ -304,7 +429,7 @@
 }
 
 .override-btn:hover {
-  background-color: var(--green); /*from blue nung una to green */
+  background-color: var(--green);
   transform: scale(1.05);
 }
 
@@ -406,6 +531,7 @@
   cursor: not-allowed;
 }
 
+/* --- Control Buttons --- */
 .save-schedule-container {
   display: flex;
   justify-content: space-between;
@@ -422,6 +548,15 @@
   cursor: pointer;
   transition: background 0.3s ease;
   font-weight: 500;
+}
+
+.save-schedule-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.save-schedule-btn:hover:enabled {
+  background-color: var(--primary-dark);
 }
 
 .existing-schedules-dropdown {
@@ -450,15 +585,6 @@
   border-color: var(--primary);
 }
 
-.save-schedule-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.save-schedule-btn:hover:enabled {
-  background-color: var(--primary-dark);
-}
-
 .schedule-name-display {
   padding: 12px 14px;
 }
@@ -470,30 +596,7 @@
   margin: 0;
 }
 
-h2 {
-  display: block;
-  font-size: 0.9em; 
-  margin-block-start: 0.66em;
-  margin-block-end: 0.66em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-  font-weight: bold;
-  unicode-bidi: isolate;
-}
-
-.faculty-modal {
-  width: 100%;
-  max-width: 648px; 
-}
-
-.faculty-modal {
-  background-color: var(--white);
-  padding: 0px;
-  border-radius: 6px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
-  position: relative;
-}
-
+/* --- Loading Overlay --- */
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -531,6 +634,7 @@ h2 {
   max-width: 64%;
 }
 
+/* --- Cards Animation --- */
 .cards {
   width: 100%;
   background-color: var(--white);
@@ -542,6 +646,12 @@ h2 {
   animation: slideUp 0.4s forwards;
 }
 
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Empty States --- */
 .no-faculty-container {
   display: flex;
   flex-direction: column;
@@ -565,8 +675,7 @@ h2 {
   text-align: center;
 }
 
-/* Add these styles to your existing ScheduleManagement.css file */
-
+/* --- View Toggles --- */
 .view-toggle-container {
   display: flex;
   justify-content: flex-end;
@@ -600,25 +709,45 @@ h2 {
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Ensure the schedule management container accommodates the new button */
-.schedule-management-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Responsive design for smaller screens */
+/* --- Responsive Adjustments --- */
 @media (max-width: 768px) {
   .view-toggle-container {
     justify-content: center;
     padding: 8px;
   }
-
   .view-toggle-btn {
     width: 100%;
     justify-content: center;
     font-size: 0.76em;
     padding: 8px 16px;
+  }
+  
+  .left-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .left-controls .save-schedule-btn,
+  .left-controls .existing-schedules-dropdown {
+    width: 100%;
+  }
+  .existing-schedules-dropdown {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .existing-schedules-dropdown label {
+    text-align: left;
+  }
+
+  .schedule-header-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    text-align: center;
+  }
+  .schedule-header-row .view-toggle-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -626,28 +755,6 @@ h2 {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-@media (max-width: 768px) {
-  .left-controls {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 6px;
-  }
-  
-  .left-controls .save-schedule-btn,
-  .left-controls .existing-schedules-dropdown {
-    width: 100%;
-  }
-  
-  .existing-schedules-dropdown {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .existing-schedules-dropdown label {
-    text-align: left;
-  }
 }
 
 .schedule-header-row {
@@ -663,37 +770,5 @@ h2 {
   font-size: 8px;
   font-weight: 600;
   color: var(--primary-dark);
-}
-
-@media (max-width: 768px) {
-  .schedule-header-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-    text-align: center;
-  }
-  
-  .schedule-header-row .view-toggle-btn {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-/* Existing overlap row style */
-.overlap-row {
-  background-color: rgba(244, 67, 54, 0.1) !important; /* Red tint */
-}
-
-/* New merged row style */
-.merged-row {
-  background-color: rgba(25, 118, 210, 0.08) !important; /* Blue tint */
-}
-
-/* Ensure hover effects still work nicely */
-.merged-row:hover {
-  background-color: rgba(25, 118, 210, 0.15) !important;
-}
-
-.overlap-row:hover {
-  background-color: rgba(244, 67, 54, 0.18) !important;
+  margin: 0;
 }

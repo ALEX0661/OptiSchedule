@@ -1,5 +1,5 @@
-// RoomView.js - Updated with Tint and Text Logic
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+// RoomView.js - With Auto-Scroll & Sticky Room Headers
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { getRooms, getDays, getTimeSettings } from '../services/settingService';
 import { overrideEvent } from '../services/scheduleService';
 import CourseDetailsModal from './CourseDetailsModal';
@@ -11,20 +11,29 @@ const EnhancedRoomView = ({ schedule: initialSchedule, onScheduleUpdate, onClose
   const [days, setDays] = useState([]);
   const [schedule, setSchedule] = useState([]);
   const [timeSettings, setTimeSettings] = useState({ start_time: 7, end_time: 21 });
+  
+  // Drag and Drop States
   const [draggedEvent, setDraggedEvent] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [hoveredCell, setHoveredCell] = useState(null);
+  
+  // Hover States
   const [hoveredEventGroup, setHoveredEventGroup] = useState(null);
   const [hoveredEventId, setHoveredEventId] = useState(null);
-  const [conflicts, setConflicts] = useState({});
+  
   const [selectedRoomType, setSelectedRoomType] = useState('all');
   const [notification, setNotification] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [viewEvent, setViewEvent] = useState(null);
 
-  // Parse time string to minutes
+  // NEW: Ref for the scrollable container
+  const scrollContainerRef = useRef(null);
+
+  // --- Helpers ---
+
   const parseTimeToMinutes = useCallback((timeStr) => {
+    if (!timeStr) return 0;
     const match = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
     if (!match) return 0;
     let hour = parseInt(match[1], 10);
@@ -35,8 +44,8 @@ const EnhancedRoomView = ({ schedule: initialSchedule, onScheduleUpdate, onClose
     return hour * 60 + minute;
   }, []);
 
-  // Calculate duration from period string
   const calculateDuration = useCallback((periodStr, sessionType) => {
+    if (!periodStr) return 90;
     const parts = periodStr.split(' - ');
     if (parts.length === 2) {
       const start = parseTimeToMinutes(parts[0]);
@@ -46,14 +55,14 @@ const EnhancedRoomView = ({ schedule: initialSchedule, onScheduleUpdate, onClose
     return sessionType === 'Laboratory' ? 180 : 90;
   }, [parseTimeToMinutes]);
 
-  // Initialize schedule from props
+  // --- Initial Data Loading ---
+
   useEffect(() => {
     if (initialSchedule && initialSchedule.length > 0) {
       setSchedule(initialSchedule);
     }
   }, [initialSchedule]);
 
-  // Fetch data on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -89,7 +98,90 @@ const EnhancedRoomView = ({ schedule: initialSchedule, onScheduleUpdate, onClose
     fetchData();
   }, []);
 
-  // Generate time slots
+  // --- COMPREHENSIVE CONFLICT LOGIC ---
+  
+  const conflictMap = useMemo(() => {
+    const map = {};
+    if (!schedule || !Array.isArray(schedule)) return map;
+
+    schedule.forEach(currentEvent => {
+      const parts = currentEvent.period.split(' - ');
+      const currentStart = parseTimeToMinutes(parts[0]);
+      const currentEnd = parseTimeToMinutes(parts[1]);
+
+      const roomConflicts = [];
+      const facultyConflicts = [];
+      const timeConflicts = [];
+      const mergedWith = [];
+
+      for (const other of schedule) {
+        if (other.schedule_id === currentEvent.schedule_id) continue;
+        if (other.day !== currentEvent.day) continue;
+
+        const otherParts = other.period.split(' - ');
+        const otherStart = parseTimeToMinutes(otherParts[0]);
+        const otherEnd = parseTimeToMinutes(otherParts[1]);
+
+        if (currentStart < otherEnd && currentEnd > otherStart) {
+          const currentRoom = (currentEvent.room || '').toLowerCase();
+          const isOnline = currentRoom === 'online';
+          const isRoomOverlap = !isOnline && currentEvent.room === other.room;
+          
+          const isSameSection = currentEvent.program === other.program &&
+                              currentEvent.year === other.year &&
+                              currentEvent.block === other.block;
+
+          const matchesMergeCriteria = 
+            currentEvent.courseCode === other.courseCode &&
+            currentEvent.program === other.program &&
+            currentEvent.year === other.year &&
+            currentEvent.session === other.session;
+
+          if (isRoomOverlap) {
+            if (matchesMergeCriteria) {
+              mergedWith.push(other);
+            } else {
+              roomConflicts.push(other);
+            }
+          }
+          
+          const isFacultyOverlap = currentEvent.faculty && 
+                                  other.faculty && 
+                                  currentEvent.faculty !== 'Unassigned' && 
+                                  currentEvent.faculty === other.faculty;
+          
+          if (isFacultyOverlap && !matchesMergeCriteria) {
+            facultyConflicts.push(other);
+          }
+
+          if (isSameSection && !isRoomOverlap) {
+            timeConflicts.push(other);
+          }
+        }
+      }
+
+      let status = 'normal';
+      if (roomConflicts.length > 0 || facultyConflicts.length > 0 || timeConflicts.length > 0) {
+        status = 'conflict';
+      } else if (mergedWith.length > 0) {
+        status = 'merged';
+      }
+
+      map[currentEvent.schedule_id] = { 
+        status, 
+        roomConflicts, 
+        facultyConflicts, 
+        timeConflicts, 
+        mergedWith 
+      };
+    });
+
+    return map;
+  }, [schedule, parseTimeToMinutes]);
+
+
+  // --- View Calculation Helpers ---
+
   const timeSlots = useMemo(() => {
     const slots = [];
     for (let hour = timeSettings.start_time; hour < timeSettings.end_time; hour++) {
@@ -145,29 +237,6 @@ const EnhancedRoomView = ({ schedule: initialSchedule, onScheduleUpdate, onClose
     return groups;
   }, [getRoomEvents, parseTimeToMinutes, calculateDuration]);
 
-  useEffect(() => {
-    const newConflicts = {};
-    const daySchedule = schedule.filter(e => e.day === selectedDay);
-    daySchedule.forEach((event, idx) => {
-      const eventStart = parseTimeToMinutes(event.period.split(' - ')[0]);
-      const eventEnd = eventStart + calculateDuration(event.period, event.session);
-      daySchedule.forEach((other, otherIdx) => {
-        if (idx !== otherIdx && event.room === other.room) {
-          const otherStart = parseTimeToMinutes(other.period.split(' - ')[0]);
-          const otherEnd = otherStart + calculateDuration(other.period, other.session);
-          if (!(eventEnd <= otherStart || eventStart >= otherEnd)) {
-            const isMerge = event.program === other.program && event.year === other.year &&
-              event.courseCode === other.courseCode && event.period === other.period &&
-              event.room === other.room && event.session === other.session;
-            const key = `${event.schedule_id}-${other.schedule_id}`;
-            newConflicts[key] = { event1: event, event2: other, room: event.room, isMerge: isMerge };
-          }
-        }
-      });
-    });
-    setConflicts(newConflicts);
-  }, [schedule, selectedDay, parseTimeToMinutes, calculateDuration]);
-
   const getEventPosition = useCallback((event) => {
     const dayStartMinutes = timeSettings.start_time * 60;
     const eventStart = parseTimeToMinutes(event.period.split(' - ')[0]);
@@ -178,9 +247,7 @@ const EnhancedRoomView = ({ schedule: initialSchedule, onScheduleUpdate, onClose
     return { top: `${top}px`, height: `${relativeHeight - 2}px` };
   }, [timeSettings, parseTimeToMinutes, calculateDuration, slotHeight]);
 
-  const isValidDrop = useCallback((event, targetRoom, targetSlot) => {
-    return !!event && !!targetRoom;
-  }, []);
+  // --- Interaction Handlers ---
 
   const showNotification = useCallback((message, type = 'success') => {
     setNotification({ message, type });
@@ -189,49 +256,95 @@ const EnhancedRoomView = ({ schedule: initialSchedule, onScheduleUpdate, onClose
 
   const handleEventClick = (event) => {
     if (isDragging) return;
+    const conflictData = conflictMap[event.schedule_id];
+    const relatedEvents = [];
 
-    // Use a Map to ensure unique events by schedule_id
-    const relatedMap = new Map();
-
-    Object.values(conflicts).forEach(conf => {
-      let otherEvent = null;
-      if (conf.event1.schedule_id === event.schedule_id) {
-        otherEvent = conf.event2;
-      } else if (conf.event2.schedule_id === event.schedule_id) {
-        otherEvent = conf.event1;
-      }
-
-      if (otherEvent) {
-        if (!relatedMap.has(otherEvent.schedule_id)) {
-          relatedMap.set(otherEvent.schedule_id, { 
-            ...otherEvent, 
-            relationType: conf.isMerge ? 'Merged' : 'Conflict' 
-          });
-        }
-      }
-    });
-
-    const related = Array.from(relatedMap.values());
+    if (conflictData) {
+      conflictData.mergedWith.forEach(item => relatedEvents.push({ ...item, relationType: 'Merged Class' }));
+      conflictData.roomConflicts.forEach(item => relatedEvents.push({ ...item, relationType: 'Room Conflict' }));
+      conflictData.facultyConflicts.forEach(item => relatedEvents.push({ ...item, relationType: 'Instructor Conflict' }));
+      conflictData.timeConflicts.forEach(item => relatedEvents.push({ ...item, relationType: 'Time Conflict' }));
+    }
 
     let status = 'Normal';
-    if (related.some(r => r.relationType === 'Conflict')) status = 'Conflict';
-    else if (related.some(r => r.relationType === 'Merged')) status = 'Merged';
+    if (conflictData && conflictData.status === 'conflict') status = 'Conflict';
+    else if (conflictData && conflictData.status === 'merged') status = 'Merged';
 
-    setViewEvent({ ...event, status, relatedEvents: related });
+    setViewEvent({ 
+      ...event, 
+      status, 
+      relatedEvents: relatedEvents 
+    });
   };
 
   const closeViewModal = () => setViewEvent(null);
+
+  // --- Auto-Scroll Handler ---
+  // This function is attached to the main container to handle scrolling while dragging
+  const handleAutoScroll = (e) => {
+    if (!isDragging || !scrollContainerRef.current) return;
+    
+    // We prevent default to allow drag events to bubble, but we need to be careful not to block drops
+    e.preventDefault(); 
+
+    const container = scrollContainerRef.current;
+    const { left, right, top, bottom } = container.getBoundingClientRect();
+    const x = e.clientX;
+    const y = e.clientY;
+    
+    const gutter = 80; // Distance in pixels from the edge to trigger scroll
+    const speed = 15;  // Scroll speed
+
+    // Horizontal Scroll
+    if (x < left + gutter) {
+      container.scrollLeft -= speed;
+    } else if (x > right - gutter) {
+      container.scrollLeft += speed;
+    }
+
+    // Vertical Scroll
+    if (y < top + gutter) {
+      container.scrollTop -= speed;
+    } else if (y > bottom - gutter) {
+      container.scrollTop += speed;
+    }
+  };
+
+  // --- Drag and Drop Handlers ---
 
   const handleDragStart = (e, event) => {
     setDraggedEvent(event);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', event.schedule_id);
+    // Create a custom drag image or use default
+    // e.dataTransfer.setDragImage(e.target, 0, 0);
     setTimeout(() => setIsDragging(true), 0);
   };
 
   const handleDragOver = (e, room, slot) => {
     e.preventDefault();
+    e.stopPropagation(); // Stop bubbling to container auto-scroll so we can process drop logic
+    
+    // We still want auto-scroll to happen even when hovering a cell
+    handleAutoScroll(e);
+
     if (draggedEvent) {
+      const sessionType = (draggedEvent.session || '').toLowerCase();
+      const roomType = (room.type || '').toLowerCase();
+      
+      const isLabEvent = sessionType.includes('lab') || sessionType.includes('laboratory');
+      const isLectureEvent = !isLabEvent; 
+
+      const isLabRoom = roomType === 'lab';
+      const isLectureRoom = roomType === 'lecture';
+
+      // Compatibility Check
+      if ((isLabEvent && !isLabRoom) || (isLectureEvent && !isLectureRoom)) {
+        e.dataTransfer.dropEffect = 'none';
+        setHoveredCell(null); 
+        return; 
+      }
+
       const cellKey = `${room.name}-${slot.startMinutes}`;
       if (hoveredCell !== cellKey) setHoveredCell(cellKey);
       e.dataTransfer.dropEffect = 'move';
@@ -243,10 +356,27 @@ const EnhancedRoomView = ({ schedule: initialSchedule, onScheduleUpdate, onClose
   const handleDrop = async (e, room, slot) => {
     e.preventDefault();
     setHoveredCell(null);
-    if (!draggedEvent || !isValidDrop(draggedEvent, room.name, slot)) {
-      showNotification('Invalid drop target!', 'error');
-      setDraggedEvent(null);
+    if (!draggedEvent) {
       setIsDragging(false);
+      return;
+    }
+
+    // Safety Check: Room Compatibility
+    const sessionType = (draggedEvent.session || '').toLowerCase();
+    const roomType = (room.type || '').toLowerCase();
+    const isLabEvent = sessionType.includes('lab') || sessionType.includes('laboratory');
+    const isLabRoom = roomType === 'lab';
+
+    if (isLabEvent && !isLabRoom) {
+      showNotification("Cannot move Laboratory classes to Lecture rooms.", "error");
+      setIsDragging(false);
+      setDraggedEvent(null);
+      return;
+    }
+    if (!isLabEvent && isLabRoom) {
+      showNotification("Cannot move Lecture classes to Laboratory rooms.", "error");
+      setIsDragging(false);
+      setDraggedEvent(null);
       return;
     }
 
@@ -294,6 +424,8 @@ const EnhancedRoomView = ({ schedule: initialSchedule, onScheduleUpdate, onClose
     setIsDragging(false);
   };
 
+  // --- Render ---
+
   if (loading) return <div className="z-room-view-container"><div className="z-loading-state"><div className="z-spinner"></div><p>Loading...</p></div></div>;
   if (error) return <div className="z-room-view-container"><div className="z-error-state"><h2>Error</h2><p>{error}</p><button onClick={onClose} className="z-close-room-view-btn">Back</button></div></div>;
   if (!schedule || schedule.length === 0) return <div className="z-room-view-container"><div className="z-room-view-header"><h2>Room Schedule</h2><button onClick={onClose} className="z-close-room-view-btn">Back</button></div><div className="z-no-schedule-state"><h2>No Data</h2></div></div>;
@@ -332,18 +464,38 @@ const EnhancedRoomView = ({ schedule: initialSchedule, onScheduleUpdate, onClose
       </div>
 
       <div className="z-room-grid-container">
-        <div className="z-timeline-grid" style={{ '--slot-height': `${slotHeight}px` }}>
+        {/* UPDATED: Added ref and onDragOver to the main container for auto-scroll */}
+        <div 
+          className="z-timeline-grid" 
+          ref={scrollContainerRef}
+          onDragOver={handleAutoScroll} 
+          style={{ '--slot-height': `${slotHeight}px` }}
+        >
           <div className="z-time-column">
-            <div className="z-time-header">Time</div>
+            {/* STICKY TIME HEADER */}
+            <div 
+              className="z-time-header"
+              style={{ position: 'sticky', top: 0, zIndex: 600, backgroundColor: '#ffffff', borderBottom: '1px solid #ddd' }}
+            >
+              Time
+            </div>
             {timeSlots.map((slot, idx) => <div key={idx} className="z-time-slot">{slot.time}</div>)}
           </div>
           <div className="z-rooms-container">
             {allRooms.map((room) => {
               const overlappingGroups = getOverlappingGroups(room.name);
-              const roomHasConflict = Object.values(conflicts).some(conf => conf.room === room.name);
+              
+              const roomHasConflict = Object.values(conflictMap).some(conf => 
+                (conf.roomConflicts.some(r => r.room === room.name) && conf.status === 'conflict')
+              );
+
               return (
                 <div key={room.name} className={`z-room-column ${room.type} ${roomHasConflict ? 'has-conflict' : ''}`}>
-                  <div className="z-room-header">
+                  {/* STICKY ROOM HEADER */}
+                  <div 
+                    className="z-room-header" 
+                    style={{ position: 'sticky', top: 0, zIndex: 400, backgroundColor: '#f8f9fa', borderBottom: '1px solid #ddd' }}
+                  >
                     <span className="z-room-icon">{room.type === 'lecture' ? 'LEC' : 'LAB'}</span>
                     <div className="z-room-info">
                       <div className="z-room-name">{room.name}</div>
@@ -378,11 +530,10 @@ const EnhancedRoomView = ({ schedule: initialSchedule, onScheduleUpdate, onClose
                         <React.Fragment key={groupKey}>
                           {group.map((event, eventIdx) => {
                             const { top, height } = getEventPosition(event);
-                            const relatedConflicts = Object.values(conflicts).filter(conf =>
-                              (conf.event1.schedule_id === event.schedule_id || conf.event2.schedule_id === event.schedule_id)
-                            );
-                            const isMerged = relatedConflicts.some(conf => conf.isMerge);
-                            const isInConflict = relatedConflicts.some(conf => !conf.isMerge);
+                            
+                            const currentConflicts = conflictMap[event.schedule_id] || { status: 'normal' };
+                            const isMerged = currentConflicts.status === 'merged';
+                            const isInConflict = currentConflicts.status === 'conflict';
 
                             const baseSpread = 45;
                             const minSpread = 12;
@@ -409,9 +560,6 @@ const EnhancedRoomView = ({ schedule: initialSchedule, onScheduleUpdate, onClose
                               if (room.name === hoveredRoom && !(eventEnd <= hoveredStart || eventStart >= draggedEnd)) isDimmedForDrop = true;
                             }
 
-                            // APPLYING CLASSES BASED ON STATUS
-                            // .merged -> Blue tint
-                            // .conflict -> Red tint
                             const blockClasses = `z-event-block 
                               ${isMerged ? 'merged' : ''} 
                               ${isInConflict ? 'conflict' : ''} 
@@ -447,7 +595,6 @@ const EnhancedRoomView = ({ schedule: initialSchedule, onScheduleUpdate, onClose
                                       <span className="z-event-code">{event.courseCode}</span>
                                       <span className="z-event-section-badge">
                                         {event.program} {event.year}-{event.block}
-                                        {/* UPDATED: Added (Merged) text logic here */}
                                         {isMerged && <span style={{ marginLeft: '4px', fontWeight: 'bold' }}>(Merged)</span>}
                                       </span>
                                     </div>
@@ -457,7 +604,6 @@ const EnhancedRoomView = ({ schedule: initialSchedule, onScheduleUpdate, onClose
                                     <div className="z-event-title">{event.title}</div>
                                   </div>
                                 </div>
-                                {/* Hidden old indicators as requested, using Tint instead */}
                               </div>
                             );
                           })}

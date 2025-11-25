@@ -79865,3 +79865,238 @@ google.api_core.exceptions.RetryError: Timeout of 300.0s exceeded, last exceptio
 2025-11-24 09:44:16,228 [INFO] faculty: Assigned Armilyn Martinez to event 350-A (Block A)
 2025-11-24 09:44:16,229 [INFO] faculty: Assigned Armilyn Martinez to event 352-A (Block A)
 2025-11-24 09:44:16,229 [INFO] faculty: Assigned Armilyn Martinez to event 351-A (Block A)
+2025-11-25 07:11:07,047 [INFO] schedule: Started schedule generation process_id=3401b3fa-be65-400f-8c80-d9aca7b0cb37
+2025-11-25 07:11:08,770 [INFO] schedgeneration: Phase 1/4 (Yr1): 33 courses (diff: 1.78, time: 256s)
+2025-11-25 07:12:23,615 [INFO] schedgeneration: Phase 1 (Yr1) done: 440 sessions scheduled
+2025-11-25 07:12:23,666 [INFO] schedgeneration: Phase 2/4 (Yr2): 30 courses (diff: 1.51, time: 326s)
+2025-11-25 07:13:42,502 [INFO] schedgeneration: Phase 2 (Yr2) done: 273 sessions scheduled
+2025-11-25 07:13:42,549 [INFO] schedgeneration: Phase 3/4 (Yr3): 25 courses (diff: 1.65, time: 476s)
+2025-11-25 07:16:00,785 [INFO] schedgeneration: Phase 3 (Yr3) done: 234 sessions scheduled
+2025-11-25 07:16:00,853 [INFO] schedgeneration: Phase 4/4 (Yr4): 4 courses (diff: 2.00, time: 720s)
+2025-11-25 07:16:26,340 [INFO] schedgeneration: Phase 4 (Yr4) done: 216 sessions scheduled
+2025-11-25 07:16:26,392 [INFO] schedgeneration: Generated schedule 1163 events
+2025-11-25 07:16:32,583 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 07:16:32,838 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 07:16:47,256 [INFO] schedule: Found 5 Schedules
+2025-11-25 07:16:47,751 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 07:16:47,836 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 07:16:51,886 [INFO] schedule: Found 5 Schedules
+2025-11-25 07:18:57,472 [INFO] override: Successfully overrode event 491 to Monday 11:00 AM - 12:00 PM in 510
+2025-11-25 07:18:57,487 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 07:19:01,313 [INFO] override: Successfully overrode event 377 to Monday 11:30 AM - 12:30 PM in 510
+2025-11-25 07:19:01,378 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 07:19:04,168 [INFO] override: Successfully overrode event 377 to Monday 12:30 PM - 1:30 PM in 510
+2025-11-25 07:19:04,234 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 07:19:09,179 [INFO] override: Successfully overrode event 377 to Monday 9:00 AM - 10:00 AM in 510
+2025-11-25 07:19:09,264 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 07:22:43,286 [INFO] override: Successfully overrode event 491 to Monday 12:00 PM - 1:00 PM in 510
+2025-11-25 07:22:43,342 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 07:22:44,855 [INFO] override: Successfully overrode event 491 to Monday 11:00 AM - 12:00 PM in 510
+2025-11-25 07:22:44,919 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 07:29:06,090 [INFO] override: Successfully overrode event 356 to Monday 11:00 AM - 12:00 PM in 510
+2025-11-25 07:29:06,157 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 07:29:33,774 [INFO] faculty: Assigning faculty Hazel Espinorio to group: ('ITC122', 'BSIT', 'A')
+2025-11-25 07:29:33,777 [INFO] faculty: Found 4 events in group (including merged classes)
+2025-11-25 07:29:33,779 [INFO] faculty: Assigned Hazel Espinorio to event 271-A (Block A)
+2025-11-25 07:29:33,780 [INFO] faculty: Assigned Hazel Espinorio to event 277 (Block A)
+2025-11-25 07:29:33,781 [INFO] faculty: Assigned Hazel Espinorio to event 276 (Block A)
+2025-11-25 07:29:33,782 [INFO] faculty: Assigned Hazel Espinorio to event 270-A (Block A)
+2025-11-25 07:29:48,195 [INFO] faculty: Assigning faculty Kenneth Bautista to group: ('ITC122', 'BSIT', 'E')
+2025-11-25 07:29:48,197 [INFO] faculty: Found 4 events in group (including merged classes)
+2025-11-25 07:29:48,199 [INFO] faculty: Assigned Kenneth Bautista to event 275-A (Block E)
+2025-11-25 07:29:48,199 [INFO] faculty: Assigned Kenneth Bautista to event 285 (Block E)
+2025-11-25 07:29:48,200 [INFO] faculty: Assigned Kenneth Bautista to event 284 (Block E)
+2025-11-25 07:29:48,200 [INFO] faculty: Assigned Kenneth Bautista to event 274-A (Block E)
+2025-11-25 07:36:11,380 [INFO] override: Successfully overrode event 126 to Monday 7:00 AM - 8:00 AM in 409
+2025-11-25 07:36:11,390 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 07:36:29,241 [INFO] override: Successfully overrode event 126 to Monday 7:00 AM - 8:00 AM in 408
+2025-11-25 07:36:29,252 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 07:38:30,315 [INFO] override: Successfully overrode event 126 to Monday 7:00 AM - 8:00 AM in 412
+2025-11-25 07:38:30,323 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 07:39:47,048 [INFO] faculty: Assigning faculty John Dom Pagot to group: ('GEC 208', 'BSIT', 'A')
+2025-11-25 07:39:47,051 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-25 07:39:47,053 [INFO] faculty: Assigned John Dom Pagot to event 350-A (Block A)
+2025-11-25 07:39:47,054 [INFO] faculty: Assigned John Dom Pagot to event 352-A (Block A)
+2025-11-25 07:39:47,055 [INFO] faculty: Assigned John Dom Pagot to event 351-A (Block A)
+2025-11-25 07:39:59,254 [INFO] faculty: Assigning faculty John Dom Pagot to group: ('ITP312', 'BSIT', 'B')
+2025-11-25 07:39:59,256 [INFO] faculty: Found 2 events in group (including merged classes)
+2025-11-25 07:39:59,257 [INFO] faculty: Assigned John Dom Pagot to event 511 (Block B)
+2025-11-25 07:39:59,258 [INFO] faculty: Assigned John Dom Pagot to event 512 (Block B)
+2025-11-25 07:42:50,944 [INFO] faculty: Assigning faculty John Dom Pagot to group: ('ITC121', 'BSIT', 'D')
+2025-11-25 07:42:50,947 [INFO] faculty: Found 4 events in group (including merged classes)
+2025-11-25 07:42:50,948 [INFO] faculty: Assigned John Dom Pagot to event 254-B (Block D)
+2025-11-25 07:42:50,949 [INFO] faculty: Assigned John Dom Pagot to event 265 (Block D)
+2025-11-25 07:42:50,949 [INFO] faculty: Assigned John Dom Pagot to event 264 (Block D)
+2025-11-25 07:42:50,950 [INFO] faculty: Assigned John Dom Pagot to event 255-B (Block D)
+2025-11-25 07:43:46,986 [INFO] faculty: Assigning faculty Kenneth Bautista to group: ('ITE325', 'BSIT', 'D')
+2025-11-25 07:43:46,989 [INFO] faculty: Found 2 events in group (including merged classes)
+2025-11-25 07:43:46,990 [INFO] faculty: Assigned Kenneth Bautista to event 697 (Block D)
+2025-11-25 07:43:46,990 [INFO] faculty: Assigned Kenneth Bautista to event 698 (Block D)
+2025-11-25 07:44:11,218 [INFO] faculty: Assigning faculty Kenneth Bautista to group: ('ITP324', 'BSIT', 'C')
+2025-11-25 07:44:11,220 [INFO] faculty: Found 4 events in group (including merged classes)
+2025-11-25 07:44:11,221 [INFO] faculty: Assigned Kenneth Bautista to event 726 (Block C)
+2025-11-25 07:44:11,221 [INFO] faculty: Assigned Kenneth Bautista to event 731 (Block C)
+2025-11-25 07:44:11,222 [INFO] faculty: Assigned Kenneth Bautista to event 725 (Block C)
+2025-11-25 07:44:11,222 [INFO] faculty: Assigned Kenneth Bautista to event 732 (Block C)
+2025-11-25 07:44:46,888 [INFO] override: Successfully overrode event 726 to Thursday 7:00 AM - 8:00 AM in 407
+2025-11-25 07:44:46,919 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 07:55:38,438 [INFO] faculty: Assigning faculty Hazel Espinorio to group: ('CSP422', 'BSCS', 'A')
+2025-11-25 07:55:38,446 [INFO] faculty: Found 18 events in group (including merged classes)
+2025-11-25 07:55:38,448 [INFO] faculty: Assigned Hazel Espinorio to event 790 (Block A)
+2025-11-25 07:55:38,449 [INFO] faculty: Assigned Hazel Espinorio to event 793 (Block A)
+2025-11-25 07:55:38,450 [INFO] faculty: Assigned Hazel Espinorio to event 791 (Block A)
+2025-11-25 07:55:38,451 [INFO] faculty: Assigned Hazel Espinorio to event 805 (Block A)
+2025-11-25 07:55:38,451 [INFO] faculty: Assigned Hazel Espinorio to event 803 (Block A)
+2025-11-25 07:55:38,452 [INFO] faculty: Assigned Hazel Espinorio to event 789 (Block A)
+2025-11-25 07:55:38,453 [INFO] faculty: Assigned Hazel Espinorio to event 798 (Block A)
+2025-11-25 07:55:38,455 [INFO] faculty: Assigned Hazel Espinorio to event 796 (Block A)
+2025-11-25 07:55:38,456 [INFO] faculty: Assigned Hazel Espinorio to event 795 (Block A)
+2025-11-25 07:55:38,457 [INFO] faculty: Assigned Hazel Espinorio to event 797 (Block A)
+2025-11-25 07:55:38,459 [INFO] faculty: Assigned Hazel Espinorio to event 806 (Block A)
+2025-11-25 07:55:38,464 [INFO] faculty: Assigned Hazel Espinorio to event 804 (Block A)
+2025-11-25 07:55:38,472 [INFO] faculty: Assigned Hazel Espinorio to event 800 (Block A)
+2025-11-25 07:55:38,472 [INFO] faculty: Assigned Hazel Espinorio to event 802 (Block A)
+2025-11-25 07:55:38,473 [INFO] faculty: Assigned Hazel Espinorio to event 799 (Block A)
+2025-11-25 07:55:38,473 [INFO] faculty: Assigned Hazel Espinorio to event 792 (Block A)
+2025-11-25 07:55:38,474 [INFO] faculty: Assigned Hazel Espinorio to event 794 (Block A)
+2025-11-25 07:55:38,474 [INFO] faculty: Assigned Hazel Espinorio to event 801 (Block A)
+2025-11-25 07:57:11,235 [INFO] faculty: Assigning faculty Armilyn Martinez to group: ('EMC422', 'BSEMC-DAT', 'A')
+2025-11-25 07:57:11,237 [INFO] faculty: Found 18 events in group (including merged classes)
+2025-11-25 07:57:11,239 [INFO] faculty: Assigned Armilyn Martinez to event 851 (Block A)
+2025-11-25 07:57:11,239 [INFO] faculty: Assigned Armilyn Martinez to event 843 (Block A)
+2025-11-25 07:57:11,240 [INFO] faculty: Assigned Armilyn Martinez to event 854 (Block A)
+2025-11-25 07:57:11,240 [INFO] faculty: Assigned Armilyn Martinez to event 852 (Block A)
+2025-11-25 07:57:11,241 [INFO] faculty: Assigned Armilyn Martinez to event 849 (Block A)
+2025-11-25 07:57:11,242 [INFO] faculty: Assigned Armilyn Martinez to event 845 (Block A)
+2025-11-25 07:57:11,243 [INFO] faculty: Assigned Armilyn Martinez to event 848 (Block A)
+2025-11-25 07:57:11,243 [INFO] faculty: Assigned Armilyn Martinez to event 856 (Block A)
+2025-11-25 07:57:11,244 [INFO] faculty: Assigned Armilyn Martinez to event 850 (Block A)
+2025-11-25 07:57:11,245 [INFO] faculty: Assigned Armilyn Martinez to event 857 (Block A)
+2025-11-25 07:57:11,245 [INFO] faculty: Assigned Armilyn Martinez to event 858 (Block A)
+2025-11-25 07:57:11,246 [INFO] faculty: Assigned Armilyn Martinez to event 846 (Block A)
+2025-11-25 07:57:11,247 [INFO] faculty: Assigned Armilyn Martinez to event 847 (Block A)
+2025-11-25 07:57:11,249 [INFO] faculty: Assigned Armilyn Martinez to event 855 (Block A)
+2025-11-25 07:57:11,251 [INFO] faculty: Assigned Armilyn Martinez to event 844 (Block A)
+2025-11-25 07:57:11,253 [INFO] faculty: Assigned Armilyn Martinez to event 859 (Block A)
+2025-11-25 07:57:11,253 [INFO] faculty: Assigned Armilyn Martinez to event 860 (Block A)
+2025-11-25 07:57:11,254 [INFO] faculty: Assigned Armilyn Martinez to event 853 (Block A)
+2025-11-25 07:59:33,862 [INFO] faculty: Assigning faculty Armilyn Martinez to group: ('GEC 04', 'BSEMC-DAT', 'A')
+2025-11-25 07:59:33,864 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-25 07:59:33,866 [INFO] faculty: Assigned Armilyn Martinez to event 9-A (Block A)
+2025-11-25 07:59:33,866 [INFO] faculty: Assigned Armilyn Martinez to event 10-A (Block A)
+2025-11-25 07:59:33,867 [INFO] faculty: Assigned Armilyn Martinez to event 11-A (Block A)
+2025-11-25 08:00:07,745 [INFO] override: Successfully overrode event 10-A to Thursday 7:00 AM - 8:00 AM in 412
+2025-11-25 08:00:07,763 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 08:18:05,792 [INFO] faculty: Unassigning group: ITE325, BSIT, D
+2025-11-25 08:18:05,806 [INFO] faculty: Found 2 events to unassign (including merged classes)
+2025-11-25 08:18:26,496 [INFO] override: Successfully overrode event 726 to Thursday 8:00 AM - 9:00 AM in 412
+2025-11-25 08:18:26,518 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 08:29:03,040 [INFO] override: Successfully overrode event 68 to Thursday 7:00 AM - 8:00 AM in 510
+2025-11-25 08:29:03,072 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 08:29:39,770 [INFO] faculty: Assigning faculty Kenneth Bautista to group: ('GEC 04', 'BSEMC-DAT', 'C')
+2025-11-25 08:29:39,774 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-25 08:29:39,775 [INFO] faculty: Assigned Kenneth Bautista to event 12 (Block C)
+2025-11-25 08:29:39,777 [INFO] faculty: Assigned Kenneth Bautista to event 13 (Block C)
+2025-11-25 08:29:39,778 [INFO] faculty: Assigned Kenneth Bautista to event 14 (Block C)
+2025-11-25 08:29:53,984 [INFO] faculty: Assigning faculty Kenneth Bautista to group: ('NSTP102', 'BSIT', 'A')
+2025-11-25 08:29:53,986 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-25 08:29:53,987 [INFO] faculty: Assigned Kenneth Bautista to event 172-A (Block A)
+2025-11-25 08:29:53,988 [INFO] faculty: Assigned Kenneth Bautista to event 171-A (Block A)
+2025-11-25 08:29:53,988 [INFO] faculty: Assigned Kenneth Bautista to event 173-A (Block A)
+2025-11-25 08:43:46,780 [INFO] faculty: Assigning faculty John Dom Pagot to group: ('GEC 03', 'BSIT', 'C')
+2025-11-25 08:43:46,811 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-25 08:43:46,813 [INFO] faculty: Assigned John Dom Pagot to event 335-A (Block C)
+2025-11-25 08:43:46,815 [INFO] faculty: Assigned John Dom Pagot to event 337-A (Block C)
+2025-11-25 08:43:46,817 [INFO] faculty: Assigned John Dom Pagot to event 336-A (Block C)
+2025-11-25 09:41:41,430 [INFO] override: Successfully overrode event 518 to Monday 11:30 AM - 1:00 PM in 520
+2025-11-25 09:41:41,473 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 09:41:46,733 [INFO] override: Successfully overrode event 536 to Monday 1:30 PM - 3:00 PM in 520
+2025-11-25 09:41:46,771 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 11:26:39,662 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 11:26:46,566 [INFO] schedule: Found 5 Schedules
+2025-11-25 11:26:46,617 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 11:26:46,886 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 11:26:50,798 [INFO] schedule: Found 5 Schedules
+2025-11-25 11:26:50,802 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 11:47:27,957 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 11:47:32,015 [INFO] schedule: Found 5 Schedules
+2025-11-25 11:47:32,058 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 11:47:32,236 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 11:47:35,945 [INFO] schedule: Found 5 Schedules
+2025-11-25 11:47:35,951 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 11:59:15,338 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 11:59:54,346 [INFO] schedule: Found 5 Schedules
+2025-11-25 11:59:54,999 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 12:07:25,102 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 12:07:30,213 [INFO] schedule: Found 5 Schedules
+2025-11-25 12:07:30,266 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 12:09:21,952 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 12:09:22,289 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 12:09:31,415 [INFO] schedule: Found 5 Schedules
+2025-11-25 13:39:19,943 [INFO] override: Successfully overrode event 736 to Monday 2:30 PM - 3:30 PM in 407
+2025-11-25 13:39:19,998 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 13:39:21,275 [INFO] override: Successfully overrode event 736 to Monday 3:00 PM - 4:00 PM in 407
+2025-11-25 13:39:21,380 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 13:39:29,131 [INFO] override: Successfully overrode event 381 to Monday 1:00 PM - 2:30 PM in 508
+2025-11-25 13:39:29,169 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 13:39:31,072 [INFO] override: Successfully overrode event 639 to Monday 1:00 PM - 2:30 PM in 517
+2025-11-25 13:39:31,107 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 13:39:59,036 [INFO] override: Successfully overrode event 377 to Monday 7:00 AM - 8:00 AM in 412
+2025-11-25 13:39:59,114 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 13:40:04,444 [INFO] override: Successfully overrode event 377 to Monday 10:00 AM - 11:00 AM in 412
+2025-11-25 13:40:04,499 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 13:40:07,374 [INFO] override: Successfully overrode event 126 to Monday 10:30 AM - 11:30 AM in 412
+2025-11-25 13:40:07,454 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 13:40:09,964 [INFO] override: Successfully overrode event 126 to Monday 9:00 AM - 10:00 AM in 510
+2025-11-25 13:40:10,025 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 13:40:11,947 [INFO] override: Successfully overrode event 377 to Monday 7:00 AM - 8:00 AM in 412
+2025-11-25 13:40:12,007 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 15:19:27,353 [WARNING] auth: Login failed: Password mismatch
+2025-11-25 15:19:27,370 [ERROR] auth: HTTP error in login: Invalid credentials
+2025-11-25 15:19:41,966 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 15:19:42,212 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 15:19:58,336 [INFO] schedule: Found 5 Schedules
+2025-11-25 15:19:58,374 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 15:19:58,859 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 15:20:01,412 [INFO] schedule: Found 5 Schedules
+2025-11-25 15:20:10,154 [INFO] override: Successfully overrode event 659 to Monday 9:30 AM - 10:30 AM in 410
+2025-11-25 15:20:10,207 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 15:20:17,541 [INFO] override: Successfully overrode event 292 to Monday 8:30 AM - 9:30 AM in 506
+2025-11-25 15:20:17,594 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 15:20:18,844 [INFO] override: Successfully overrode event 292 to Monday 7:00 AM - 8:00 AM in 506
+2025-11-25 15:20:18,899 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 15:56:24,893 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 15:56:25,317 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 15:56:33,572 [INFO] schedule: Found 5 Schedules
+2025-11-25 15:56:33,643 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 15:56:34,706 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 15:56:37,300 [INFO] schedule: Found 5 Schedules
+2025-11-25 16:03:03,384 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 16:03:05,358 [INFO] schedule: Found 5 Schedules
+2025-11-25 16:03:05,369 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 16:03:07,216 [INFO] schedule: Found 5 Schedules
+2025-11-25 16:03:08,901 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 16:03:09,171 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 16:03:38,467 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 16:03:38,754 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 16:03:40,803 [INFO] schedule: Found 5 Schedules
+2025-11-25 16:03:40,810 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 16:03:41,031 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 16:03:43,104 [INFO] schedule: Found 5 Schedules
+2025-11-25 16:55:19,577 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 16:55:20,045 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 16:55:25,813 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 16:55:37,138 [INFO] schedule: Found 5 Schedules
+2025-11-25 16:55:37,148 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 16:55:37,334 [INFO] schedule: GET /schedule/final called to list schedules
+2025-11-25 16:56:12,286 [INFO] schedule: Found 5 Schedules
+2025-11-25 16:56:12,297 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 16:57:06,332 [INFO] override: Successfully overrode event 292 to Monday 8:00 AM - 9:00 AM in 506
+2025-11-25 16:57:06,377 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 16:57:07,340 [INFO] override: Successfully overrode event 292 to Monday 7:00 AM - 8:00 AM in 506
+2025-11-25 16:57:07,411 [INFO] schedule: Returning cached schedule (1163 events)
+2025-11-25 17:29:13,295 [INFO] faculty: Assigning faculty Johniel Zar Mendoza to group: ('GEC 212', 'BSIT', 'A')
+2025-11-25 17:29:13,322 [INFO] faculty: Found 3 events in group (including merged classes)
+2025-11-25 17:29:13,324 [INFO] faculty: Assigned Johniel Zar Mendoza to event 153-A (Block A)
+2025-11-25 17:29:13,324 [INFO] faculty: Assigned Johniel Zar Mendoza to event 155-A (Block A)
+2025-11-25 17:29:13,325 [INFO] faculty: Assigned Johniel Zar Mendoza to event 154-A (Block A)

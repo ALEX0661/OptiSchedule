@@ -98,67 +98,118 @@
   margin-bottom: 10px; 
 }
 
+/* =========================================
+   UPDATED FACULTY LIST & CARD STYLES
+   ========================================= */
+
+.faculty-content {
+  position: relative;
+  min-height: 200px;
+}
+
 .faculty-cards {
   display: flex;
   flex-direction: column;
   gap: 7px; 
   max-height: 352px; 
   overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) transparent;
 }
 
+.faculty-cards::-webkit-scrollbar {
+  width: 6px;
+}
+
+.faculty-cards::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.faculty-cards::-webkit-scrollbar-thumb {
+  background-color: var(--primary);
+  border-radius: 3px;
+}
+
+/* ========== FACULTY CARD ========== */
 .faculty-card {
   width: 100%;
-  padding: 11px 9px; 
-  min-height: 50px;
+  padding: 12px;
+  min-height: 60px;
+  background: white;
   border: 1px solid var(--border-gray);
-  border-radius: var(--radius);
+  border-radius: 6px;
   display: flex;
   align-items: center;
-  gap: 9px; 
+  gap: 10px;
   cursor: pointer;
-  transition: box-shadow 0.3s;
-  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
 }
 
 .faculty-card:hover {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary);
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.12);
 }
 
 .faculty-card.disabled {
   opacity: 0.3;
+  cursor: not-allowed;
+  background: #f9f9f9;
   transition: opacity 0.2s ease;
 }
 
+.faculty-card.disabled:hover {
+  border-color: var(--border-gray);
+  box-shadow: none;
+}
+
+/* ========== FACULTY INFO ========== */
 .faculty-info {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 0px; 
+  gap: 4px;
+  margin-left: 0px;
 }
 
 .faculty-name-text {
-  font-weight: 530;
-  font-size: 9px; 
-  line-height: 0.88;
+  font-weight: 600;
+  font-size: 9.5px;
+  line-height: 1.3;
+  color: #222;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .faculty-status {
-  font-size: 8px; 
+  font-size: 8px;
   color: var(--dark-gray);
-  margin-top: 2px; 
   display: flex;
   align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
+.faculty-workload {
+  font-weight: 500;
+  padding: 2px 6px;
+  background-color: rgba(46, 125, 50, 0.08);
+  border-radius: 3px;
+  color: var(--primary-dark);
+  font-size: 8px;
+}
+
+/* ========== STATUS INDICATOR ========== */
 .status-indicator {
-  width: 9px; 
-  height: 9px; 
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  margin-left: 2px; 
+  margin-left: 2px;
+  transition: opacity 0.2s ease;
 }
 
 .status-green {
@@ -177,6 +228,10 @@
   font-style: italic;
   color: var(--dark-gray);
 }
+
+/* =========================================
+   BUTTONS & PANELS (Existing Styles)
+   ========================================= */
 
 .toggle-faculty-btn {
   background-color: transparent;
@@ -330,9 +385,9 @@
 .group-modal {
   background-color: var(--white);
   border-radius: 12px;
-  max-width: 520px;
-  width: 100%;
-  max-height: 80vh;
+  max-width: 700px;
+  width: 90%;
+  max-height: 85vh;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   animation: modalSlideIn 0.3s ease-out;
@@ -401,7 +456,7 @@
 .group-modal-content {
   padding: 24px;
   overflow-y: auto;
-  max-height: calc(80vh - 76px);
+  max-height: calc(85vh - 76px);
   scrollbar-width: thin;
   scrollbar-color: var(--primary) transparent;
 }
@@ -534,11 +589,9 @@
   gap: 8px;
 }
 
-/* Emoji removed from here */
-
 .modal-table-container {
-  max-height: 300px;
-  overflow-y: auto;
+  max-height: 350px;
+  overflow: auto;
   border: 1px solid var(--border-gray);
   border-radius: var(--radius);
   margin-bottom: 16px;
@@ -547,8 +600,8 @@
 }
 
 .modal-table-container::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 .modal-table-container::-webkit-scrollbar-track {
@@ -557,19 +610,20 @@
 
 .modal-table-container::-webkit-scrollbar-thumb {
   background-color: var(--primary);
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .modal-table-container .assigned-events-table {
   width: 100%;
   border-collapse: collapse;
   margin: 0;
-  font-size: 0.85em;
+  font-size: 0.9em;
+  min-width: 600px;
 }
 
 .modal-table-container .assigned-events-table th,
 .modal-table-container .assigned-events-table td {
-  padding: 10px 12px;
+  padding: 12px 10px;
   border: 1px solid var(--border-gray);
   text-align: left;
 }
@@ -581,7 +635,7 @@
   top: 0;
   font-weight: 600;
   z-index: 10;
-  font-size: 0.9em;
+  font-size: 0.85em;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -610,7 +664,8 @@
   }
   
   .group-modal {
-    max-width: 90vw;
+    max-width: 95vw;
+    width: 95vw;
     margin: 10px;
   }
   
@@ -639,12 +694,105 @@
   }
   
   .modal-table-container .assigned-events-table {
-    font-size: 0.75em;
+    font-size: 0.8em;
   }
   
   .modal-table-container .assigned-events-table th,
   .modal-table-container .assigned-events-table td {
-    padding: 8px 6px;
+    padding: 10px 8px;
     white-space: nowrap;
   }
+}
+
+/* --- UPDATED MODAL SIZING & FONTS --- */
+
+/* Standardize both modals to be wide and clean */
+.faculty-modal, 
+.group-modal {
+  width: 90%;
+  max-width: 850px;
+  background-color: var(--white);
+  border-radius: var(--radius);
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+/* Ensure font is Poppins everywhere inside the table */
+.assigned-events-table,
+.assigned-events-table th,
+.assigned-events-table td,
+.assigned-events-table span,
+.assigned-events-table div {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* --- CONFLICT POPOVER STYLES (Specific to Modal) --- */
+
+.conflict-popover {
+  /* Updated: Defaults only. Positioning is now handled by JS inline styles */
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  padding: 0;
+  min-width: 220px;
+  max-width: 280px;
+  z-index: 2000;
+  border: 1px solid #eee;
+  text-align: left;
+}
+
+.popover-header {
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.popover-header button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #999;
+}
+
+.popover-content {
+  padding: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.popover-item {
+  padding: 6px 8px;
+  background: #f9f9f9;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.popover-course {
+  font-weight: 600;
+  font-size: 10px;
+  color: #333;
+}
+
+.popover-details {
+  font-size: 9px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* Ensure table cells allow absolute positioning for badges */
+.assigned-events-table td {
+  position: relative;
+}
+
+/* Remove default scrollbar from modal if it clashes */
+.group-modal-content, 
+.faculty-modal-content {
+  overflow-y: auto;
+  flex: 1;
 }

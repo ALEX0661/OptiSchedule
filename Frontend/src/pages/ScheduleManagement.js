@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import {
   generateSchedule,
   saveFinalSchedule,
@@ -23,12 +23,10 @@ import RoomView from '../components/RoomView';
 import { 
   computeGroupKey, 
   getMergedClassEvents, 
-  isMergedClass,
   computeExtendedGroupKey 
 } from '../utils/scheduleHelpers';
 import '../styles/ScheduleManagement.css';
 import '../styles/FacultyPanel.css';
-
 
 const ScheduleManagement = () => {
   const [schedule, setSchedule] = useState([]);
@@ -63,8 +61,9 @@ const ScheduleManagement = () => {
   const [isFacultyLoading, setIsFacultyLoading] = useState(false);
   const [isRoomView, setIsRoomView] = useState(false);
 
-  const daysOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const daysOrder = useMemo(() => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], []);
 
+  // --- Initial Data Fetching ---
   useEffect(() => {
     const fetchCurrentSchedule = async () => {
       setLoading(true);
@@ -129,45 +128,49 @@ const ScheduleManagement = () => {
     fetchExistingSchedules();
   }, []);
 
-  const handleFilterChange = (e) => {
+  // --- Handlers ---
+  const handleFilterChange = useCallback((e) => {
     const { name, value, type, checked } = e.target;
     setFilters((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
-  };
+  }, []);
 
-  const handleFacultySearchChange = (e) => {
+  const handleFacultySearchChange = useCallback((e) => {
     setFacultySearch(e.target.value);
-  };
+  }, []);
 
-  const filteredSchedule = (schedule || []).filter((event) => {
-    const { program, year, block, courseQuery, day, room, showUnassignedOnly } = filters;
-    if (program !== 'all' && event.program !== program) return false;
-    if (year !== 'all' && event.year !== parseInt(year)) return false;
-    if (block !== 'all' && event.block !== block) return false;
-    if (
-      courseQuery &&
-      !event.courseCode.toLowerCase().includes(courseQuery.toLowerCase()) &&
-      !event.title.toLowerCase().includes(courseQuery.toLowerCase())
-    )
-      return false;
-    if (day !== 'all' && event.day !== day) return false;
-    if (room !== 'all' && event.room !== room) return false;
-    if (showUnassignedOnly && event.faculty && event.faculty.trim() !== '') return false;
-    return true;
-  });
+  // --- Memoized Data Filtering ---
+  const filteredSchedule = useMemo(() => {
+    return (schedule || []).filter((event) => {
+      const { program, year, block, courseQuery, day, room, showUnassignedOnly } = filters;
+      if (program !== 'all' && event.program !== program) return false;
+      if (year !== 'all' && event.year !== parseInt(year)) return false;
+      if (block !== 'all' && event.block !== block) return false;
+      if (
+        courseQuery &&
+        !event.courseCode.toLowerCase().includes(courseQuery.toLowerCase()) &&
+        !event.title.toLowerCase().includes(courseQuery.toLowerCase())
+      )
+        return false;
+      if (day !== 'all' && event.day !== day) return false;
+      if (room !== 'all' && event.room !== room) return false;
+      if (showUnassignedOnly && event.faculty && event.faculty.trim() !== '') return false;
+      return true;
+    });
+  }, [schedule, filters]);
 
-  const groupByDay = (events) =>
-    events.reduce((acc, event) => {
+  const groupedSchedule = useMemo(() => {
+    return filteredSchedule.reduce((acc, event) => {
       const eventDay = event.day || 'Other';
       if (!acc[eventDay]) acc[eventDay] = [];
       acc[eventDay].push(event);
       return acc;
     }, {});
+  }, [filteredSchedule]);
 
-  const groupedSchedule = groupByDay(filteredSchedule);
-
+  // --- Actions ---
   const handleSaveFinalSchedule = async () => {
     setLoading(true);
     setLoadingMessage('Saving Schedule, please wait...');
@@ -231,127 +234,78 @@ const ScheduleManagement = () => {
     }
   };
 
-  // UPDATED: Handle merged classes when toggling group selection
-// In ScheduleManagement.js, update handleToggleGroupSelection:
+  const handleToggleGroupSelection = useCallback((event) => {
+    // Check extended group key logic
+    const mergedEvents = getMergedClassEvents(schedule, event);
+    const extendedGroupKey = computeExtendedGroupKey(event, schedule);
+    
+    setSelectedGroup(prevSelected => {
+      if (prevSelected && prevSelected.groupKey === extendedGroupKey) {
+        return null;
+      } else {
+        let groupEvents = [];
+        mergedEvents.forEach(mergedEvent => {
+          const individualGroupKey = computeGroupKey(mergedEvent);
+          const eventsForBlock = (schedule || []).filter((e) => computeGroupKey(e) === individualGroupKey);
+          groupEvents = [...groupEvents, ...eventsForBlock];
+        });
+        
+        const uniqueGroupEvents = groupEvents.filter((ev, index, self) =>
+          index === self.findIndex((e) => e.schedule_id === ev.schedule_id)
+        );
+        
+        return { 
+          groupKey: extendedGroupKey, 
+          groupEvents: uniqueGroupEvents,
+          isMerged: mergedEvents.length > 1,
+          mergedBlocks: mergedEvents.map(e => e.block)
+        };
+      }
+    });
+  }, [schedule]);
 
-const handleToggleGroupSelection = (event) => {
-  console.log('Toggling group selection for event:', event);
-  console.log('Event schedule_id:', event.schedule_id);
-  
-  // Get all events in the merged class (if applicable)
-  const mergedEvents = getMergedClassEvents(schedule, event);
-  console.log('Merged events found:', mergedEvents);
-  
-  // Compute the extended group key that includes merged blocks
-  const extendedGroupKey = computeExtendedGroupKey(event, schedule);
-  console.log('Extended group key:', extendedGroupKey);
-  
-  if (selectedGroup && selectedGroup.groupKey === extendedGroupKey) {
-    setSelectedGroup(null);
-  } else {
-    // Collect all events for this group, including both lecture and lab
-    let groupEvents = [];
-    
-    mergedEvents.forEach(mergedEvent => {
-      const individualGroupKey = computeGroupKey(mergedEvent);
-      const eventsForBlock = (schedule || []).filter((e) => computeGroupKey(e) === individualGroupKey);
-      groupEvents = [...groupEvents, ...eventsForBlock];
-    });
-    
-    // Remove duplicates based on schedule_id
-    const uniqueGroupEvents = groupEvents.filter((event, index, self) =>
-      index === self.findIndex((e) => e.schedule_id === event.schedule_id)
-    );
-    
-    console.log('Group events collected:', uniqueGroupEvents);
-    console.log('Group events schedule_ids:', uniqueGroupEvents.map(e => e.schedule_id));
-    
-    setSelectedGroup({ 
-      groupKey: extendedGroupKey, 
-      groupEvents: uniqueGroupEvents,
-      isMerged: mergedEvents.length > 1,
-      mergedBlocks: mergedEvents.map(e => e.block)
-    });
-    
-    console.log('Selected group with merged classes:', {
-      groupKey: extendedGroupKey,
-      eventCount: uniqueGroupEvents.length,
-      isMerged: mergedEvents.length > 1,
-      blocks: mergedEvents.map(e => e.block),
-      scheduleIds: uniqueGroupEvents.map(e => e.schedule_id)
-    });
-  }
-};
-  // UPDATED: Handle faculty assignment for merged classes
-// UPDATED: Handle faculty assignment for merged classes
-const handleAssignFaculty = async (facultyObj) => {
-  if (!selectedGroup) return;
-  try {
-    const firstEvent = selectedGroup.groupEvents[0];
-    
-    // For merged classes, use the actual schedule_id with suffix (69-A or 69-B)
-    // The backend will handle finding the event and grouping by baseCourseCode
-    let validScheduleId = firstEvent.schedule_id;
-    
-    console.log('Assigning faculty with schedule_id:', validScheduleId);
-    console.log('Selected group:', selectedGroup);
-    console.log('First event:', firstEvent);
-    
-    const response = await assignFacultyToEvent(validScheduleId, facultyObj.id);
-    if (response.status === 'success') {
-      setSchedule((prevSchedule) =>
-        (prevSchedule || []).map((event) => {
-          // Check if this event is part of the selected group
-          const isInGroup = selectedGroup.groupEvents.some(
-            ge => ge.schedule_id === event.schedule_id
-          );
-          return isInGroup ? { ...event, faculty: facultyObj.name } : event;
-        })
-      );
-      setSelectedGroup(null);
+  const handleAssignFaculty = async (facultyObj) => {
+    if (!selectedGroup) return;
+    try {
+      const firstEvent = selectedGroup.groupEvents[0];
+      let validScheduleId = firstEvent.schedule_id;
+      
+      const response = await assignFacultyToEvent(validScheduleId, facultyObj.id);
+      if (response.status === 'success') {
+        setSchedule((prevSchedule) =>
+          (prevSchedule || []).map((event) => {
+            const isInGroup = selectedGroup.groupEvents.some(
+              ge => ge.schedule_id === event.schedule_id
+            );
+            return isInGroup ? { ...event, faculty: facultyObj.name } : event;
+          })
+        );
+        setSelectedGroup(null);
+        setSuccessModalData({ 
+          message: `Faculty assigned successfully${selectedGroup.isMerged ? ' to merged classes' : ''}.`, 
+          type: 'success' 
+        });
+      }
+    } catch (error) {
+      console.error('Error assigning faculty:', error);
       setSuccessModalData({ 
-        message: `Faculty assigned successfully${selectedGroup.isMerged ? ' to merged classes' : ''}.`, 
-        type: 'success' 
+        message: 'Error assigning faculty: ' + (error.response?.data?.detail || error.message), 
+        type: 'error' 
       });
     }
-  } catch (error) {
-    console.error('Error assigning faculty:', error);
-    setSuccessModalData({ 
-      message: 'Error assigning faculty: ' + (error.response?.data?.detail || error.message), 
-      type: 'error' 
-    });
-  }
-};
+  };
 
-  const handleOverride = (scheduleId) => {
+  const handleOverride = useCallback((scheduleId) => {
     const event = (schedule || []).find((e) => e.schedule_id === scheduleId);
     if (event) {
       setOverrideEventData(event);
       setIsOverrideModalOpen(true);
     }
-  };
+  }, [schedule]);
 
   const closeOverrideModal = () => {
     setIsOverrideModalOpen(false);
     setOverrideEventData(null);
-  };
-
-  const handleSaveOverride = async (overrideDetails) => {
-    try {
-      const response = await overrideEvent(overrideDetails);
-      console.log('Override response:', response);
-      if (response.status === 'success') {
-        setSuccessModalData({ message: 'Override saved successfully.', type: 'success' });
-        await refreshSchedule();
-      } else {
-        setSuccessModalData({ message: 'Override failed: ' + (response.detail || 'Error occurred.'), type: 'error' });
-      }
-    } catch (error) {
-      console.error('Error overriding event:', error);
-      setSuccessModalData({ message: 'Error: ' + error.message, type: 'error' });
-    } finally {
-      closeOverrideModal();
-    }
   };
 
   const refreshSchedule = async () => {
@@ -373,13 +327,30 @@ const handleAssignFaculty = async (facultyObj) => {
     }
   };
 
-  const getAssignedEventsForFaculty = (facultyName) =>
-    (schedule || []).filter((event) => event.faculty === facultyName);
+  const handleSaveOverride = async (overrideDetails) => {
+    try {
+      const response = await overrideEvent(overrideDetails);
+      if (response.status === 'success') {
+        setSuccessModalData({ message: 'Override saved successfully.', type: 'success' });
+        await refreshSchedule();
+      } else {
+        setSuccessModalData({ message: 'Override failed: ' + (response.detail || 'Error occurred.'), type: 'error' });
+      }
+    } catch (error) {
+      console.error('Error overriding event:', error);
+      setSuccessModalData({ message: 'Error: ' + error.message, type: 'error' });
+    } finally {
+      closeOverrideModal();
+    }
+  };
 
-  const openFacultyModal = (facultyObj) => {
+  const getAssignedEventsForFaculty = useCallback((facultyName) =>
+    (schedule || []).filter((event) => event.faculty === facultyName), [schedule]);
+
+  const openFacultyModal = useCallback((facultyObj) => {
     setModalFaculty(facultyObj);
     setIsFacultyModalOpen(true);
-  };
+  }, []);
 
   const closeFacultyModal = () => {
     setIsFacultyModalOpen(false);
@@ -468,6 +439,7 @@ const handleAssignFaculty = async (facultyObj) => {
         <FacultyModal
           faculty={modalFaculty}
           assignedEvents={getAssignedEventsForFaculty(modalFaculty.name)}
+          schedule={schedule}
           onClose={closeFacultyModal}
           onRequestUnassignGroup={(groupKey, groupEvents, facultyName) => {
             setUnassignModalData({ groupKey, groupEvents, facultyName });
@@ -515,7 +487,6 @@ const handleAssignFaculty = async (facultyObj) => {
       {isOverrideModalOpen && overrideEventData && (
         <OverrideModal
           event={overrideEventData}
-          roomsData={roomsData}
           schedule={schedule}
           onClose={closeOverrideModal}
           onSave={handleSaveOverride}

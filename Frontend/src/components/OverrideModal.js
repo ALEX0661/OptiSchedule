@@ -74,6 +74,12 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
     return `${displayHours}:${mins.toString().padStart(2, '0')} ${period}`;
   };
 
+  // Helper to shorten session names for the table
+  const shortenSession = (session) => {
+    if (!session) return session;
+    return session.replace(/Laboratory/gi, 'LAB').replace(/Lecture/gi, 'LEC');
+  };
+
   const updateFields = useCallback(
     (newStart, dayValue) => {
       const startMinutes = timeToMinutes(newStart);
@@ -288,7 +294,7 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
             <div className="override-field">
               <label htmlFor="override-day">Select Day:</label>
               <select id="override-day" value={selectedDay} onChange={handleDayChange}>
-                <option value="">Monday</option>
+                <option value="Monday">Monday</option>
                 <option value="Tuesday">Tuesday</option>
                 <option value="Wednesday">Wednesday</option>
                 <option value="Thursday">Thursday</option>
@@ -423,120 +429,123 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
 
       {showConfirmModal && (
         <div className="modal-overlay" onClick={handleCancelOverride}>
-          <div className="unassign-modal" onClick={e => e.stopPropagation()}>
-            <header className="unassign-modal-header">
-              <h2>Confirm Schedule Override</h2>
-              <p>
+          {/* Manually setting wider style for the confirmation modal to match Faculty Modal width */}
+          <div className="unassign-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '900px', width: '90%' }}>
+            <header className="unassign-modal-header" style={{ backgroundColor: 'var(--primary)', color: 'white' }}>
+              <h2 style={{ fontSize: '1.2em', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                Confirm Schedule Override
+              </h2>
+            </header>
+            
+            <div className="unassign-modal-content" style={{ padding: '20px' }}>
+              <p style={{ marginBottom: '15px', color: '#555' }}>
                 You are about to move <strong>{event.title} ({event.courseCode})</strong>{isOccupiedRoom && !hasOverlap ? ' to an occupied room' : hasOverlap ? ' to a time slot that conflicts with other classes' : ''}.
               </p>
-            </header>
-            <div className="unassign-modal-content">
+
               <div style={{ 
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr",
                 gap: "15px",
-                marginBottom: "15px"
+                marginBottom: "20px"
               }}>
                 <div style={{ 
-                  padding: "12px", 
+                  padding: "14px", 
                   backgroundColor: "#fff3e0", 
                   borderRadius: "var(--radius)",
-                  border: "2px solid #ff9800"
+                  border: "1px solid #ffb74d",
+                  boxShadow: "0 2px 5px rgba(0,0,0,0.05)"
                 }}>
-                  <div style={{ fontWeight: "600", marginBottom: "8px", color: "#e65100", fontSize: "0.95em" }}>
-                    Current Schedule:
+                  <div style={{ fontWeight: "600", marginBottom: "8px", color: "#e65100", fontSize: "0.95em", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                    Current Schedule
                   </div>
-                  <div style={{ fontSize: "0.85em", lineHeight: "1.6", color: "#333" }}>
-                    <strong>{event.title} ({event.courseCode})</strong><br />
-                    <span style={{ color: "#666" }}>
-                      {event.session}
-                    </span>
-                  </div>
-                  <div style={{ 
-                    marginTop: "8px", 
-                    paddingTop: "8px", 
-                    borderTop: "1px solid #ffe0b2",
-                    fontSize: "0.85em"
-                  }}>
-                    <span style={{ color: "#666" }}>
-                      Program: <strong>{event.program}</strong><br />
-                      Year: <strong>{event.year}</strong><br />
-                      Block: <strong>{event.block}</strong><br />
-                      Day: <strong>{event.day}</strong><br />
-                      Time: <strong>{event.period}</strong><br />
-                      Room: <strong>{event.room || 'Not assigned'}</strong>
-                    </span>
+                  <div style={{ fontSize: "0.9em", lineHeight: "1.6", color: "#333" }}>
+                    <div style={{ fontWeight: '600', color: '#222' }}>{event.title}</div>
+                    <div style={{ color: '#666', fontSize: '0.9em' }}>{event.courseCode} • {event.session}</div>
+                    
+                    <div style={{ marginTop: '10px', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 10px', fontSize: '0.9em' }}>
+                      <span style={{ color: '#777' }}>Section:</span> <span>{event.program} {event.year}-{event.block}</span>
+                      <span style={{ color: '#777' }}>Time:</span> <span>{event.day}, {event.period}</span>
+                      <span style={{ color: '#777' }}>Room:</span> <span>{event.room || 'Not assigned'}</span>
+                    </div>
                   </div>
                 </div>
 
                 <div style={{ 
-                  padding: "12px", 
+                  padding: "14px", 
                   backgroundColor: "#e8f5e9", 
                   borderRadius: "var(--radius)",
-                  border: "2px solid var(--primary)"
+                  border: "1px solid #81c784",
+                  boxShadow: "0 2px 5px rgba(0,0,0,0.05)"
                 }}>
-                  <div style={{ fontWeight: "600", marginBottom: "8px", color: "var(--primary-dark)", fontSize: "0.95em" }}>
-                    New Schedule:
+                  <div style={{ fontWeight: "600", marginBottom: "8px", color: "#2e7d32", fontSize: "0.95em", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                    New Schedule
                   </div>
-                  <div style={{ fontSize: "0.85em", lineHeight: "1.6", color: "#333" }}>
-                    <strong>{event.title} ({event.courseCode})</strong><br />
-                    <span style={{ color: "#666" }}>
-                      {event.session}
-                    </span>
-                  </div>
-                  <div style={{ 
-                    marginTop: "8px", 
-                    paddingTop: "8px", 
-                    borderTop: "1px solid #c8e6c9",
-                    fontSize: "0.85em"
-                  }}>
-                    <span style={{ color: "#666" }}>
-                      Program: <strong>{event.program}</strong><br />
-                      Year: <strong>{event.year}</strong><br />
-                      Block: <strong>{event.block}</strong><br />
-                      Day: <strong>{selectedDay || event.day}</strong><br />
-                      Time: <strong>{minutesToTime12Hour(timeToMinutes(startTime))} - {minutesToTime12Hour(timeToMinutes(startTime) + fixedDuration)}</strong><br />
-                      Room: <strong>{pendingSaveData?.new_room || 'Not selected'}</strong>
-                    </span>
+                  <div style={{ fontSize: "0.9em", lineHeight: "1.6", color: "#333" }}>
+                    <div style={{ fontWeight: '600', color: '#222' }}>{event.title}</div>
+                    <div style={{ color: '#666', fontSize: '0.9em' }}>{event.courseCode} • {event.session}</div>
+                    
+                    <div style={{ marginTop: '10px', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 10px', fontSize: '0.9em' }}>
+                      <span style={{ color: '#777' }}>Section:</span> <span>{event.program} {event.year}-{event.block}</span>
+                      <span style={{ color: '#777' }}>Time:</span> <span>{selectedDay || event.day}, {minutesToTime12Hour(timeToMinutes(startTime))} - {minutesToTime12Hour(timeToMinutes(startTime) + fixedDuration)}</span>
+                      <span style={{ color: '#777' }}>Room:</span> <span style={{ fontWeight: '600', color: '#2e7d32' }}>{pendingSaveData?.new_room || 'Not selected'}</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {conflictingEvents.length > 0 && (
                 <>
-                  <p className="unassign-info" style={{ color: "var(--red)", fontWeight: "500" }}>
-                    The following classes will conflict with this change:
+                  <p className="unassign-info" style={{ color: "var(--red)", fontWeight: "600", marginBottom: '8px', fontSize: '0.95em' }}>
+                    ⚠️ The following classes will conflict with this change:
                   </p>
-                  <div className="modal-table-container">
-                    <table className="assigned-events-table" style={{ fontSize: "0.85em" }}>
+                  <div className="modal-table-container" style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                    <table className="assigned-events-table" style={{ tableLayout: 'fixed', width: '100%' }}>
+                      <colgroup>
+                        <col style={{ width: '8%' }} />  {/* Session */}
+                        <col style={{ width: '26%' }} /> {/* Course (Name + Code) */}
+                        <col style={{ width: '14%' }} /> {/* Section (Prog + Yr + Blk) */}
+                        <col style={{ width: '7%' }} />  {/* Room */}
+                        <col style={{ width: '11%' }} />  {/* Day */}
+                        <col style={{ width: '14%' }} /> {/* Time */}
+                        <col style={{ width: '20%' }} /> {/* Conflict Reason (Wide + Wrap) */}
+                      </colgroup>
                       <thead>
                         <tr>
-                          <th style={{ padding: "8px 6px" }}>Session</th>
-                          <th style={{ padding: "8px 6px" }}>Course</th>
-                          <th style={{ padding: "8px 6px" }}>Program</th>
-                          <th style={{ padding: "8px 6px" }}>Year</th>
-                          <th style={{ padding: "8px 6px" }}>Block</th>
-                          <th style={{ padding: "8px 6px" }}>Room</th>
-                          <th style={{ padding: "8px 6px" }}>Day</th>
-                          <th style={{ padding: "8px 6px" }}>Time</th>
-                          <th style={{ padding: "8px 6px" }}>Conflict Type</th>
+                          <th>SESS</th>
+                          <th>COURSE</th>
+                          <th>SECTION</th>
+                          <th>ROOM</th>
+                          <th>DAY</th>
+                          <th>TIME</th>
+                          <th>CONFLICT REASON</th>
                         </tr>
                       </thead>
                       <tbody>
                         {conflictingEvents.map(conflict => (
                           <tr key={conflict.schedule_id}>
-                            <td style={{ padding: "8px 6px" }}>{conflict.session || '-'}</td>
-                            <td style={{ padding: "8px 6px" }}>
-                              <strong>{conflict.title}</strong><br />
-                              <span style={{ fontSize: "0.9em", color: "#666" }}>({conflict.courseCode})</span>
+                            <td className="center-text">{shortenSession(conflict.session)}</td>
+                            <td>
+                              <div className="course-cell">
+                                <span className="course-code">{conflict.courseCode}</span>
+                                <span className="course-title">{conflict.title}</span>
+                              </div>
                             </td>
-                            <td style={{ padding: "8px 6px" }}>{conflict.program || '-'}</td>
-                            <td style={{ padding: "8px 6px" }}>{conflict.year || '-'}</td>
-                            <td style={{ padding: "8px 6px" }}>{conflict.block || '-'}</td>
-                            <td style={{ padding: "8px 6px" }}>{conflict.room || '-'}</td>
-                            <td style={{ padding: "8px 6px" }}>{conflict.day}</td>
-                            <td style={{ padding: "8px 6px", fontSize: "0.9em" }}>{conflict.period}</td>
-                            <td style={{ padding: "8px 6px", color: "var(--red)", fontWeight: "600", fontSize: "0.9em" }}>
+                            <td>
+                              <div className="section-cell">
+                                <span>{conflict.program} {conflict.year}-{conflict.block}</span>
+                              </div>
+                            </td>
+                            <td className="center-text">{conflict.room || '-'}</td>
+                            <td className="center-text">{conflict.day}</td>
+                            <td className="time-cell" style={{ fontSize: '0.7em' }}>{conflict.period}</td>
+                            <td style={{ 
+                                color: "var(--red)", 
+                                fontWeight: "600", 
+                                fontSize: "0.85em", 
+                                whiteSpace: "normal", /* Allow text wrap */
+                                lineHeight: "1.3",
+                                padding: "8px"
+                              }}>
                               {conflict.conflictType}
                             </td>
                           </tr>
@@ -547,11 +556,11 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
                 </>
               )}
             </div>
-            <footer className="unassign-modal-footer">
+            <footer className="unassign-modal-footer" style={{ padding: '15px 20px', borderTop: '1px solid #eee' }}>
               <button className="modal-btn cancel-btn" onClick={handleCancelOverride}>
                 Cancel
               </button>
-              <button className="modal-btn confirm-btn" onClick={handleConfirmOverride}>
+              <button className="modal-btn confirm-btn" onClick={handleConfirmOverride} style={{ backgroundColor: 'var(--red)', borderColor: 'var(--red)' }}>
                 Confirm Override
               </button>
             </footer>

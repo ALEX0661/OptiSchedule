@@ -27,11 +27,24 @@ const UnassignConfirmationModal = ({ groupEvents = [], onCancel, onConfirm }) =>
         </header>
         <div className="unassign-modal-content">
           <p className="unassign-info">The following events will be unassigned:</p>
-          <div className="modal-table-container">
-            <table className="assigned-events-table">
+          
+          {/* Added overflow-x: hidden to container to prevent scrolling */}
+          <div className="modal-table-container" style={{ overflowX: 'hidden' }}>
+            
+            {/* Added tableLayout: fixed, width: 100%, and removed minWidth to force fit */}
+            <table 
+              className="assigned-events-table" 
+              style={{ width: '100%', tableLayout: 'fixed', minWidth: 'auto' }}
+            >
+              <colgroup>
+                      {/* ADJUSTED WIDTHS: Total is now 100% (15+45+15+25) */}
+                      <col style={{ width: '15%' }} /> {/* Session */}
+                      <col style={{ width: '45%' }} /> {/* Course - Reduced slightly to fit */}
+                      <col style={{ width: '15%' }} /> {/* Day */}
+                      <col style={{ width: '25%' }} /> {/* Time - Reduced slightly to fit */}
+              </colgroup>
               <thead>
                 <tr>
-                  <th>Schedule ID</th>
                   <th>Session</th>
                   <th>Course</th>
                   <th>Day</th>
@@ -41,11 +54,19 @@ const UnassignConfirmationModal = ({ groupEvents = [], onCancel, onConfirm }) =>
               <tbody>
                 {groupEvents.map(event => (
                   <tr key={event.schedule_id}>
-                    <td>{event.schedule_id}</td>
-                    <td>{event.session || '-'}</td>
-                    <td>{event.title} ({event.courseCode})</td>
-                    <td>{event.day}</td>
-                    <td>{event.period}</td>
+                    {/* Added text truncation styles just in case content is very long */}
+                    <td style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {event.session || '-'}
+                    </td>
+                    <td style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {event.title} ({event.courseCode})
+                    </td>
+                    <td style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {event.day}
+                    </td>
+                    <td style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {event.period}
+                    </td>
                   </tr>
                 ))}
               </tbody>
