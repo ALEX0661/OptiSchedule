@@ -2,9 +2,10 @@ import React, { useState, useEffect, useMemo } from 'react';
 import '../styles/GeneratedSchedulePage.css';
 import { getFinalSchedule, getFinalSchedules } from '../services/scheduleService';
 import SuccessModal from '../components/SuccessModal';
-import ScheduleFilters from '../components/ScheduleFilters'; // Import the Advanced Filters
+import ScheduleFilters from '../components/ScheduleFilters';
 import noScheduleLogo from '../assets/noScheduleLogo.png';
 import { exportToPDF, exportToExcel } from '../utils/exportUtils';
+import ScheduleGeneratorLoader from '../animations/ScheduleGeneratorLoader'; // Import the loader
 
 const toMinutes = timeStr => {
   if (!timeStr) return 0;
@@ -107,13 +108,11 @@ const GeneratedSchedulePage = () => {
     fetchFinalSchedules();
   }, []);
 
-  // Extract available rooms from the schedule for the filter component
   const availableRooms = useMemo(() => {
     const lecture = new Set();
     const lab = new Set();
     schedule.forEach(evt => {
       if (evt.room) {
-        // Simple heuristic: if it says "Lab" or "Com", count as lab, else lecture
         if (evt.room.match(/(Lab|Com|Mac|Win)/i)) {
           lab.add(evt.room);
         } else {
@@ -124,7 +123,6 @@ const GeneratedSchedulePage = () => {
     return { lecture: Array.from(lecture), lab: Array.from(lab) };
   }, [schedule]);
 
-  // Extract available days from the schedule
   const availableDays = useMemo(() => {
     const days = new Set(schedule.map(s => s.day).filter(Boolean));
     return Array.from(days).sort((a, b) => dayOrder[a] - dayOrder[b]);
@@ -177,9 +175,7 @@ const GeneratedSchedulePage = () => {
     }));
   };
 
-  // Advanced Filtering Logic
   const filteredSchedule = schedule.filter(evt => {
-    // 1. Dynamic Search (Code, Title, Program, Year)
     if (filter.courseQuery) {
       const q = filter.courseQuery.toLowerCase().trim();
       const match =
@@ -191,14 +187,12 @@ const GeneratedSchedulePage = () => {
       if (!match) return false;
     }
 
-    // 2. Advanced Arrays
     if (filter.programSelected?.length > 0 && !filter.programSelected.includes(evt.program)) return false;
     if (filter.yearSelected?.length > 0 && !filter.yearSelected.includes(Number(evt.year))) return false;
     if (filter.blockSelected?.length > 0 && !filter.blockSelected.includes(evt.block)) return false;
     if (filter.daySelected?.length > 0 && !filter.daySelected.includes(evt.day)) return false;
     if (filter.roomSelected?.length > 0 && !filter.roomSelected.includes(evt.room)) return false;
 
-    // 3. Unassigned Only
     if (filter.showUnassignedOnly) {
       if (evt.faculty && evt.faculty !== 'Unassigned' && evt.faculty !== '') return false;
     }
@@ -284,11 +278,25 @@ const GeneratedSchedulePage = () => {
         </button>
       </div>
 
-      {/* Schedule Table or No Data */}
+      {/* Schedule Table or Loading State */}
       {loading ? (
-        <div className="loading-overlay">
-          <div className="spinner"></div>
-          <p>Loading schedule...</p>
+        // Containerized Loading Animation
+        <div style={{ 
+          minHeight: '400px', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          backgroundColor: 'white',
+          borderRadius: '8px',
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.04)',
+          margin: '20px 0',
+          border: '1px solid #e0e0e0'
+        }}>
+          <ScheduleGeneratorLoader 
+            message="Loading schedule..." 
+            showProgress={false} 
+            isOverlay={false} 
+          />
         </div>
       ) : error ? (
         <p className="error-msg">{error}</p>

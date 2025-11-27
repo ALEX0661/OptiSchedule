@@ -20,6 +20,7 @@ import UnassignConfirmationModal from '../components/UnassignConfirmationModal';
 import SuccessModal from '../components/SuccessModal';
 import ConfirmationModal from '../components/ConfirmationModal';
 import RoomView from '../components/RoomView';
+import SaveScheduleModal from '../components/SaveScheduleModal';
 import ScheduleGeneratorLoader from '../animations/ScheduleGeneratorLoader'; 
 import { 
   computeGroupKey, 
@@ -55,6 +56,10 @@ const ScheduleManagement = () => {
   const [displayScheduleName, setDisplayScheduleName] = useState(
     localStorage.getItem('scheduleName') || 'Default Schedule'
   );
+  
+  // NEW STATE: For Save Confirmation Modal
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+
   const [unassignModalData, setUnassignModalData] = useState(null);
   const [successModalData, setSuccessModalData] = useState(null);
   const [confirmationModalData, setConfirmationModalData] = useState(null);
@@ -114,19 +119,22 @@ const ScheduleManagement = () => {
     fetchFacultyData();
   }, []);
 
-  useEffect(() => {
-    const fetchExistingSchedules = async () => {
-      try {
-        const data = await getFinalSchedules();
-        if (data && data.schedules) {
-          setExistingSchedules(data.schedules);
-        }
-      } catch (err) {
-        console.error('Error fetching Schedules list:', err);
+  // --- Reusable function to fetch existing schedules ---
+  const fetchExistingSchedulesList = useCallback(async () => {
+    try {
+      const data = await getFinalSchedules();
+      if (data && data.schedules) {
+        setExistingSchedules(data.schedules);
       }
-    };
-    fetchExistingSchedules();
+    } catch (err) {
+      console.error('Error fetching Schedules list:', err);
+    }
   }, []);
+
+  // Call the fetch function on mount
+  useEffect(() => {
+    fetchExistingSchedulesList();
+  }, [fetchExistingSchedulesList]);
 
   // --- Handlers ---
   const handleFilterChange = useCallback((e) => {
@@ -146,32 +154,12 @@ const ScheduleManagement = () => {
     return (schedule || []).filter((event) => {
       const { courseQuery, showUnassignedOnly, programSelected, yearSelected, blockSelected, daySelected, roomSelected } = filters;
       
-      // Program filter
-      if (programSelected && programSelected.length > 0 && !programSelected.includes(event.program)) {
-        return false;
-      }
+      if (programSelected && programSelected.length > 0 && !programSelected.includes(event.program)) return false;
+      if (yearSelected && yearSelected.length > 0 && !yearSelected.includes(event.year)) return false;
+      if (blockSelected && blockSelected.length > 0 && !blockSelected.includes(event.block)) return false;
+      if (daySelected && daySelected.length > 0 && !daySelected.includes(event.day)) return false;
+      if (roomSelected && roomSelected.length > 0 && !roomSelected.includes(event.room)) return false;
       
-      // Year filter
-      if (yearSelected && yearSelected.length > 0 && !yearSelected.includes(event.year)) {
-        return false;
-      }
-      
-      // Block filter
-      if (blockSelected && blockSelected.length > 0 && !blockSelected.includes(event.block)) {
-        return false;
-      }
-      
-      // Day filter
-      if (daySelected && daySelected.length > 0 && !daySelected.includes(event.day)) {
-        return false;
-      }
-      
-      // Room filter
-      if (roomSelected && roomSelected.length > 0 && !roomSelected.includes(event.room)) {
-        return false;
-      }
-      
-      // Course query filter
       if (
         courseQuery &&
         !event.courseCode.toLowerCase().includes(courseQuery.toLowerCase()) &&
@@ -180,10 +168,7 @@ const ScheduleManagement = () => {
         return false;
       }
       
-      // Unassigned only filter
-      if (showUnassignedOnly && event.faculty && event.faculty.trim() !== '') {
-        return false;
-      }
+      if (showUnassignedOnly && event.faculty && event.faculty.trim() !== '') return false;
       
       return true;
     });
@@ -198,19 +183,38 @@ const ScheduleManagement = () => {
     }, {});
   }, [filteredSchedule]);
 
-  // --- Actions ---
-  const handleSaveFinalSchedule = async () => {
+  // --- SAVE ACTIONS ---
+
+  // 1. Initial Click: Opens the Confirmation Modal
+  const handleSaveButtonClick = () => {
+    setIsSaveModalOpen(true);
+  };
+
+  // 2. Confirmed Save: Actually calls the API
+  const performFinalSave = async (confirmedName) => {
+    // Close modal first
+    setIsSaveModalOpen(false);
+    
+    // Update local display name to match what user just typed
+    setDisplayScheduleName(confirmedName);
+    
     setLoading(true);
     setLoadingMessage('Saving Schedule...');
+    
     const finalSchedule = {
-      schedule_name: displayScheduleName,
+      schedule_name: confirmedName,
       schedule: schedule,
     };
+    
     try {
       const response = await saveFinalSchedule(finalSchedule);
       if (response.status === 'success') {
-        localStorage.setItem('finalScheduleName', finalSchedule.schedule_name);
+        localStorage.setItem('finalScheduleName', confirmedName);
         setSuccessModalData({ message: 'Generated schedule saved successfully.', type: 'success' });
+        
+        // Refresh the existing schedules dropdown list immediately
+        await fetchExistingSchedulesList(); 
+
       } else {
         setSuccessModalData({ message: 'Error saving schedule: ' + response.message, type: 'error' });
       }
@@ -262,7 +266,7 @@ const ScheduleManagement = () => {
     }
   };
 
-  // --- MODIFIED: Prevent Online classes from being merged during selection ---
+  // --- Group Selection Logic (Preserving Online Fix) ---
   const handleToggleGroupSelection = useCallback((event) => {
     const getBaseCourseCode = (courseCode) => {
       return courseCode.replace(/[AL]$/, '');
@@ -274,9 +278,6 @@ const ScheduleManagement = () => {
     // Create a merge group identifier
     const getMergeGroupId = (e) => {
       const baseId = `${e.courseCode}-${e.program}-${e.year}-${e.session}-${e.room}-${e.period}-${e.day}`;
-      // FIX: If it's online, we append the block to the ID. 
-      // This makes the ID unique to this specific block, preventing it from matching other blocks 
-      // even if they share the same time/course/online status.
       if (e.room && e.room.toLowerCase() === 'online') {
           return `${baseId}-${e.block}`; 
       }
@@ -286,14 +287,8 @@ const ScheduleManagement = () => {
     const clickedMergeId = getMergeGroupId(event);
     const clickedBaseCourseCode = getBaseCourseCode(event.courseCode);
     
-    // Find events. If it's online, clickedMergeId is unique to the block, 
-    // so this will only find events for THIS block.
     const mergeGroupEvents = schedule.filter(e => getMergeGroupId(e) === clickedMergeId);
-    
-    // Get the blocks that are part of this merge group
     const mergedBlocks = [...new Set(mergeGroupEvents.map(e => e.block))];
-    
-    // Create a unique key for this selection
     const extendedGroupKey = computeExtendedGroupKey(event, schedule);
     
     setSelectedGroup(prevSelected => {
@@ -309,8 +304,6 @@ const ScheduleManagement = () => {
                mergedBlocks.includes(e.block); 
       });
       
-      // Only consider it merged if multiple blocks are found AND it's not effectively separated by logic above
-      // (The logic above ensures mergedBlocks length is 1 for online, so isMerged becomes false)
       const isMerged = mergeGroupEvents.length > 1 && !isOnline;
       
       return { 
@@ -484,7 +477,7 @@ const ScheduleManagement = () => {
               onToggleGroupSelection={handleToggleGroupSelection}
               onOverride={handleOverride}
               displayScheduleName={displayScheduleName}
-              onSaveFinalSchedule={handleSaveFinalSchedule}
+              onSaveFinalSchedule={handleSaveButtonClick} // Use the new handler here
               onSelectExistingSchedule={handleSelectExistingSchedule}
               existingSchedules={existingSchedules}
               fetchError={scheduleError}
@@ -531,9 +524,7 @@ const ScheduleManagement = () => {
             const sampleEvent = unassignModalData.groupEvents[0];
             const baseCourseCode = sampleEvent.courseCode.replace(/[AL]$/, '');
             
-            // Check if online
             const isOnline = sampleEvent.room && sampleEvent.room.toLowerCase() === 'online';
-
             const uniqueBlocks = [...new Set(unassignModalData.groupEvents.map(e => e.block))];
             
             const groupParams = {
@@ -541,12 +532,8 @@ const ScheduleManagement = () => {
               program: sampleEvent.program,
               year: String(sampleEvent.year), 
               block: uniqueBlocks[0], 
-              // FIX: If online, do NOT send merged_blocks (force it to be null/single), 
-              // even if uniqueBlocks has multiple items (though it shouldn't due to upstream fixes).
               merged_blocks: (uniqueBlocks.length > 1 && !isOnline) ? uniqueBlocks : null 
             };
-            
-            console.log('Unassigning with params:', groupParams);
             
             try {
               const response = await unassignFacultyFromGroup(groupParams);
@@ -575,10 +562,8 @@ const ScheduleManagement = () => {
                   type: 'warning' 
                 });
               }
-              
               setUnassignModalData(null);
             } catch (err) {
-              console.error('Error unassigning faculty:', err);
               setSuccessModalData({ 
                 message: 'Error unassigning faculty: ' + (err.response?.data?.detail || err.message), 
                 type: 'error' 
@@ -597,6 +582,15 @@ const ScheduleManagement = () => {
           onSave={handleSaveOverride}
         />
       )}
+
+      {/* NEW: Save Schedule Confirmation Modal */}
+      <SaveScheduleModal 
+        isOpen={isSaveModalOpen}
+        onClose={() => setIsSaveModalOpen(false)}
+        onConfirm={performFinalSave}
+        currentName={displayScheduleName}
+        existingSchedules={existingSchedules} // PASSED HERE
+      />
 
       {successModalData && (
         <SuccessModal
