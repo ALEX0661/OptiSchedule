@@ -66,7 +66,7 @@ const CourseDetailsModal = ({ event, onClose }) => {
           {event.relatedEvents && event.relatedEvents.length > 0 ? (
             <div className="details-section">
               <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', color: '#333' }}>
-                Related Schedule Events
+                Related Schedule Classes
                 <span style={{ fontSize: '0.75em', fontWeight: 'normal', color: '#666' }}>
                   (Conflicts, Merges, or Overlaps)
                 </span>

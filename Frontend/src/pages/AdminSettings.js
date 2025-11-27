@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import {
   getRooms,
@@ -23,6 +22,14 @@ const convertToDropdown = (time24) => {
 const convertTo24Hour = (hour, period) => {
   hour = Number(hour);
   return period === 'AM' ? (hour === 12 ? 0 : hour) : (hour === 12 ? 12 : hour + 12);
+};
+
+// --- HELPER: Natural Sort (Ascending) ---
+// Sorts alphanumerically: "Room 2" < "Room 10", "Lab A" < "Lab B"
+const sortRooms = (rooms) => {
+  return [...rooms].sort((a, b) => 
+    a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })
+  );
 };
 
 const AdminSettings = () => {
@@ -65,8 +72,9 @@ const AdminSettings = () => {
     try {
       const res = await getRooms(); 
       if (res.lecture && res.lab) {
-        setLectureRooms(res.lecture);
-        setLabRooms(res.lab);
+        // Sort rooms immediately upon loading
+        setLectureRooms(sortRooms(res.lecture));
+        setLabRooms(sortRooms(res.lab));
       }
     } catch (error) {
       console.error('Error loading rooms:', error);
@@ -77,16 +85,24 @@ const AdminSettings = () => {
 
   const handleAddLectureRoom = () => {
     if (!newLectureRoom.trim()) return;
-    if (!lectureRooms.includes(newLectureRoom.trim())) {
-      setLectureRooms([...lectureRooms, newLectureRoom.trim()]);
+    const roomToAdd = newLectureRoom.trim();
+    
+    if (!lectureRooms.includes(roomToAdd)) {
+      // Add and immediately sort
+      const updatedRooms = [...lectureRooms, roomToAdd];
+      setLectureRooms(sortRooms(updatedRooms));
     }
     setNewLectureRoom('');
   };
 
   const handleAddLabRoom = () => {
     if (!newLabRoom.trim()) return;
-    if (!labRooms.includes(newLabRoom.trim())) {
-      setLabRooms([...labRooms, newLabRoom.trim()]);
+    const roomToAdd = newLabRoom.trim();
+
+    if (!labRooms.includes(roomToAdd)) {
+      // Add and immediately sort
+      const updatedRooms = [...labRooms, roomToAdd];
+      setLabRooms(sortRooms(updatedRooms));
     }
     setNewLabRoom('');
   };
@@ -103,6 +119,7 @@ const AdminSettings = () => {
     setLoading(true);
     setMessage('');
     try {
+      // Send sorted arrays to backend
       const payload = { lecture: lectureRooms, lab: labRooms };
       const resp = await updateRooms(payload);
       if (resp.status === 'success') {

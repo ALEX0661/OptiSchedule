@@ -4,7 +4,7 @@ from app.core.globals import schedule_dict, progress_state
 from app.core.firebase import load_courses, load_rooms, load_time_settings, load_days
 import logging
 import math
-import random # <--- Ensures random is imported
+import random 
 from typing import List, Dict, Tuple, Set, Optional
 from enum import Enum
 import time
@@ -20,7 +20,7 @@ class SchedulingPhase(Enum):
 # --- Constants ---
 PHYSICAL_SESSION_LIMIT = 6 # How many sessions get a physical room
 MAX_PHYSICAL_SESSIONS_PER_DAY = 2 # Max physical sessions per day per course/block
-MAX_ONLINE_SESSIONS_PER_DAY = 4 # NEW: Max online sessions per day per course/block
+MAX_ONLINE_SESSIONS_PER_DAY = 4 # Max online sessions per day per course/block
 # --- End Constants ---
 
 class HierarchicalScheduler:
@@ -72,7 +72,6 @@ class HierarchicalScheduler:
         self.setup_time_parameters(); self.update_progress(50)
         
     def prioritize_and_partition_courses(self, courses):
-        # (No changes needed)
         year_courses = defaultdict(list); result = []
         phase_map = {1: SchedulingPhase.YEAR_1, 2: SchedulingPhase.YEAR_2, 3: SchedulingPhase.YEAR_3, 4: SchedulingPhase.YEAR_4}
         for course in courses:
@@ -87,14 +86,12 @@ class HierarchicalScheduler:
         return result
     
     def setup_time_parameters(self):
-        # (No changes needed)
         self.start_t = self.time_settings["start_time"]; self.end_t = self.time_settings["end_time"]
         self.inc_hr = 2; self.inc_day = (self.end_t - self.start_t) * self.inc_hr
         self.total_inc = self.inc_day * len(self.days); self.lab_starts = []
         for d in range(len(self.days)): base = d*self.inc_day; self.lab_starts.extend(range(base, base+self.inc_day-2))
     
     def get_available_time_slots(self, section_key, duration, is_lab=False, max_slots=500):
-        # (No changes needed)
         occupied = self.section_occupied.get(section_key, set()); available = []
         search = self.lab_starts if is_lab else range(self.total_inc - duration + 1)
         for start in search:
@@ -105,12 +102,10 @@ class HierarchicalScheduler:
         return available
     
     def get_phase_timeout(self, phase_num, total_phases, phase_difficulty):
-        # (No changes needed)
         base = [t*1.2 for t in [120, 180, 240, 300]]; timeout = base[phase_num-1] if phase_num<=len(base) else 360
         return max(60, int(timeout * phase_difficulty))
     
     def calculate_phase_difficulty(self, phase_courses):
-        # (No changes needed)
         if not phase_courses: return 0.5
         units = sum(c.get('unitsLecture',0)+c.get('unitsLab',0)*2 for c in phase_courses)
         blocks = sum(c.get('blocks', 1) for c in phase_courses); count = len(phase_courses)
@@ -118,7 +113,6 @@ class HierarchicalScheduler:
         diff = (avg_u/5.0)*(avg_b/1.5); return max(0.5, min(2.0, diff))
     
     def solve_phase(self, phase_courses, phase_num, total_phases, year_level):
-        # (No changes needed)
         if not phase_courses: return []
         diff = self.calculate_phase_difficulty(phase_courses); timeout = self.get_phase_timeout(phase_num, total_phases, diff)
         logger.info(f"Phase {phase_num}/{total_phases} (Yr{year_level}): {len(phase_courses)} courses (diff: {diff:.2f}, time: {timeout}s)")
@@ -130,7 +124,6 @@ class HierarchicalScheduler:
         logger.error(f"Phase {phase_num} (Yr{year_level}) failed completely"); return None
     
     def _solve_phase_attempt(self, phase_courses, phase_num, total_phases, timeout, optimize=True, year_level=1):
-        # (No significant changes needed)
         model=cp_model.CpModel(); solver=cp_model.CpSolver()
         phase_sessions=[]; section_intervals=defaultdict(list); room_intervals=defaultdict(list)
         for(r_type, r_idx), slots in self.occupied_slots.items():
@@ -163,7 +156,7 @@ class HierarchicalScheduler:
         logger.info(f"Phase {phase_num} (Yr{year_level}) done: {len(phase_sched)} sessions scheduled"); return phase_sched
     
     # ========================================================================
-    # MODIFIED: create_course_sessions - Calls new daily limit function
+    # FIXED: create_course_sessions - Now iterates ALL blocks to avoid missing Block D
     # ========================================================================
     def create_course_sessions(self, model, course, section_intervals, room_intervals, year_level):
         """Creates sessions, calls shared/individual helpers, adds physical AND online daily limits."""
@@ -177,9 +170,13 @@ class HierarchicalScheduler:
         # --- Lectures ---
         if lec_u > 0:
             is_shareable = (yr == 1 or code.startswith("GEC"))
-            for i in range(0, num_blocks, 2):
+            # FIX: Loop through ALL blocks (range(num_blocks)), not just evens
+            for i in range(num_blocks):
                 if i in processed_lec_indices: continue
+                
                 blk1 = block_letters[i]
+                
+                # Check for shared (only if shareable and next block exists)
                 if is_shareable and (i + 1) < num_blocks:
                     blk2 = block_letters[i+1]; logger.debug(f"SHARED lecture {code} {blk1}+{blk2}")
                     shared = self.create_shared_lecture_session(model, course, blk1, blk2, lec_u, section_intervals, room_intervals)
@@ -188,10 +185,13 @@ class HierarchicalScheduler:
                     all_sessions_by_block[blk2].extend([s for s in shared if s['blk'] == blk2])
                     processed_lec_indices.add(i); processed_lec_indices.add(i+1)
                 else:
+                    # Individual Lecture (e.g. BSCS2D)
                     logger.debug(f"INDIV lecture {code} {blk1}")
                     indiv = self.create_individual_session(model, course, blk1, 'lecture', lec_u, 2, lec_u, section_intervals, room_intervals, is_lab=False)
                     if indiv is None: return None
-                    all_sessions_by_block[blk1].extend(indiv); processed_lec_indices.add(i)
+                    all_sessions_by_block[blk1].extend(indiv)
+                    processed_lec_indices.add(i)
+
         # --- Labs ---
         if lab_u > 0:
             num_lab_sessions = lab_u; lab_hours_to_create = lab_u * 2
@@ -205,14 +205,13 @@ class HierarchicalScheduler:
         for blk, block_sessions in all_sessions_by_block.items():
             if block_sessions:
                  self.add_physical_session_daily_limit(model, block_sessions, code, blk)
-                 self.add_online_session_daily_limit(model, block_sessions, code, blk) # Call new function
+                 self.add_online_session_daily_limit(model, block_sessions, code, blk) 
 
         final_all_sessions = [sess for block_list in all_sessions_by_block.values() for sess in block_list]
         return final_all_sessions
 
     def create_shared_lecture_session(self, model, course, blk1, blk2, total_course_units,
                                      section_intervals, room_intervals):
-        # (Logic for PHYSICAL_SESSION_LIMIT is correct)
         code=course["courseCode"]; title=course["title"]; prog=course["program"]; yr=course["yearLevel"]
         lec_u=course["unitsLecture"]; duration=2; sess_type='lecture'; sk1=(prog, yr, blk1); sk2=(prog, yr, blk2)
         starts=self.get_available_time_slots(sk1, duration, False, 300)
@@ -249,7 +248,6 @@ class HierarchicalScheduler:
     def create_individual_session(self, model, course, blk, sess_type,
                                  units_to_create, duration, total_course_units,
                                  section_intervals, room_intervals, is_lab=False):
-        # (Logic for PHYSICAL_SESSION_LIMIT is correct)
         code=course["courseCode"]; title=course["title"]; prog=course["program"]; yr=course["yearLevel"]
         sk=(prog, yr, blk); sessions=[]; days=[]; phys_rvs=[]
         starts=self.get_available_time_slots(sk, duration, is_lab, 300)
@@ -281,7 +279,6 @@ class HierarchicalScheduler:
         return sessions
     
     def add_block_day_constraints(self, model, day_vars, name_prefix, blk, is_lab, total_course_units):
-        # (Logic for bypassing lab limit is correct)
         apply_limit = True; max_per_day = 0
         if is_lab:
             if total_course_units > 3: apply_limit = False; logger.debug(f"Bypassing total daily lab limit {name_prefix} {blk} (Units: {total_course_units})")
@@ -295,9 +292,7 @@ class HierarchicalScheduler:
                 if day_bools: model.Add(sum(day_bools) <= max_per_day)
 
     def add_physical_session_daily_limit(self, model, sessions_for_block, course_code, block):
-        # (Logic for MAX_PHYSICAL_SESSIONS_PER_DAY is correct)
         if not sessions_for_block: return
-        # logger.debug(f"Adding physical daily limit ({MAX_PHYSICAL_SESSIONS_PER_DAY}) for {course_code} {block}") # Optional: Can be noisy
         for d in range(len(self.days)):
             physical_day_bools = []; session_index = 0
             for sess in sessions_for_block:
@@ -309,34 +304,23 @@ class HierarchicalScheduler:
                 session_index += 1
             if physical_day_bools: model.Add(sum(physical_day_bools) <= MAX_PHYSICAL_SESSIONS_PER_DAY)
 
-    # ========================================================================
-    # NEW: add_online_session_daily_limit
-    # ========================================================================
     def add_online_session_daily_limit(self, model, sessions_for_block, course_code, block):
-        """Adds constraint: max MAX_ONLINE_SESSIONS_PER_DAY online sessions per day."""
         if not sessions_for_block: return
-
-        # logger.debug(f"Adding online daily limit ({MAX_ONLINE_SESSIONS_PER_DAY}) for {course_code} {block}") # Optional: Can be noisy
         for d in range(len(self.days)):
             online_day_bools = []
-            session_index = 0 # For unique naming
+            session_index = 0
             for sess in sessions_for_block:
-                 # Check if the 'room' variable IS None (meaning it's an online session)
                 if sess['room'] is None:
                     day_var = sess['day']
-                    # Boolean variable: True if this online session is on day 'd'
                     b_online_on_day = model.NewBoolVar(f"online_{course_code}_{block}_day{d}_sess{session_index}")
                     model.Add(day_var == d).OnlyEnforceIf(b_online_on_day)
                     model.Add(day_var != d).OnlyEnforceIf(b_online_on_day.Not())
                     online_day_bools.append(b_online_on_day)
                 session_index += 1
-            
-            # Add the sum constraint for this day if there were any online sessions possible
             if online_day_bools:
                 model.Add(sum(online_day_bools) <= MAX_ONLINE_SESSIONS_PER_DAY)
 
     def add_room_consistency(self, model, sessions):
-        # (No changes needed)
         by_key = defaultdict(list)
         for sess in sessions:
             if isinstance(sess['id'], int) and sess['room'] is not None:
@@ -345,7 +329,6 @@ class HierarchicalScheduler:
             if len(r_vars)>1: first=r_vars[0]; [model.Add(o==first) for o in r_vars[1:]]
 
     def add_phase_objectives(self, model, sessions):
-        # (No changes needed)
         objs=[]; days_by_key=defaultdict(list); unique_sess={}
         for sess in sessions:
             key=sess['id']
@@ -358,7 +341,6 @@ class HierarchicalScheduler:
         if objs: model.Minimize(sum(objs))
 
     def extract_phase_solution(self, solver, sessions):
-        # (No changes needed)
         schedule = []
         for sess in sessions:
             try:
@@ -379,7 +361,6 @@ class HierarchicalScheduler:
         return schedule
     
     def update_occupancy_from_schedule(self, schedule):
-        # (No changes needed)
         for event in schedule:
             sk=(event['program'],event['year'],event['block']); start=event['_start_slot']; dur=event['_duration']
             slots=set(range(start, start+dur)); self.section_occupied[sk].update(slots)
@@ -387,7 +368,6 @@ class HierarchicalScheduler:
                 rk=(event['_room_type'],event['_room_idx']); self.occupied_slots[rk].update(slots)
             
     def solve(self):
-        # (No changes needed)
         self.update_progress(52); phases=defaultdict(list); p_yrs={};
         for phase, course in self.all_courses: phases[phase].append(course); p_yrs[phase]=course['yearLevel']
         total_p=len(phases); combined=[]
@@ -404,7 +384,6 @@ class HierarchicalScheduler:
 
 # --- Main entry point ---
 def generate_schedule(process_id=None):
-    # (No changes needed)
     try:
         scheduler=HierarchicalScheduler(process_id); scheduler.load_data(); schedule=scheduler.solve()
         if schedule=="impossible": logger.error("Sched gen impossible"); return "impossible"

@@ -85,8 +85,8 @@ async def delete_faculty(faculty_id: int):
 async def assign_faculty(request: AssignmentRequest):
     """
     Assign faculty to a group of events.
-    Handles merged classes by using baseCourseCode for grouping.
-    All events with the same baseCourseCode, program, and block are grouped together.
+    Handles merged classes by assigning to all schedules of the merged blocks.
+    Groups by base course code (strips A/L suffix) to include both Lecture and Lab.
     """
     try:
         # Handle schedule_id with -A or -B suffixes (merged classes)
@@ -112,26 +112,35 @@ async def assign_faculty(request: AssignmentRequest):
         if not faculty:
             raise HTTPException(status_code=404, detail="Faculty not found")
 
-        # Use baseCourseCode for grouping (handles merged classes)
+        # Get base course code (strip A/L suffix to match both Lecture and Lab)
         base_code = event.get("baseCourseCode", event["courseCode"].rstrip("AL"))
         event_program = event.get("program", event.get("Program", ""))
-        event_block = event.get("block", event.get("Block", ""))
+        event_year = event.get("year", event.get("Year", ""))
         
-        group_key = (base_code, event_program, event_block)
+        # Get the blocks to assign to (from merged_blocks parameter or just current block)
+        blocks_to_assign = request.merged_blocks if request.merged_blocks else [event.get("block", event.get("Block", ""))]
         
-        logger.info(f"Assigning faculty {faculty['name']} to group: {group_key}")
+        logger.info(f"Assigning faculty {faculty['name']} to base course: {base_code}, program: {event_program}, year: {event_year}, blocks: {blocks_to_assign}")
         
-        # Find all events in the same group (includes merged blocks with same base code)
+        # Find all events that match:
+        # - Same base course code (matches both lecture A and lab L)
+        # - Same program and year
+        # - Block is in the list of merged blocks
         group_events = []
         for key, e in schedule_dict.items():
             e_base_code = e.get("baseCourseCode", e.get("courseCode", "").rstrip("AL"))
             e_program = e.get("program", e.get("Program", ""))
+            e_year = e.get("year", e.get("Year", ""))
             e_block = e.get("block", e.get("Block", ""))
-            e_group_key = (e_base_code, e_program, e_block)
-            if e_group_key == group_key:
+            
+            # Match on base code, program, year, and block must be in merged blocks
+            if (e_base_code == base_code and 
+                e_program == event_program and 
+                str(e_year) == str(event_year) and
+                e_block in blocks_to_assign):
                 group_events.append(e)
         
-        logger.info(f"Found {len(group_events)} events in group (including merged classes)")
+        logger.info(f"Found {len(group_events)} events in group (including merged blocks and their lectures/labs)")
         
         # Get all currently assigned events for this faculty
         assigned_events = [e for e in schedule_dict.values() if e.get("faculty") == faculty["name"]]
@@ -205,14 +214,14 @@ async def assign_faculty(request: AssignmentRequest):
                     logger.warning(f"Could not check conflict for event {ae.get('schedule_id')}: {e}")
                     continue
 
-        # Assign faculty to all events in the group (including merged classes)
+        # Assign faculty to all events in the group
         for ge in group_events:
             ge["faculty"] = faculty["name"]
-            logger.info(f"Assigned {faculty['name']} to event {ge.get('schedule_id')} (Block {ge.get('block')})")
+            logger.info(f"Assigned {faculty['name']} to event {ge.get('schedule_id')} (Block {ge.get('block')}, Session {ge.get('session')})")
 
         return {
             "status": "success",
-            "message": f"Assigned {faculty['name']} to {len(group_events)} event(s) in the group",
+            "message": f"Assigned {faculty['name']} to {len(group_events)} event(s) in the group (merged blocks: {', '.join(blocks_to_assign)})",
             "events": group_events
         }
     except HTTPException as he:
@@ -226,35 +235,44 @@ async def assign_faculty(request: AssignmentRequest):
 async def unassign_faculty_group(request: GroupUnassignmentRequest):
     """
     Unassign faculty from a group of events.
-    Handles merged classes by using baseCourseCode for grouping.
+    - If merged_blocks is provided, it unassigns only those specific blocks (for merged classes).
+    - If merged_blocks is NOT provided, it unassigns only the single requested 'block'.
     """
     try:
-        # Use baseCourseCode for grouping (strip suffixes if needed)
+        # Use baseCourseCode for grouping (strip suffixes like 'A' or 'L' if needed)
         group_events = []
         request_base_code = request.courseCode.rstrip("AL")
         
-        logger.info(f"Unassigning group: {request_base_code}, {request.program}, {request.block}")
+        # Determine which blocks to target
+        # If merged_blocks is passed (and not empty), use it. Otherwise, use the single block.
+        target_blocks = request.merged_blocks if (request.merged_blocks and len(request.merged_blocks) > 0) else [request.block]
+        
+        logger.info(f"Unassigning group: {request_base_code}, {request.program}, Blocks: {target_blocks}")
         
         for e in schedule_dict.values():
+            # Get event base code
             event_base_code = e.get("baseCourseCode", e.get("courseCode", "").rstrip("AL"))
             
-            # Match on base course code, program, and block
+            # Match strict criteria:
+            # 1. Same Course Base Code
+            # 2. Same Program
+            # 3. Block MUST be in the target_blocks list
             if (event_base_code == request_base_code and 
                 e.get("program") == request.program and 
-                e.get("block") == request.block):
+                e.get("block") in target_blocks):
                 group_events.append(e)
         
         if not group_events:
+            logger.warning(f"No events found for unassignment: {request_base_code} {target_blocks}")
             raise HTTPException(
                 status_code=404, 
-                detail=f"No matching events found for {request_base_code}, {request.program}, Block {request.block}"
+                detail=f"No matching events found for {request_base_code}, {request.program}, Blocks {target_blocks}"
             )
         
-        logger.info(f"Found {len(group_events)} events to unassign (including merged classes)")
+        logger.info(f"Found {len(group_events)} events to unassign.")
         
-        # Unassign faculty from all events
+        # Unassign faculty from the matched events
         for e in group_events:
-            logger.debug(f"Unassigning event {e['schedule_id']} (Block {e['block']})")
             e["faculty"] = ""
         
         return {
@@ -263,7 +281,6 @@ async def unassign_faculty_group(request: GroupUnassignmentRequest):
             "events": group_events
         }
     except HTTPException as he:
-        logger.error(f"HTTP error in unassign_faculty_group: {he.detail}")
         raise he
     except Exception as e:
         logger.exception("Unexpected error in unassign_faculty_group")

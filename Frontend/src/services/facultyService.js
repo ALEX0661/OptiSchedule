@@ -19,12 +19,12 @@ export const getFacultyList = async () => {
   }
 };
 
-export const assignFacultyToEvent = async (schedule_id, faculty_id) => {
+export const assignFacultyToEvent = async (schedule_id, faculty_id, merged_blocks = null) => {
   try {
-    // Ensure schedule_id is a string
     const payload = { 
       schedule_id: String(schedule_id), 
-      faculty_id: Number(faculty_id) 
+      faculty_id: Number(faculty_id),
+      merged_blocks: merged_blocks  // Pass the merged blocks array
     };
     console.log('Assigning faculty with payload:', payload);
     const response = await api.post('/faculty/assign', payload, { headers: { ...getAuthHeader() } });
@@ -67,6 +67,7 @@ export const deleteFaculty = async (facultyId) => {
 
 export const unassignFacultyFromGroup = async (groupParams) => {
   try {
+    // groupParams now includes { ..., merged_blocks: ['A', 'B'] }
     const response = await api.post('/faculty/unassign', groupParams, { headers: { ...getAuthHeader() } });
     return response.data;
   } catch (error) {

@@ -27,6 +27,9 @@ const FacultyPanel = ({
   fetchError,
 }) => {
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
+  
+  // NEW: State to track which specific faculty ID is currently being assigned
+  const [assigningFacultyId, setAssigningFacultyId] = useState(null);
 
   // Memoize filtered faculty list
   const filteredFaculty = useMemo(() => {
@@ -82,6 +85,34 @@ const FacultyPanel = ({
     });
   }, [selectedGroup]);
 
+  // NEW: Local handler to manage loading state during assignment
+  const handleCardClick = async (f, available) => {
+    // If no group is selected, just open details
+    if (!selectedGroup) {
+      onOpenFacultyModal(f);
+      return;
+    }
+
+    // UPDATED: We no longer return if !available. 
+    // We allow the click to proceed even if there is a conflict.
+
+    // If we are already assigning someone, prevent clicks
+    if (assigningFacultyId !== null) return;
+
+    // Start assignment process
+    setAssigningFacultyId(f.id);
+    
+    try {
+      // await the parent prop function
+      await onAssignFaculty(f);
+    } catch (error) {
+      console.error("Assignment failed within panel:", error);
+    } finally {
+      // Stop loading state regardless of success/failure
+      setAssigningFacultyId(null);
+    }
+  };
+
   return (
     <div className="card">
       <div className="faculty-header">
@@ -100,6 +131,14 @@ const FacultyPanel = ({
           </button>
         )}
       </div>
+
+      {/* --- UPDATED: Minimal Selection Hint --- */}
+      {selectedGroup && (
+        <div className="selection-hint">
+          <span className="status-dot"></span>
+          Select a faculty to assign
+        </div>
+      )}
       
       <input
         type="text"
@@ -129,24 +168,47 @@ const FacultyPanel = ({
               const unitCount = calculateFacultyUnits(f.name, schedule);
               const loadColor = getFacultyLoadColor(f, unitCount);
               
+              // Determine states
+              const isAssigningThis = assigningFacultyId === f.id;
+              const isAnyAssigning = assigningFacultyId !== null;
+              
+              // UPDATED LOGIC:
+              // 1. Conflict State: If selectedGroup exists AND !available
+              const hasConflict = selectedGroup && !available;
+
+              // 2. Disabled State: Only disable if we are currently assigning SOMEONE ELSE.
+              //    We DO NOT disable if hasConflict is true (per request).
+              const isDisabled = isAnyAssigning && !isAssigningThis;
+
               return (
                 <div
                   key={f.id}
-                  className={`faculty-card ${selectedGroup && !available ? 'disabled' : ''}`}
-                  onClick={() => {
-                    if (selectedGroup && available) onAssignFaculty(f);
-                    else if (!selectedGroup) onOpenFacultyModal(f);
-                  }}
-                  style={{ cursor: selectedGroup && available ? 'pointer' : 'default' }}
+                  className={`faculty-card 
+                    ${isDisabled ? 'disabled' : ''} 
+                    ${isAssigningThis ? 'assigning' : ''}
+                    ${hasConflict ? 'conflict' : ''} 
+                  `}
+                  onClick={() => !isDisabled && handleCardClick(f, available)}
+                  style={{ cursor: (!isDisabled && (selectedGroup || !isAnyAssigning)) ? 'pointer' : 'default' }}
                 >
-                  <div className="faculty-info">
+                  {/* Content Wrapper - fades when assigning */}
+                  <div className={`faculty-info ${isAssigningThis ? 'faded' : ''}`}>
                     <div className="faculty-name-text">{f.name}</div>
                     <div className="faculty-status">
                       <span>{f.Status || f.status}</span>
                       <span className="faculty-workload">{unitCount} units</span>
                       <div className={`status-indicator status-${loadColor}`}></div>
+                      {/* Optional: Add a text indicator for conflict */}
+                      {hasConflict && <span className="conflict-text">Conflict</span>}
                     </div>
                   </div>
+
+                  {/* Spinner - Only visible when assigning this specific card */}
+                  {isAssigningThis && (
+                    <div className="assignment-spinner-overlay">
+                       <div className="assignment-spinner"></div>
+                    </div>
+                  )}
                 </div>
               );
             })}

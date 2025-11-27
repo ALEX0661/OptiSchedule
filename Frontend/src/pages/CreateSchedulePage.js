@@ -138,12 +138,19 @@ const CreateSchedulePage = () => {
   }, []);
 
   const filteredCourses = courses.filter(course => {
+    // 1. Check Dropdown Filters
     const matchesProgram = filterProgram === 'All Programs' || course.program === filterProgram;
     const matchesYear = filterYear === 'All Years' || String(course.yearLevel) === filterYear;
+    
+    // 2. Check Search Query (Dynamic: Code, Title, Program, Year)
+    const query = filterQuery.toLowerCase().trim();
     const matchesQuery =
-      filterQuery.trim() === '' ||
-      course.courseCode.toLowerCase().includes(filterQuery.toLowerCase()) ||
-      course.title.toLowerCase().includes(filterQuery.toLowerCase());
+      query === '' ||
+      course.courseCode.toLowerCase().includes(query) ||
+      course.title.toLowerCase().includes(query) ||
+      course.program.toLowerCase().includes(query) ||
+      String(course.yearLevel).includes(query);
+
     return matchesProgram && matchesYear && matchesQuery;
   });
 
@@ -479,6 +486,17 @@ const CreateSchedulePage = () => {
       <div className="filters-card">
         <h2>Filters</h2>
         <div className="filters-grid">
+          {/* SEARCH INPUT (Moved First) */}
+          <div className="filter-item" style={{ flexGrow: 2 }}>
+            <label>Search</label>
+            <input
+              type="text"
+              placeholder="Search by Code, Name, Program or Year..."
+              value={filterQuery}
+              onChange={(e) => setFilterQuery(e.target.value)}
+            />
+          </div>
+
           <div className="filter-item">
             <label>Program</label>
             <select value={filterProgram} onChange={(e) => setFilterProgram(e.target.value)}>
@@ -498,15 +516,6 @@ const CreateSchedulePage = () => {
               <option value="3">Third Year</option>
               <option value="4">Fourth Year</option>
             </select>
-          </div>
-          <div className="filter-item">
-            <label>Course Code/Name</label>
-            <input
-              type="text"
-              placeholder="Search course..."
-              value={filterQuery}
-              onChange={(e) => setFilterQuery(e.target.value)}
-            />
           </div>
         </div>
       </div>

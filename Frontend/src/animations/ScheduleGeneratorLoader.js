@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './ScheduleGeneratorLoader.css';
 
-const ScheduleGeneratorLoader = ({ message, progress }) => {
+const ScheduleGeneratorLoader = ({ 
+  message, 
+  progress, 
+  showProgress = true, // Default to true for backward compatibility
+  isOverlay = true     // Default to true (full screen)
+}) => {
   const totalCells = 35;
   
   // Function to create a random array of booleans for cell highlights.
@@ -37,8 +42,20 @@ const ScheduleGeneratorLoader = ({ message, progress }) => {
     <div key={i} className="ring"></div>
   ));
 
+  // Determine container style based on isOverlay prop
+  const containerClass = isOverlay ? "loading-overlay" : "embedded-loader";
+  const containerStyle = isOverlay ? {} : {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    padding: '20px'
+  };
+
   return (
-    <div className="loading-overlay">
+    <div className={containerClass} style={containerStyle}>
       <div className="schedule-generator-wrapper">
         <div className="calendar-loader">
           <div className="calendar-rings">
@@ -53,11 +70,18 @@ const ScheduleGeneratorLoader = ({ message, progress }) => {
             </div>
           </div>
         </div>
-        <div className="generating-text">{message}</div>
-        <div className="progress-container">
-          <div className="progress-bar" style={{ width: `${progress}%` }}></div>
+        <div className="generating-text" style={{ marginTop: '20px', textAlign: 'center' }}>
+          {message}
         </div>
-        <div className="progress-text">{progress}% Complete</div>
+        
+        {showProgress && (
+          <>
+            <div className="progress-container">
+              <div className="progress-bar" style={{ width: `${progress}%` }}></div>
+            </div>
+            <div className="progress-text">{progress}% Complete</div>
+          </>
+        )}
       </div>
     </div>
   );

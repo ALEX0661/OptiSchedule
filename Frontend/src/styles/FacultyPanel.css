@@ -16,7 +16,7 @@
 .filters-header {
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 0px;
   color: #333;
 }
 
@@ -102,6 +102,31 @@
    UPDATED FACULTY LIST & CARD STYLES
    ========================================= */
 
+/* --- Minimal Selection Hint --- */
+.selection-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-size: 0.65rem;
+  color: var(--primary);
+  font-weight: 550;
+  animation: fadeIn 0.3s ease;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .faculty-content {
   position: relative;
   min-height: 200px;
@@ -132,7 +157,7 @@
   border-radius: 3px;
 }
 
-/* ========== FACULTY CARD ========== */
+/* ========== FACULTY CARD BASE ========== */
 .faculty-card {
   width: 100%;
   padding: 12px;
@@ -144,8 +169,9 @@
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  position: relative;
+  transition: all 0.2s ease;
+  position: relative; /* Essential for overlay */
+  overflow: hidden;   /* Ensures shimmer doesn't bleed */
 }
 
 .faculty-card:hover {
@@ -154,15 +180,96 @@
 }
 
 .faculty-card.disabled {
-  opacity: 0.3;
+  opacity: 0.5; /* Slightly more visible than before */
   cursor: not-allowed;
-  background: #f9f9f9;
+  background: #fafafa;
   transition: opacity 0.2s ease;
+  pointer-events: none; /* Prevents clicks */
 }
 
 .faculty-card.disabled:hover {
   border-color: var(--border-gray);
   box-shadow: none;
+}
+
+/* ========== NEW: CONFLICT STATE ========== */
+/* Red border and tint, but still clickable (pointer events not disabled) */
+.faculty-card.conflict {
+  border-color: #e57373; /* Red border */
+  background-color: rgba(229, 115, 115, 0.05); /* Slight red tint */
+}
+
+.faculty-card.conflict:hover {
+  border-color: #d32f2f;
+  background-color: rgba(229, 115, 115, 0.1);
+  box-shadow: 0 2px 6px rgba(211, 47, 47, 0.15);
+}
+
+.conflict-text {
+  font-size: 8px;
+  color: #d32f2f;
+  font-weight: 600;
+  margin-left: auto; /* Pushes to right side of flex container */
+  padding: 1px 4px;
+  background: rgba(211, 47, 47, 0.1);
+  border-radius: 2px;
+}
+
+/* ========== ASSIGNING STATE ANIMATIONS ========== */
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes spin-small {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.faculty-card.assigning {
+  /* Green shimmer background */
+  background: linear-gradient(
+    90deg, 
+    #ffffff 0%, 
+    #e8f5e9 50%, 
+    #ffffff 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  
+  /* Lock the card */
+  pointer-events: none;
+  border-color: var(--primary);
+  cursor: wait;
+}
+
+/* Fade content when assigning */
+.faculty-info.faded {
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+}
+
+/* Centered Spinner Overlay */
+.assignment-spinner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.assignment-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(46, 125, 50, 0.2);
+  border-top: 2px solid var(--primary);
+  border-radius: 50%;
+  animation: spin-small 0.8s linear infinite;
 }
 
 /* ========== FACULTY INFO ========== */
@@ -173,6 +280,7 @@
   justify-content: center;
   gap: 4px;
   margin-left: 0px;
+  transition: opacity 0.2s ease;
 }
 
 .faculty-name-text {

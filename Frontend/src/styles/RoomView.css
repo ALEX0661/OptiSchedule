@@ -239,6 +239,12 @@
   border-color: #d84315;
 }
 
+/* NEW: Legend for Conflict Zone */
+.z-legend-box.conflict-zone {
+  background-color: rgba(220, 53, 69, 0.15);
+  border: 1px dashed #dc3545;
+}
+
 /* Grid Container */
 .z-room-grid-container {
   background-color: var(--white);
@@ -251,17 +257,15 @@
   flex-direction: column;
 }
 
-/* Timeline Grid - SCROLLABLE AREA */
+/* Timeline Grid */
 .z-timeline-grid {
   display: flex;
-  overflow: auto; /* Enable both X and Y scrolling */
+  overflow: auto;
   position: relative;
-  /* IMPORTANT: Fix height to allow internal scrolling */
   height: calc(100vh - 220px); 
   min-height: 400px;
 }
 
-/* Custom Scrollbar */
 .z-timeline-grid::-webkit-scrollbar {
   width: 7px;
   height: 7px;
@@ -285,7 +289,7 @@
 .z-time-column {
   position: sticky;
   left: 0;
-  z-index: 500; /* High z-index to stay above event cards and horizontal scroll */
+  z-index: 500;
   background-color: var(--white);
   border-right: 1.4px solid var(--border-gray);
   min-width: 70px;
@@ -302,11 +306,9 @@
   font-size: 0.7rem;
   border-bottom: 1.4px solid var(--border-gray);
   background: linear-gradient(135deg, var(--light-gray) 0%, var(--white) 100%);
-  
-  /* STICKY TOP */
   position: sticky;
   top: 0;
-  z-index: 600; /* Highest z-index to stay in top-left corner */
+  z-index: 600;
 }
 
 .z-time-slot {
@@ -319,6 +321,14 @@
   color: var(--dark-gray);
   font-weight: 500;
   background-color: var(--light-gray);
+  transition: background-color 0.2s ease;
+}
+
+/* NEW: Highlight Time Slot when Dragging hits Global Conflict */
+.z-time-slot.global-conflict-time {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  font-weight: 700;
 }
 
 /* Rooms Container */
@@ -357,11 +367,9 @@
   padding: 0 11.2px;
   border-bottom: 1.4px solid var(--border-gray);
   background: linear-gradient(135deg, var(--light-gray) 0%, var(--white) 100%);
-  
-  /* STICKY TOP */
   position: sticky;
   top: 0;
-  z-index: 400; /* Stay above events, below time header */
+  z-index: 400;
 }
 
 .z-room-icon {
@@ -402,7 +410,7 @@
 .z-time-slot-cell {
   height: var(--slot-height);
   border-bottom: 0.7px solid var(--border-gray);
-  transition: var(--transition);
+  transition: background-color 0.1s ease;
   position: relative;
   cursor: default;
   background-color: var(--white);
@@ -412,6 +420,26 @@
   background-color: rgba(76, 175, 80, 0.15);
   border: 1.4px dashed var(--green);
   cursor: copy;
+}
+
+/* NEW: Global Conflict Zone (The Red Glow) */
+.z-time-slot-cell.global-conflict-zone {
+  background-color: rgba(239, 68, 68, 0.15); /* Light red tint */
+  border-bottom: 0.7px solid rgba(239, 68, 68, 0.3);
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(239, 68, 68, 0.05),
+    rgba(239, 68, 68, 0.05) 10px,
+    rgba(239, 68, 68, 0.1) 10px,
+    rgba(239, 68, 68, 0.1) 20px
+  );
+}
+
+/* NEW: Room Occupied Zone (Gray/Striped) */
+.z-time-slot-cell.room-occupied-zone {
+  background-color: #f3f4f6;
+  background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+  background-size: 10px 10px;
 }
 
 /* Drop Indicator */
@@ -426,6 +454,7 @@
   font-weight: 600;
   pointer-events: none;
   z-index: 100;
+  white-space: nowrap;
 }
 
 .z-drop-indicator.valid {
@@ -434,10 +463,16 @@
   box-shadow: var(--shadow-md);
 }
 
+.z-drop-indicator.invalid {
+  background-color: #dc3545;
+  color: var(--white);
+  box-shadow: var(--shadow-md);
+}
+
 /* Events Overlay */
 .z-events-overlay {
   position: absolute;
-  top: 45px; /* Offset by header height */
+  top: 45px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -463,7 +498,6 @@
   will-change: transform, box-shadow;
 }
 
-/* When dragging, parent container makes events "see-through" to clicks */
 .z-room-view-container.is-dragging .z-event-block {
   pointer-events: none;
 }
@@ -474,7 +508,6 @@
   box-shadow: none;
 }
 
-/* Hovered Card Effect */
 .z-event-block.hovered-card {
   box-shadow: 0 6px 18px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.4) !important;
 }
@@ -496,7 +529,6 @@
   box-shadow: 0 5px 16px rgba(230, 165, 2, 0.35), 0 2px 6px rgba(0,0,0,0.2);
 }
 
-/* MERGED: Blue Tint */
 .z-event-block.merged {
   background: linear-gradient(145deg, #1976d2 0%, #0d47a1 100%);
   border: 1px solid rgba(33, 150, 243, 0.4);
@@ -504,7 +536,6 @@
   box-shadow: 0 3px 10px rgba(25, 118, 210, 0.25);
 }
 
-/* CONFLICT: Red Tint */
 .z-event-block.conflict {
   background: linear-gradient(145deg, #d84315 0%, #bf360c 100%);
   border: 1px solid rgba(255, 152, 0, 0.3);
@@ -532,10 +563,9 @@
   border-bottom: 0.7px solid rgba(255, 255, 255, 0.3);
 }
 
-/* New style for the header left section: SIDE-BY-SIDE */
 .z-header-left {
   display: flex;
-  flex-direction: row; /* Ensure side-by-side */
+  flex-direction: row; 
   align-items: center;
   gap: 6px;
   overflow: hidden;
@@ -548,7 +578,6 @@
   letter-spacing: 0.35px;
 }
 
-/* New style for program/year/block in header */
 .z-event-section-badge {
   font-size: 0.5rem;
   font-weight: 500;
@@ -561,7 +590,7 @@
   opacity: 0.9;
   white-space: nowrap;
   text-align: right;
-  margin-left: auto; /* Push time to far right */
+  margin-left: auto;
 }
 
 .z-event-body {
@@ -582,21 +611,14 @@
   -webkit-box-orient: vertical;
 }
 
-/* Merge and Conflict Indicators - HIDDEN AS REQUESTED */
 .z-merge-indicator,
 .z-conflict-indicator {
   display: none; 
 }
 
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(0.98);
-  }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(0.98); }
 }
 
 /* Loading State */

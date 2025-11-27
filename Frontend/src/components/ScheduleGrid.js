@@ -1,36 +1,47 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import ReactDOM from 'react-dom'; // Required for Portals
 import { parsePeriod, computeGroupKey, computeExtendedGroupKey } from '../utils/scheduleHelpers';
 import noScheduleLogo from '../assets/noScheduleLogo.png';
 import '../styles/ScheduleManagement.css';
 
-// --- Components defined OUTSIDE ScheduleGrid to prevent re-creation on every render ---
+// --- Conflict Badge Component (Fixed Scroll & Compact Size) ---
 
 const ConflictBadge = React.memo(({ 
   type, 
   conflicts, 
   eventId, 
-  cellType, 
-  activePopover, 
-  setActivePopover 
+  cellType 
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  const badgeRef = useRef(null);
+  const popoverRef = useRef(null); // Ref to track the popover content
+  
+  // Close on scroll ONLY if scrolling outside the popover
+  useEffect(() => {
+    const handleScroll = (event) => {
+      if (!isOpen) return;
+
+      // Check if the scroll event originated inside the popover
+      if (popoverRef.current && popoverRef.current.contains(event.target)) {
+        return; // Ignore scroll events inside the popover
+      }
+
+      // If scrolling the main window/body, close the popover
+      setIsOpen(false);
+    };
+
+    if (isOpen) {
+      window.addEventListener('scroll', handleScroll, true); // Capture phase
+    }
+    
+    return () => window.removeEventListener('scroll', handleScroll, true);
+  }, [isOpen]);
+
   if (!conflicts || conflicts.length === 0) return null;
   
-  const popoverId = `${eventId}-${cellType}`;
-  const isActive = activePopover === popoverId;
-
-  const handleToggle = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setActivePopover(isActive ? null : popoverId);
-  };
-
-  const handleClose = (e) => {
-    e?.stopPropagation();
-    setActivePopover(null);
-  };
-
   const getConflictTypeLabel = () => {
-    if (type === 'merged') return 'Merged Classes';
+    if (type === 'merged') return 'Merged';
     switch (cellType) {
       case 'room': return 'Room Conflict';
       case 'faculty': return 'Instructor Conflict';
@@ -40,62 +51,158 @@ const ConflictBadge = React.memo(({
   };
 
   const conflictTypeLabel = getConflictTypeLabel();
-  const isRightEdge = cellType === 'faculty' || cellType === 'room';
   const badgeColor = type === 'merged' ? '#1976d2' : '#d32f2f';
 
-  const popoverStyle = isRightEdge 
-    ? {
-        position: 'absolute', top: '0', right: '100%', marginRight: '12px', marginTop: '-10px',
-        backgroundColor: 'white', border: `1px solid ${badgeColor}`, borderRadius: '8px',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.15)', padding: '16px', minWidth: '280px', maxWidth: '350px',
-        maxHeight: '300px', zIndex: 10000, fontSize: '11px',
+  const handleToggle = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    
+    if (!isOpen && badgeRef.current) {
+      const rect = badgeRef.current.getBoundingClientRect();
+      // COMPACT DIMENSIONS
+      const popoverWidth = 260; 
+      const popoverHeight = 220; 
+      
+      let top, left;
+      
+      // --- Smart Positioning Logic ---
+      
+      // Horizontal Positioning
+      if (cellType === 'room' || cellType === 'faculty') {
+        // Right edge -> Show to the Left
+        left = rect.left - popoverWidth - 8;
+      } else {
+        // Center aligned for Time, Block, etc.
+        left = rect.left + (rect.width / 2) - (popoverWidth / 2);
       }
-    : {
-        position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: '10px',
-        backgroundColor: 'white', border: `1px solid ${badgeColor}`, borderRadius: '8px',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.15)', padding: '16px', minWidth: '280px', maxWidth: '350px',
-        maxHeight: '300px', zIndex: 10000, fontSize: '11px',
-      };
+      
+      // Vertical Positioning
+      // Default to showing BELOW the badge with small offset
+      top = rect.bottom + 6;
+
+      // Boundary Checks
+      if (left + popoverWidth > window.innerWidth - 10) {
+        left = window.innerWidth - popoverWidth - 10;
+      }
+      if (left < 10) {
+        left = 10;
+      }
+      // Check Bottom Edge (Flip to top if no space)
+      if (top + popoverHeight > window.innerHeight - 10) {
+        top = rect.top - popoverHeight - 6;
+      }
+      
+      setPosition({ top, left });
+    }
+    setIsOpen(!isOpen);
+  };
+
+  const popoverContent = (
+    <>
+      <div 
+        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99998, background: 'transparent' }}
+        onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
+      />
+      <div 
+        ref={popoverRef} // Attach ref here
+        style={{
+          position: 'fixed',
+          top: `${position.top}px`,
+          left: `${position.left}px`,
+          backgroundColor: 'white',
+          border: '1px solid #e0e0e0',
+          borderTop: `3px solid ${badgeColor}`, // Slightly thinner border
+          borderRadius: '6px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          padding: '0',
+          width: '260px', // COMPACT WIDTH
+          maxHeight: '220px', // COMPACT HEIGHT
+          zIndex: 99999, 
+          fontSize: '11px', // SMALLER FONT
+          overflowY: 'auto',
+          fontFamily: "'Poppins', sans-serif"
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          padding: '8px 12px', // Compact padding
+          borderBottom: '1px solid #f0f0f0',
+          backgroundColor: '#fff',
+          position: 'sticky',
+          top: 0
+        }}>
+          <strong style={{ color: badgeColor, fontSize: '11px' }}>{conflictTypeLabel}</strong>
+          <button 
+            onClick={() => setIsOpen(false)} 
+            style={{ 
+              background: 'none', 
+              border: 'none', 
+              fontSize: '16px', 
+              cursor: 'pointer', 
+              color: '#999', 
+              padding: '0',
+              lineHeight: 1,
+              display: 'flex'
+            }}
+          >×</button>
+        </div>
+        
+        <div style={{ padding: '4px 0' }}>
+          {conflicts.map((conflict, idx) => (
+            <div key={idx} style={{ 
+              padding: '8px 12px', // Compact padding
+              borderBottom: idx === conflicts.length - 1 ? 'none' : '1px solid #f5f5f5',
+              display: 'flex',
+              gap: '8px'
+            }}>
+               <div style={{ width: '3px', backgroundColor: badgeColor, borderRadius: '2px', flexShrink: 0 }}></div>
+               <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: '600', color: '#333', marginBottom: '2px', fontSize: '11px' }}>
+                    {conflict.courseCode}
+                  </div>
+                  <div style={{ color: '#666', fontSize: '10px', lineHeight: '1.3' }}>
+                     {conflict.title}
+                  </div>
+                  <div style={{ marginTop: '4px', fontSize: '10px', color: '#555', backgroundColor: '#f9f9f9', padding: '4px 6px', borderRadius: '4px' }}>
+                     <div><strong>{conflict.program} {conflict.year}-{conflict.block}</strong></div>
+                     <div>{conflict.period}</div>
+                     {conflict.faculty && <div>{conflict.faculty}</div>}
+                     {conflict.room && <div>Rm: {conflict.room}</div>}
+                  </div>
+               </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
 
   return (
-    <div 
-      className="conflict-badge-container" 
-      style={{ position: 'absolute', top: '4px', right: '4px', zIndex: isActive ? 9998 : 10 }}
-    >
-      <button 
-        className={`conflict-badge ${type}`}
-        onClick={handleToggle}
-        style={{
-          padding: '0', borderRadius: '50%', border: `1.5px solid ${badgeColor}`,
-          cursor: 'pointer', fontSize: '10px', fontWeight: '600', backgroundColor: 'white',
-          color: badgeColor, width: '16px', height: '16px', display: 'flex', alignItems: 'center',
-          justifyContent: 'center', transition: 'all 0.2s ease', boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
-        }}
-        title={type === 'merged' ? `Merged with ${conflicts.length} class${conflicts.length > 1 ? 'es' : ''}` : `${conflicts.length} conflict${conflicts.length > 1 ? 's' : ''}`}
+    <>
+      <div 
+        className="conflict-badge-container" 
+        style={{ position: 'absolute', top: '3px', right: '3px', zIndex: 10 }} // Adjusted offset
       >
-        !
-      </button>
-      
-      {isActive && (
-        <div className="conflict-popover" style={{ ...popoverStyle, overflowY: 'auto', scrollbarWidth: 'none' }} onClick={(e) => e.stopPropagation()}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', paddingBottom: '8px', borderBottom: `1px solid ${type === 'merged' ? '#e3f2fd' : '#ffebee'}` }}>
-            <strong style={{ color: badgeColor, fontSize: '12px', display: 'block' }}>{conflictTypeLabel}</strong>
-            <button onClick={handleClose} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer', color: '#999', padding: '0 4px', lineHeight: 1 }}>×</button>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {conflicts.map((conflict, idx) => (
-              <div key={idx} style={{ padding: '8px 10px', backgroundColor: type === 'merged' ? '#f5f9ff' : '#fff5f5', borderRadius: '6px', borderLeft: `3px solid ${badgeColor}` }}>
-                <div style={{ fontWeight: '600', color: '#333', fontSize: '11px', marginBottom: '4px' }}>{conflict.courseCode}</div>
-                <div style={{ color: '#555', fontSize: '10px', lineHeight: '1.5' }}>
-                   {conflict.title} <br/>
-                   <span style={{opacity: 0.8}}>{conflict.program} {conflict.year}-{conflict.block} ({conflict.room})</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
+        <button 
+          ref={badgeRef}
+          className={`conflict-badge ${type}`}
+          onClick={handleToggle}
+          style={{
+            padding: '0', borderRadius: '50%', border: `1.5px solid ${badgeColor}`,
+            cursor: 'pointer', fontSize: '9px', fontWeight: '700', backgroundColor: 'white',
+            color: badgeColor, width: '16px', height: '16px', display: 'flex', alignItems: 'center',
+            justifyContent: 'center', transition: 'all 0.2s ease', boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+          }}
+          title={type === 'merged' ? `Merged with ${conflicts.length} class${conflicts.length > 1 ? 'es' : ''}` : `${conflicts.length} conflict${conflicts.length > 1 ? 's' : ''}`}
+        >
+          !
+        </button>
+      </div>
+      {isOpen && ReactDOM.createPortal(popoverContent, document.body)}
+    </>
   );
 });
 
@@ -115,21 +222,8 @@ const ScheduleGrid = ({
   onToggleViewMode,
   schedule 
 }) => {
-  const [activePopover, setActivePopover] = useState(null);
-
-  // Close popover when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (activePopover && !event.target.closest('.conflict-badge-container')) {
-        setActivePopover(null);
-      }
-    };
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, [activePopover]);
-
+  
   // --- Optimization 1: Memoize Sorted Schedule ---
-  // This prevents resorting the entire array on every single render/hover/click
   const sortedGroupedSchedule = useMemo(() => {
     if (!groupedSchedule) return {};
     const sorted = { ...groupedSchedule };
@@ -154,13 +248,10 @@ const ScheduleGrid = ({
   }, [daysOrder, sortedGroupedSchedule]);
 
   // --- Optimization 2: Pre-calculate Conflicts ---
-  // Instead of calculating conflicts inside the render loop (O(n^2) per render),
-  // we calculate them once when the schedule changes and store in a Map (O(1) lookup).
   const conflictMap = useMemo(() => {
     const map = {};
     if (!schedule || !Array.isArray(schedule)) return map;
 
-    // Helper to parse period
     const getPeriod = (p) => parsePeriod(p);
 
     schedule.forEach(currentEvent => {
@@ -170,13 +261,11 @@ const ScheduleGrid = ({
       const timeConflicts = [];
       const mergedWith = [];
 
-      // Loop through schedule to find conflicts for this specific event
       for (const other of schedule) {
         if (other.schedule_id === currentEvent.schedule_id) continue;
         if (other.day !== currentEvent.day) continue;
 
         const [otherStart, otherEnd] = getPeriod(other.period);
-        // Time Overlap Check
         if (currentStart < otherEnd && currentEnd > otherStart) {
           const currentRoom = (currentEvent.room || '').toLowerCase();
           const isOnline = currentRoom === 'online';
@@ -193,7 +282,8 @@ const ScheduleGrid = ({
             currentEvent.session === other.session;
 
           if (isRoomOverlap) {
-            if (matchesMergeCriteria) {
+            // FIX: Ensure Online classes never get marked as mergedWith
+            if (matchesMergeCriteria && !isOnline) {
               mergedWith.push(other);
             } else {
               roomConflicts.push(other);
@@ -203,10 +293,16 @@ const ScheduleGrid = ({
           const isFacultyOverlap = currentEvent.faculty && 
                                   other.faculty && 
                                   currentEvent.faculty !== 'Unassigned' && 
+                                  other.faculty !== 'Unassigned' &&
+                                  currentEvent.faculty.trim() !== '' &&
+                                  other.faculty.trim() !== '' &&
                                   currentEvent.faculty === other.faculty;
           
-          if (isFacultyOverlap && !matchesMergeCriteria) {
-            facultyConflicts.push(other);
+          if (isFacultyOverlap) {
+            const isSameRoom = currentEvent.room === other.room;
+            if (!matchesMergeCriteria || !isSameRoom) {
+              facultyConflicts.push(other);
+            }
           }
 
           if (isSameSection && !isRoomOverlap) {
@@ -227,6 +323,10 @@ const ScheduleGrid = ({
 
     return map;
   }, [schedule]);
+
+  const getBaseCourseCode = (courseCode) => {
+    return courseCode.replace(/[AL]$/, '');
+  };
 
   return (
     <div className="cards schedule-card">
@@ -293,13 +393,21 @@ const ScheduleGrid = ({
                   </thead>
                   <tbody>
                     {sortedGroupedSchedule[day].map((event) => {
-                      const extendedKey = schedule ? computeExtendedGroupKey(event, schedule) : computeGroupKey(event);
-                      const isSelected = selectedGroup && extendedKey === selectedGroup.groupKey;
-                      
-                      // Use cached conflicts (O(1) access)
                       const conflicts = conflictMap[event.schedule_id] || { 
                         status: 'normal', roomConflicts: [], facultyConflicts: [], timeConflicts: [], mergedWith: [] 
                       };
+                      
+                      let isSelected = false;
+                      if (selectedGroup && selectedGroup.mergedBlocks) {
+                        const selectedBaseCourseCode = getBaseCourseCode(selectedGroup.groupEvents[0].courseCode);
+                        const eventBaseCourseCode = getBaseCourseCode(event.courseCode);
+                        const matchesCourse = 
+                          eventBaseCourseCode === selectedBaseCourseCode &&
+                          event.program === selectedGroup.groupEvents[0].program &&
+                          event.year === selectedGroup.groupEvents[0].year;
+                        const isInMergedBlock = selectedGroup.mergedBlocks.includes(event.block);
+                        isSelected = matchesCourse && isInMergedBlock;
+                      }
                       
                       const rowClass = conflicts.status === 'conflict' ? 'overlap-row' : 
                                        conflicts.status === 'merged' ? 'merged-row' : '';
@@ -333,8 +441,6 @@ const ScheduleGrid = ({
                                   conflicts={conflicts.mergedWith}
                                   eventId={event.schedule_id}
                                   cellType="block"
-                                  activePopover={activePopover}
-                                  setActivePopover={setActivePopover}
                                 />
                               )}
                             </div>
@@ -348,8 +454,6 @@ const ScheduleGrid = ({
                                   conflicts={conflicts.timeConflicts}
                                   eventId={event.schedule_id}
                                   cellType="time"
-                                  activePopover={activePopover}
-                                  setActivePopover={setActivePopover}
                                 />
                               )}
                             </div>
@@ -364,8 +468,6 @@ const ScheduleGrid = ({
                                   conflicts={conflicts.roomConflicts}
                                   eventId={event.schedule_id}
                                   cellType="room"
-                                  activePopover={activePopover}
-                                  setActivePopover={setActivePopover}
                                 />
                               )}
                             </div>
@@ -387,8 +489,6 @@ const ScheduleGrid = ({
                                   conflicts={conflicts.facultyConflicts}
                                   eventId={event.schedule_id}
                                   cellType="faculty"
-                                  activePopover={activePopover}
-                                  setActivePopover={setActivePopover}
                                 />
                               )}
                             </div>
