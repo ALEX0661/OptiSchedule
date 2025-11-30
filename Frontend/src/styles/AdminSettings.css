@@ -3,12 +3,7 @@
    ------------------------------------------------------------------------
    Global Font: "Poppins" imported from Google Fonts.
    Theme: Dark Green Palette.
-   Design Enhancements:
-     • Increased border radii and wider card dimensions.
-     • Smaller, subtle buttons.
-     • Added smooth animations and transitions.
 ------------------------------------------------------------------------ */
-
 
 :root {
   --primary: #2E7D32;
@@ -19,14 +14,10 @@
   --medium-gray: #e0e0e0;
   --dark-gray: #666666;
   --border-gray: #dddddd;
-  --green: #4caf50;
-  --yellow: #ffc107;
-  --red: #f44336;
-  --blue: #2196f3;
   --transition-speed: 0.3s;
-  --bounce-effect: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* Bounce effect for the pop animation */
+  --bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-
 
 .admin-settings-container {
   padding: 24px 32px;         
@@ -34,9 +25,7 @@
   margin: 0 auto;
   background-color: var(--light-gray);
   box-sizing: border-box;
-  animation: fadeIn 0.5s ease;
 }
-
 
 .card {
   width: 100%;
@@ -45,15 +34,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
   padding: 24px 28px;         
   margin-bottom: 24px;        
-  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-  animation: slideUp 0.4s var(--bounce-effect) forwards;
 }
-
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
 
 .card h2 {
   margin-bottom: 12px;      
@@ -66,42 +47,25 @@
 .card h2::after {
   content: '';
   position: absolute;
-  width: 0;
+  width: 100%; 
   height: 2px;
   bottom: -3px;
   left: 0;
   background-color: var(--primary);
-  transition: width 0.4s ease;
 }
-
-.card:hover h2::after {
-  width: 100%;
-}
-
 
 .form-group {
   margin-bottom: 20px;       
   display: flex;
   flex-direction: column;
   gap: 8px;                  
-  transition: transform var(--transition-speed);
-}
-
-.form-group:focus-within {
-  transform: scale(1.01);
 }
 
 .form-group label {
   font-weight: 600;
   color: var(--dark-gray);
   font-size: 0.76rem;         
-  transition: color var(--transition-speed);
 }
-
-.form-group:focus-within label {
-  color: var(--primary);
-}
-
 
 .form-group input,
 .time-dropdowns select {
@@ -109,7 +73,7 @@
   border: 1px solid var(--border-gray);
   border-radius: 13px;        
   font-size: 0.8rem;          
-  transition: border var(--transition-speed), box-shadow var(--transition-speed);
+  transition: border var(--transition-speed);
 }
 
 .form-group input:focus,
@@ -117,9 +81,15 @@
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
   outline: none;
-  animation: pulse 1.5s infinite alternate;
 }
 
+.form-group input:disabled,
+.time-dropdowns select:disabled,
+.checkbox-label input:disabled {
+  background-color: #f9f9f9;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
 
 .form-group button,
 .update-btn {
@@ -131,45 +101,24 @@
   font-weight: 600;
   font-size: 0.72rem;         
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s, box-shadow 0.3s;
+  transition: background 0.3s ease;
   align-self: flex-start;
   position: relative;
   overflow: hidden;
 }
 
-.form-group button::before,
-.update-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-.form-group button:hover::before,
-.update-btn:hover::before {
-  width: 200%;
-  height: 200%;
-}
-
 .form-group button:hover,
 .update-btn:hover {
   background-color: var(--primary-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(227, 235, 228, 0.3);
 }
 
-.form-group button:active,
-.update-btn:active {
-  transform: translateY(1px);
+.form-group button:disabled,
+.update-btn:disabled {
+  background-color: var(--primary-light);
+  color: var(--primary);
+  cursor: not-allowed;
   box-shadow: none;
 }
-
 
 .room-chips {
   display: flex;
@@ -178,6 +127,7 @@
   margin-bottom: 8px;       
 }
 
+/* Base room chip style */
 .room-chip {
   position: relative;
   border: 2px solid var(--primary);
@@ -189,18 +139,18 @@
   align-items: center;
   justify-content: center;
   font-size: 0.76rem;        
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s;
   cursor: default;
-  overflow: hidden;
-  animation: popIn 0.4s var(--bounce-effect);
+  /* Enter Animation: Plays automatically when element is mounted */
+  animation: popIn 0.3s var(--bounce) forwards;
 }
 
-.room-chip:hover {
-  transform: scale(1.05);
+/* Exit Class: Applied via JS before removal */
+.room-chip.exiting {
+  animation: popOut 0.3s ease forwards;
+  pointer-events: none; /* Prevent clicks while exiting */
 }
 
 .room-chip button {
-  
   position: absolute;
   top: 0px;
   left: 0px;
@@ -217,7 +167,6 @@
   justify-content: center;
 }
 
-
 .room-chip:hover {
   background-color: var(--primary-dark);
   color: transparent;
@@ -226,7 +175,6 @@
   opacity: 1;
   color: var(--white);
 }
-
 
 .time-settings-row {
   display: flex;
@@ -240,22 +188,12 @@
   display: flex;
   flex-direction: column;
   gap: 6px;               
-  transition: transform var(--transition-speed);
-}
-
-.time-setting-field:focus-within {
-  transform: scale(1.01);
 }
 
 .time-setting-field label {
   font-weight: 600;
   color: var(--dark-gray);
   font-size: 0.76rem;      
-  transition: color var(--transition-speed);
-}
-
-.time-setting-field:focus-within label {
-  color: var(--primary);
 }
 
 .time-dropdowns {
@@ -275,19 +213,7 @@
   background-position: right 10px center;
   padding-right: 30px;
   cursor: pointer;
-  transition: border 0.3s, box-shadow 0.3s, transform 0.2s;
 }
-
-.time-dropdowns select:hover {
-  transform: translateY(-1px);
-}
-
-.time-dropdowns select:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
-  outline: none;
-}
-
 
 .checkbox-group {
   display: flex;
@@ -307,14 +233,12 @@
   padding: 6px 11px;        
   color: var(--primary);
   background-color: var(--white);
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s;
-  animation: fadeIn 0.5s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .checkbox-label:hover {
   background-color: var(--primary-light);
   color: var(--primary);
-  transform: scale(1.05);
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -323,160 +247,27 @@
   accent-color: var(--primary);
   cursor: pointer;
   margin: 0;
-  transition: transform 0.2s var(--bounce-effect);
 }
 
-.checkbox-label input[type="checkbox"]:checked {
-  transform: scale(1.2);
-}
-
-
-.chip {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 18px;       
-  border: 1px solid #c75f23;
-  border-radius: 16px;      
-  font-size: 1em;
-  font-weight: bold;
-  background: var(--white);
-  color: #c75f23;
-  transition: background 0.3s, color 0.3s, transform 0.2s;
-  cursor: pointer;
-  overflow: hidden;
-  animation: popIn 0.4s var(--bounce-effect);
-}
-
-.chip:hover {
-  background-color: #c75f23;
-  color: transparent;
-  transform: scale(1.05);
-}
-
-.chip::after {
-  content: "×";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 0.96em;        
-  font-weight: bold;
-  color: #fff;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.chip:hover::after {
-  opacity: 1;
-  animation: rotateIn 0.3s forwards;
-}
-
-
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255,255,255,0.8);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-  animation: fadeIn 0.3s ease;
-}
-
-.spinner {
-  border: 6px solid #f3f3f3;   
-  border-top: 6px solid var(--primary);
+.loader-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(46, 125, 50, 0.3);
   border-radius: 50%;
-  width: 48px;               
-  height: 48px;              
-  animation: spin 1s linear infinite;
-  margin-bottom: 10px;       
+  border-top-color: var(--primary);
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  to { transform: rotate(360deg); }
 }
 
-.message {
-  text-align: center;
-  font-size: 1rem;
-  color: var(--primary);
-  margin-top: 15px;
-  animation: fadeIn 0.5s 0.3s both;
-}
-
-
-@media (max-width: 500px) {
-  .chip {
-    font-size: 0.68rem;        
-    padding: 6px 11px;        
-  }
-  .checkbox-label {
-    padding: 5px 8px;          
-  }
-}
-
-.update-btn {
-  width: 160px;             
-  display: block;
-  margin: 8px auto;         
-  background-color: #f3f3f3;
-  color: var(--primary);     
-  border: none;
-  padding: 10px 0;           
-  border-radius: 7px;      
-  font-weight: 600;
-  font-size: 0.72rem;        
-  cursor: pointer;
-  transition: background 0.3s ease, outline 0.2s ease, transform 0.2s;
-  outline: 1.6px solid olivedrab;   
-  position: relative;
-  overflow: hidden;
-}
-
-.update-btn:hover {
-  background-color: var(--primary);
-  color: var(--white);
-  transform: translateY(-2px);
-  box-shadow: 0 3px 8px rgba(27, 94, 32, 0.3);
-}
-
-.update-btn:active {
-  transform: translateY(1px);
-  box-shadow: none;
-}
-
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from { 
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to { 
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* Pop In Animation */
 @keyframes popIn {
   0% {
     opacity: 0;
-    transform: scale(0.8);
-  }
-  70% {
-    transform: scale(1.05);
+    transform: scale(0.5);
   }
   100% {
     opacity: 1;
@@ -484,38 +275,55 @@
   }
 }
 
-@keyframes pulse {
+/* Pop Out Animation */
+@keyframes popOut {
   0% {
-    box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.15);
+    opacity: 1;
+    transform: scale(1);
   }
   100% {
-    box-shadow: 0 0 0 5px rgba(46, 125, 50, 0.05);
+    opacity: 0;
+    transform: scale(0.5);
   }
 }
 
-@keyframes rotateIn {
-  from {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  to {
-    transform: translate(-50%, -50%) rotate(90deg);
-  }
+.message {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--primary);
+  margin-top: 15px;
 }
 
-
-.card:nth-child(1) { animation-delay: 0.1s; }
-.card:nth-child(2) { animation-delay: 0.2s; }
-.card:nth-child(3) { animation-delay: 0.3s; }
-.card:nth-child(4) { animation-delay: 0.4s; }
-.card:nth-child(5) { animation-delay: 0.5s; }
-
-
-.form-group:nth-child(even) input {
-  animation: pulseOnLoad 1s var(--bounce-effect);
+.update-btn {
+  width: 160px;             
+  display: flex;            
+  justify-content: center;
+  align-items: center;
+  min-height: 36px;         
+  margin: 8px auto;         
+  background-color: #f3f3f3;
+  color: var(--primary);     
+  border: none;
+  border-radius: 7px;      
+  font-weight: 600;
+  font-size: 0.72rem;        
+  cursor: pointer;
+  transition: background 0.3s ease;
+  outline: 1.6px solid olivedrab;   
 }
 
-@keyframes pulseOnLoad {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-  100% { transform: scale(1); }
+.update-btn:hover:not(:disabled) {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+@media (max-width: 500px) {
+  .room-chip,
+  .chip {
+    font-size: 0.68rem;        
+    padding: 6px 11px;        
+  }
+  .checkbox-label {
+    padding: 5px 8px;          
+  }
 }

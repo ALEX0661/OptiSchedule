@@ -10,7 +10,6 @@ import {
 import SuccessModal from '../components/SuccessModal';
 import '../styles/AdminSettings.css';
 
-
 const convertToDropdown = (time24) => {
   let period = time24 >= 12 ? 'PM' : 'AM';
   let hour = time24 % 12;
@@ -18,14 +17,12 @@ const convertToDropdown = (time24) => {
   return { hour, period };
 };
 
-
 const convertTo24Hour = (hour, period) => {
   hour = Number(hour);
   return period === 'AM' ? (hour === 12 ? 0 : hour) : (hour === 12 ? 12 : hour + 12);
 };
 
 // --- HELPER: Natural Sort (Ascending) ---
-// Sorts alphanumerically: "Room 2" < "Room 10", "Lab A" < "Lab B"
 const sortRooms = (rooms) => {
   return [...rooms].sort((a, b) => 
     a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })
@@ -39,26 +36,28 @@ const AdminSettings = () => {
   const [newLectureRoom, setNewLectureRoom] = useState('');
   const [newLabRoom, setNewLabRoom] = useState('');
 
- 
+  // Track rooms currently animating out (to delay removal from state)
+  const [exitingRooms, setExitingRooms] = useState([]);
+
   const [startHour, setStartHour] = useState(7);
   const [startPeriod, setStartPeriod] = useState('AM');
   const [endHour, setEndHour] = useState(9);
   const [endPeriod, setEndPeriod] = useState('PM');
-
  
   const [days, setDays] = useState([]);
   const allDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-  
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  // --- SEPARATE LOADING STATES ---
+  const [roomsLoading, setRoomsLoading] = useState(false);
+  const [timeLoading, setTimeLoading] = useState(false);
+  const [daysLoading, setDaysLoading] = useState(false);
 
-  
+  const [message, setMessage] = useState(''); 
+
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [modalType, setModalType] = useState("success");
 
-  
   useEffect(() => {
     loadRooms();
     loadTimeSettings();
@@ -67,28 +66,24 @@ const AdminSettings = () => {
 
   // --------------------- ROOMS LOGIC ---------------------
   const loadRooms = async () => {
-    setLoading(true);
-    setMessage('');
+    setRoomsLoading(true);
     try {
       const res = await getRooms(); 
       if (res.lecture && res.lab) {
-        // Sort rooms immediately upon loading
         setLectureRooms(sortRooms(res.lecture));
         setLabRooms(sortRooms(res.lab));
       }
     } catch (error) {
       console.error('Error loading rooms:', error);
     } finally {
-      setLoading(false);
+      setRoomsLoading(false);
     }
   };
 
   const handleAddLectureRoom = () => {
     if (!newLectureRoom.trim()) return;
     const roomToAdd = newLectureRoom.trim();
-    
     if (!lectureRooms.includes(roomToAdd)) {
-      // Add and immediately sort
       const updatedRooms = [...lectureRooms, roomToAdd];
       setLectureRooms(sortRooms(updatedRooms));
     }
@@ -98,28 +93,44 @@ const AdminSettings = () => {
   const handleAddLabRoom = () => {
     if (!newLabRoom.trim()) return;
     const roomToAdd = newLabRoom.trim();
-
     if (!labRooms.includes(roomToAdd)) {
-      // Add and immediately sort
       const updatedRooms = [...labRooms, roomToAdd];
       setLabRooms(sortRooms(updatedRooms));
     }
     setNewLabRoom('');
   };
 
+  // Helper to handle Enter key press
+  const handleKeyDown = (e, action) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Prevent form submission if inside a form tag
+      action();
+    }
+  };
+
   const handleRemoveLectureRoom = (room) => {
-    setLectureRooms(lectureRooms.filter(r => r !== room));
+    // 1. Add to exiting list to trigger CSS animation
+    setExitingRooms((prev) => [...prev, room]);
+
+    // 2. Wait for animation (300ms) then remove from actual state
+    setTimeout(() => {
+      setLectureRooms((prev) => prev.filter((r) => r !== room));
+      setExitingRooms((prev) => prev.filter((r) => r !== room));
+    }, 300);
   };
 
   const handleRemoveLabRoom = (room) => {
-    setLabRooms(labRooms.filter(r => r !== room));
+    setExitingRooms((prev) => [...prev, room]);
+
+    setTimeout(() => {
+      setLabRooms((prev) => prev.filter((r) => r !== room));
+      setExitingRooms((prev) => prev.filter((r) => r !== room));
+    }, 300);
   };
 
   const handleUpdateRooms = async () => {
-    setLoading(true);
-    setMessage('');
+    setRoomsLoading(true);
     try {
-      // Send sorted arrays to backend
       const payload = { lecture: lectureRooms, lab: labRooms };
       const resp = await updateRooms(payload);
       if (resp.status === 'success') {
@@ -131,14 +142,13 @@ const AdminSettings = () => {
       console.error('Error updating rooms:', error);
       showModal('Error updating rooms.', "error");
     } finally {
-      setLoading(false);
+      setRoomsLoading(false);
     }
   };
 
   // --------------------- TIME SETTINGS LOGIC ---------------------
   const loadTimeSettings = async () => {
-    setLoading(true);
-    setMessage('');
+    setTimeLoading(true);
     try {
       const res = await getTimeSettings();
       if (res.time_settings) {
@@ -153,13 +163,12 @@ const AdminSettings = () => {
     } catch (error) {
       console.error('Error loading time settings:', error);
     } finally {
-      setLoading(false);
+      setTimeLoading(false);
     }
   };
 
   const handleTimeUpdate = async () => {
-    setLoading(true);
-    setMessage('');
+    setTimeLoading(true);
     try {
       const st = convertTo24Hour(startHour, startPeriod);
       const et = convertTo24Hour(endHour, endPeriod);
@@ -169,14 +178,13 @@ const AdminSettings = () => {
       console.error('Error updating time settings:', error);
       showModal('Error updating time settings.', "error");
     } finally {
-      setLoading(false);
+      setTimeLoading(false);
     }
   };
 
   // --------------------- DAYS LOGIC ---------------------
   const loadDays = async () => {
-    setLoading(true);
-    setMessage('');
+    setDaysLoading(true);
     try {
       const res = await getDays();
       if (res.status === 'success' && res.days) {
@@ -185,7 +193,7 @@ const AdminSettings = () => {
     } catch (error) {
       console.error('Error loading days:', error);
     } finally {
-      setLoading(false);
+      setDaysLoading(false);
     }
   };
 
@@ -198,8 +206,7 @@ const AdminSettings = () => {
   };
 
   const handleDaysUpdate = async () => {
-    setLoading(true);
-    setMessage('');
+    setDaysLoading(true);
     try {
       const resp = await updateDays({ days });
       if (resp.status === 'success') {
@@ -211,18 +218,16 @@ const AdminSettings = () => {
       console.error('Error updating days:', error);
       showModal('Error updating days.', "error");
     } finally {
-      setLoading(false);
+      setDaysLoading(false);
     }
   };
 
   // --------------------- SUCCESS MODAL LOGIC ---------------------
-  
   const showModal = (msg, type = "success") => {
     setSuccessMessage(msg);
     setModalType(type);
     setShowSuccessModal(true);
   };
-
  
   const closeModal = () => {
     setShowSuccessModal(false);
@@ -230,9 +235,9 @@ const AdminSettings = () => {
 
   // --------------------- RENDER UI ---------------------
   return (
-    
     <div className="zoom-wrapper">
       <div className="admin-settings-container">
+        
         {/* Rooms Card */}
         <div className="card">
           <h2>Update Rooms</h2>
@@ -240,9 +245,12 @@ const AdminSettings = () => {
             <label>Lecture Rooms</label>
             <div className="room-chips">
               {lectureRooms.map(room => (
-                <div key={room} className="room-chip">
+                <div 
+                  key={room} 
+                  className={`room-chip ${exitingRooms.includes(room) ? 'exiting' : ''}`}
+                >
                   {room}
-                  <button onClick={() => handleRemoveLectureRoom(room)}>x</button>
+                  <button onClick={() => handleRemoveLectureRoom(room)} disabled={roomsLoading}>x</button>
                 </div>
               ))}
             </div>
@@ -251,16 +259,21 @@ const AdminSettings = () => {
               placeholder="Add new lecture room"
               value={newLectureRoom}
               onChange={(e) => setNewLectureRoom(e.target.value)}
+              onKeyDown={(e) => handleKeyDown(e, handleAddLectureRoom)}
+              disabled={roomsLoading}
             />
-            <button onClick={handleAddLectureRoom}>Add</button>
+            <button onClick={handleAddLectureRoom} disabled={roomsLoading}>Add</button>
           </div>
           <div className="form-group">
             <label>Lab Rooms</label>
             <div className="room-chips">
               {labRooms.map(room => (
-                <div key={room} className="room-chip">
+                <div 
+                  key={room} 
+                  className={`room-chip ${exitingRooms.includes(room) ? 'exiting' : ''}`}
+                >
                   {room}
-                  <button onClick={() => handleRemoveLabRoom(room)}>x</button>
+                  <button onClick={() => handleRemoveLabRoom(room)} disabled={roomsLoading}>x</button>
                 </div>
               ))}
             </div>
@@ -269,11 +282,13 @@ const AdminSettings = () => {
               placeholder="Add new lab room"
               value={newLabRoom}
               onChange={(e) => setNewLabRoom(e.target.value)}
+              onKeyDown={(e) => handleKeyDown(e, handleAddLabRoom)}
+              disabled={roomsLoading}
             />
-            <button onClick={handleAddLabRoom}>Add</button>
+            <button onClick={handleAddLabRoom} disabled={roomsLoading}>Add</button>
           </div>
-          <button className="update-btn" onClick={handleUpdateRooms}>
-            Update Rooms
+          <button className="update-btn" onClick={handleUpdateRooms} disabled={roomsLoading}>
+            {roomsLoading ? <span className="loader-spinner"></span> : 'Update Rooms'}
           </button>
         </div>
 
@@ -284,12 +299,20 @@ const AdminSettings = () => {
             <div className="time-setting-field">
               <label>Start Time:</label>
               <div className="time-dropdowns">
-                <select value={startHour} onChange={(e) => setStartHour(Number(e.target.value))}>
+                <select 
+                  value={startHour} 
+                  onChange={(e) => setStartHour(Number(e.target.value))}
+                  disabled={timeLoading}
+                >
                   {Array.from({ length: 12 }, (_, i) => i + 1).map(hr => (
                     <option key={hr} value={hr}>{hr}</option>
                   ))}
                 </select>
-                <select value={startPeriod} onChange={(e) => setStartPeriod(e.target.value)}>
+                <select 
+                  value={startPeriod} 
+                  onChange={(e) => setStartPeriod(e.target.value)}
+                  disabled={timeLoading}
+                >
                   <option value="AM">AM</option>
                   <option value="PM">PM</option>
                 </select>
@@ -298,20 +321,28 @@ const AdminSettings = () => {
             <div className="time-setting-field">
               <label>End Time:</label>
               <div className="time-dropdowns">
-                <select value={endHour} onChange={(e) => setEndHour(Number(e.target.value))}>
+                <select 
+                  value={endHour} 
+                  onChange={(e) => setEndHour(Number(e.target.value))}
+                  disabled={timeLoading}
+                >
                   {Array.from({ length: 12 }, (_, i) => i + 1).map(hr => (
                     <option key={hr} value={hr}>{hr}</option>
                   ))}
                 </select>
-                <select value={endPeriod} onChange={(e) => setEndPeriod(e.target.value)}>
+                <select 
+                  value={endPeriod} 
+                  onChange={(e) => setEndPeriod(e.target.value)}
+                  disabled={timeLoading}
+                >
                   <option value="AM">AM</option>
                   <option value="PM">PM</option>
                 </select>
               </div>
             </div>
           </div>
-          <button className="update-btn" onClick={handleTimeUpdate}>
-            Update Time Settings
+          <button className="update-btn" onClick={handleTimeUpdate} disabled={timeLoading}>
+            {timeLoading ? <span className="loader-spinner"></span> : 'Update Time Settings'}
           </button>
         </div>
 
@@ -325,24 +356,18 @@ const AdminSettings = () => {
                   type="checkbox"
                   checked={days.includes(day)}
                   onChange={() => handleDayToggle(day)}
+                  disabled={daysLoading}
                 />
                 <span className="day-chip">{day}</span>
               </label>
             ))}
           </div>
-          <button className="update-btn" onClick={handleDaysUpdate}>
-            Update Days
+          <button className="update-btn" onClick={handleDaysUpdate} disabled={daysLoading}>
+            {daysLoading ? <span className="loader-spinner"></span> : 'Update Days'}
           </button>
         </div>
 
         {message && <p className="message">{message}</p>}
-
-        {loading && (
-          <div className="loading-overlay">
-            <div className="spinner"></div>
-            <p>Loading...</p>
-          </div>
-        )}
 
         {/* Global Success Modal */}
         {showSuccessModal && (
