@@ -8,7 +8,7 @@ import {
 import noFacultyLogo from '../assets/noFacultyLogo.png';
 import FacultyLoader from '../animations/FacultyLoader';
 
-// --- FIXED: Constants moved OUTSIDE component to avoid dependency issues ---
+// --- Constants moved OUTSIDE component ---
 const dayMapping = {
   Monday: 'M', Tuesday: 'T', Wednesday: 'W', Thursday: 'Th',
   Friday: 'F', Saturday: 'Sat', Sunday: 'Sun',
@@ -27,16 +27,88 @@ const FacultyPanel = ({
   fetchError,
 }) => {
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
-  
-  // NEW: State to track which specific faculty ID is currently being assigned
   const [assigningFacultyId, setAssigningFacultyId] = useState(null);
 
-  // Memoize filtered faculty list
-  const filteredFaculty = useMemo(() => {
-    return faculty.filter((f) =>
+  // --- FIXED: Exact course title matching (ignoring spaces and case only) ---
+  const calculateMatchScore = (specialization, courseTitle) => {
+    if (!specialization || !courseTitle) return 0;
+    
+    const specLower = (specialization || '').toLowerCase().trim();
+    const titleLower = (courseTitle || '').toLowerCase().trim();
+    
+    // Return 0 if specialization is empty or just whitespace
+    if (!specLower || !titleLower) return 0;
+    
+    // Normalize: remove all spaces for exact comparison
+    const normalizeText = (text) => text.replace(/\s+/g, '').toLowerCase();
+    const normalizedTitle = normalizeText(courseTitle);
+    
+    // Split the specialization string by comma (e.g., "Introduction to Computing (5), Game Programming 1 (3)")
+    const specs = specLower.split(',').map(s => s.trim()).filter(s => s);
+    
+    // Return 0 if no valid specializations
+    if (specs.length === 0) return 0;
+    
+    let bestScore = 0;
+
+    specs.forEach(specEntry => {
+        // Regex to extract subject name and rating: "Subject Name (5)"
+        const match = specEntry.match(/^(.+?)\s*\((\d)\)$/);
+        
+        if (match) {
+            const subjectName = match[1].trim();
+            const rating = parseInt(match[2], 10);
+            
+            // CRITICAL: Skip if rating is 0 or subject name is empty
+            if (!subjectName || rating === 0) return;
+            
+            // Normalize subject name (remove spaces)
+            const normalizedSubject = normalizeText(subjectName);
+            
+            // EXACT MATCH: Compare normalized strings (ignoring spaces only)
+            if (normalizedSubject === normalizedTitle) {
+                if (rating > bestScore) bestScore = rating;
+            }
+        }
+    });
+
+    return bestScore;
+  };
+
+  // Memoize filtered faculty list with FIXED RANKING logic
+  const sortedAndFilteredFaculty = useMemo(() => {
+    // 1. Basic search filter
+    let list = faculty.filter((f) =>
       f.name.toLowerCase().includes(facultySearch.toLowerCase())
     );
-  }, [faculty, facultySearch]);
+
+    // 2. If a group is selected, apply ranking
+    if (selectedGroup && selectedGroup.groupEvents.length > 0) {
+      const courseTitle = selectedGroup.groupEvents[0].title;
+      
+      list = list.map(f => {
+        const isAvailable = isFacultyAvailableForGroup(f, selectedGroup, schedule);
+        const matchScore = calculateMatchScore(f.specialization, courseTitle);
+        
+        // Sorting Algorithm:
+        // Priority 1: Availability (+1000)
+        // Priority 2: Expertise Match (Rating * 100)
+        let sortScore = 0;
+        if (isAvailable) sortScore += 1000;
+        if (matchScore > 0) sortScore += (matchScore * 100);
+        
+        return { ...f, isAvailable, matchScore, sortScore };
+      });
+
+      // Sort by Score (Desc), then Units (Asc) for load balancing
+      list.sort((a, b) => {
+        if (b.sortScore !== a.sortScore) return b.sortScore - a.sortScore;
+        return (a.units || 0) - (b.units || 0);
+      });
+    }
+
+    return list;
+  }, [faculty, facultySearch, selectedGroup, schedule]);
 
   const getSelectedGroupBlocks = () => {
     if (!selectedGroup || !selectedGroup.groupEvents || selectedGroup.groupEvents.length === 0) {
@@ -54,7 +126,6 @@ const FacultyPanel = ({
     return hours * 60 + minutes;
   };
 
-  // Memoize formatted schedule events
   const formattedScheduleEvents = useMemo(() => {
     if (!selectedGroup?.groupEvents?.length) return [];
 
@@ -85,30 +156,20 @@ const FacultyPanel = ({
     });
   }, [selectedGroup]);
 
-  // NEW: Local handler to manage loading state during assignment
   const handleCardClick = async (f, available) => {
-    // If no group is selected, just open details
     if (!selectedGroup) {
       onOpenFacultyModal(f);
       return;
     }
 
-    // UPDATED: We no longer return if !available. 
-    // We allow the click to proceed even if there is a conflict.
-
-    // If we are already assigning someone, prevent clicks
     if (assigningFacultyId !== null) return;
 
-    // Start assignment process
     setAssigningFacultyId(f.id);
-    
     try {
-      // await the parent prop function
       await onAssignFaculty(f);
     } catch (error) {
       console.error("Assignment failed within panel:", error);
     } finally {
-      // Stop loading state regardless of success/failure
       setAssigningFacultyId(null);
     }
   };
@@ -132,7 +193,6 @@ const FacultyPanel = ({
         )}
       </div>
 
-      {/* --- UPDATED: Minimal Selection Hint --- */}
       {selectedGroup && (
         <div className="selection-hint">
           <span className="status-dot"></span>
@@ -156,29 +216,26 @@ const FacultyPanel = ({
             <img src={noFacultyLogo} alt="Error fetching faculty" className="no-faculty-logo" />
             <p>Error fetching faculty.</p>
           </div>
-        ) : filteredFaculty.length === 0 ? (
+        ) : sortedAndFilteredFaculty.length === 0 ? (
           <div className="no-faculty-container">
             <img src={noFacultyLogo} alt="No Faculty Found" className="no-faculty-logo" />
             <p>No faculty members found.</p>
           </div>
         ) : (
           <div className="faculty-cards">
-            {filteredFaculty.map((f) => {
-              const available = selectedGroup ? isFacultyAvailableForGroup(f, selectedGroup, schedule) : true;
+            {sortedAndFilteredFaculty.map((f) => {
+              // Recalculate basic props if not in map (handle normal view vs group view)
+              const available = selectedGroup ? (f.isAvailable !== undefined ? f.isAvailable : isFacultyAvailableForGroup(f, selectedGroup, schedule)) : true;
               const unitCount = calculateFacultyUnits(f.name, schedule);
               const loadColor = getFacultyLoadColor(f, unitCount);
               
-              // Determine states
               const isAssigningThis = assigningFacultyId === f.id;
               const isAnyAssigning = assigningFacultyId !== null;
-              
-              // UPDATED LOGIC:
-              // 1. Conflict State: If selectedGroup exists AND !available
               const hasConflict = selectedGroup && !available;
-
-              // 2. Disabled State: Only disable if we are currently assigning SOMEONE ELSE.
-              //    We DO NOT disable if hasConflict is true (per request).
               const isDisabled = isAnyAssigning && !isAssigningThis;
+              
+              // FIXED: Badge Logic - Only show if matchScore > 0
+              const isRecommended = selectedGroup && f.matchScore > 0;
 
               return (
                 <div
@@ -187,23 +244,32 @@ const FacultyPanel = ({
                     ${isDisabled ? 'disabled' : ''} 
                     ${isAssigningThis ? 'assigning' : ''}
                     ${hasConflict ? 'conflict' : ''} 
+                    ${isRecommended ? 'recommended-card' : ''}
                   `}
                   onClick={() => !isDisabled && handleCardClick(f, available)}
                   style={{ cursor: (!isDisabled && (selectedGroup || !isAnyAssigning)) ? 'pointer' : 'default' }}
                 >
-                  {/* Content Wrapper - fades when assigning */}
                   <div className={`faculty-info ${isAssigningThis ? 'faded' : ''}`}>
-                    <div className="faculty-name-text">{f.name}</div>
+                    <div className="faculty-name-row">
+                      <span className="faculty-name-text">{f.name}</span>
+                      {/* FIXED: Only render badge if matchScore > 0 */}
+                      {isRecommended && (
+                        <span 
+                          className={`specialist-badge rating-${f.matchScore}`}
+                          title={`Expertise match: ${f.matchScore}/5 stars`}
+                        >
+                          {'★'.repeat(f.matchScore)}
+                        </span>
+                      )}
+                    </div>
                     <div className="faculty-status">
                       <span>{f.Status || f.status}</span>
                       <span className="faculty-workload">{unitCount} units</span>
                       <div className={`status-indicator status-${loadColor}`}></div>
-                      {/* Optional: Add a text indicator for conflict */}
                       {hasConflict && <span className="conflict-text">Conflict</span>}
                     </div>
                   </div>
 
-                  {/* Spinner - Only visible when assigning this specific card */}
                   {isAssigningThis && (
                     <div className="assignment-spinner-overlay">
                        <div className="assignment-spinner"></div>

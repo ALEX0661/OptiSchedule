@@ -29,10 +29,31 @@ export const generateSchedule = async (force = false, progress = true) => {
   }
 };
 
+/**
+ * Retrieves the currently generated schedule (if it exists).
+ * Does NOT trigger a new generation process.
+ */
+export const getGeneratedSchedule = async () => {
+  try {
+    const response = await api.get('/schedule/result');
+    return response.data;
+  } catch (error) {
+    // If 404, it means no schedule has been generated yet.
+    // Return a safe empty structure so the UI handles it gracefully.
+    if (error.response && error.response.status === 404) {
+      return { status: "empty", schedule: [], rooms: [] };
+    }
+    console.error('Error fetching generated schedule:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
 
 export const getFinalSchedule = async (scheduleName) => {
   try {
-    const response = await api.get(`/schedule/final/${scheduleName}`);
+    // FIX: Add encodeURIComponent to handle names with spaces, #, ?, etc.
+    const encodedName = encodeURIComponent(scheduleName);
+    const response = await api.get(`/schedule/final/${encodedName}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching Schedule:', error);

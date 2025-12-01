@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import {
   generateSchedule,
+  getGeneratedSchedule, 
   saveFinalSchedule,
   overrideEvent,
   getFinalSchedules,
@@ -57,7 +58,6 @@ const ScheduleManagement = () => {
     localStorage.getItem('scheduleName') || 'Default Schedule'
   );
   
-  // NEW STATE: For Save Confirmation Modal
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
   const [unassignModalData, setUnassignModalData] = useState(null);
@@ -68,13 +68,13 @@ const ScheduleManagement = () => {
 
   const daysOrder = useMemo(() => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], []);
 
-  // --- Initial Data Fetching ---
   useEffect(() => {
     const fetchCurrentSchedule = async () => {
       setLoading(true);
       setLoadingMessage('Retrieving generated schedule...');
       try {
-        const data = await generateSchedule(false, true);
+        const data = await getGeneratedSchedule();
+        
         if (data.status === 'success' && data.schedule) {
           setSchedule(data.schedule.map(event => ({
             ...event,
@@ -84,7 +84,7 @@ const ScheduleManagement = () => {
           if (data.rooms) setRoomsData(data.rooms);
         } else {
           setSchedule([]);
-          setScheduleError(true);
+          setScheduleError(data.status !== 'empty');
           if (data.rooms) setRoomsData(data.rooms);
         }
       } catch (error) {
@@ -119,7 +119,6 @@ const ScheduleManagement = () => {
     fetchFacultyData();
   }, []);
 
-  // --- Reusable function to fetch existing schedules ---
   const fetchExistingSchedulesList = useCallback(async () => {
     try {
       const data = await getFinalSchedules();
@@ -131,12 +130,10 @@ const ScheduleManagement = () => {
     }
   }, []);
 
-  // Call the fetch function on mount
   useEffect(() => {
     fetchExistingSchedulesList();
   }, [fetchExistingSchedulesList]);
 
-  // --- Handlers ---
   const handleFilterChange = useCallback((e) => {
     const { name, value, type, checked } = e.target;
     setFilters((prev) => ({
@@ -149,7 +146,6 @@ const ScheduleManagement = () => {
     setFacultySearch(e.target.value);
   }, []);
 
-  // --- Memoized Data Filtering ---
   const filteredSchedule = useMemo(() => {
     return (schedule || []).filter((event) => {
       const { courseQuery, showUnassignedOnly, programSelected, yearSelected, blockSelected, daySelected, roomSelected } = filters;
@@ -185,17 +181,13 @@ const ScheduleManagement = () => {
 
   // --- SAVE ACTIONS ---
 
-  // 1. Initial Click: Opens the Confirmation Modal
   const handleSaveButtonClick = () => {
     setIsSaveModalOpen(true);
   };
 
-  // 2. Confirmed Save: Actually calls the API
+  // --- FIX START: Update localStorage logic within performFinalSave ---
   const performFinalSave = async (confirmedName) => {
-    // Close modal first
     setIsSaveModalOpen(false);
-    
-    // Update local display name to match what user just typed
     setDisplayScheduleName(confirmedName);
     
     setLoading(true);
@@ -209,10 +201,11 @@ const ScheduleManagement = () => {
     try {
       const response = await saveFinalSchedule(finalSchedule);
       if (response.status === 'success') {
+        // Save to BOTH keys to keep apps in sync
         localStorage.setItem('finalScheduleName', confirmedName);
-        setSuccessModalData({ message: 'Generated schedule saved successfully.', type: 'success' });
+        localStorage.setItem('scheduleName', confirmedName);
         
-        // Refresh the existing schedules dropdown list immediately
+        setSuccessModalData({ message: 'Generated schedule saved successfully.', type: 'success' });
         await fetchExistingSchedulesList(); 
 
       } else {
@@ -226,6 +219,7 @@ const ScheduleManagement = () => {
       setLoadingMessage('');
     }
   };
+  // --- FIX END ---
 
   const handleSelectExistingSchedule = async (e) => {
     const selectedName = e.target.value;
@@ -266,16 +260,13 @@ const ScheduleManagement = () => {
     }
   };
 
-  // --- Group Selection Logic (Preserving Online Fix) ---
   const handleToggleGroupSelection = useCallback((event) => {
     const getBaseCourseCode = (courseCode) => {
       return courseCode.replace(/[AL]$/, '');
     };
     
-    // Check if the clicked event is online
     const isOnline = event.room && event.room.toLowerCase() === 'online';
 
-    // Create a merge group identifier
     const getMergeGroupId = (e) => {
       const baseId = `${e.courseCode}-${e.program}-${e.year}-${e.session}-${e.room}-${e.period}-${e.day}`;
       if (e.room && e.room.toLowerCase() === 'online') {
@@ -366,7 +357,7 @@ const ScheduleManagement = () => {
 
   const refreshSchedule = async () => {
     try {
-      const data = await generateSchedule(false, true);
+      const data = await getGeneratedSchedule();
       if (data.status === 'success' && data.schedule) {
         setSchedule(data.schedule.map(event => ({
           ...event,
@@ -477,7 +468,7 @@ const ScheduleManagement = () => {
               onToggleGroupSelection={handleToggleGroupSelection}
               onOverride={handleOverride}
               displayScheduleName={displayScheduleName}
-              onSaveFinalSchedule={handleSaveButtonClick} // Use the new handler here
+              onSaveFinalSchedule={handleSaveButtonClick}
               onSelectExistingSchedule={handleSelectExistingSchedule}
               existingSchedules={existingSchedules}
               fetchError={scheduleError}
@@ -583,13 +574,12 @@ const ScheduleManagement = () => {
         />
       )}
 
-      {/* NEW: Save Schedule Confirmation Modal */}
       <SaveScheduleModal 
         isOpen={isSaveModalOpen}
         onClose={() => setIsSaveModalOpen(false)}
         onConfirm={performFinalSave}
         currentName={displayScheduleName}
-        existingSchedules={existingSchedules} // PASSED HERE
+        existingSchedules={existingSchedules}
       />
 
       {successModalData && (

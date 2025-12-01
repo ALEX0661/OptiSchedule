@@ -4,12 +4,12 @@ import '../styles/CreateSchedule.css';
 const FacultyAddModal = ({ onClose, onSave }) => {
   const [facultyData, setFacultyData] = useState({
     name: '',
-    specialization: '',
+    specialization: '', // Keep this here to ensure API compatibility
     AcademicRank: '',
     Department: '',
     Educational_attainment: '',
-    Sex: 'Male',
-    Status: 'Full Time',
+    Sex: '',
+    Status: '',
   });
 
   const handleChange = (e) => {
@@ -19,6 +19,7 @@ const FacultyAddModal = ({ onClose, onSave }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Name is the only strictly required field
     if (!facultyData.name.trim()) {
       alert("Faculty name is required.");
       return;
@@ -35,21 +36,14 @@ const FacultyAddModal = ({ onClose, onSave }) => {
       >
         <div className="modal-header">Add Faculty Member</div>
         <form onSubmit={handleSubmit}>
-          <label>Name:</label>
+          <label>Name: <span style={{color: 'red'}}>*</span></label>
           <input
             type="text"
             name="name"
             value={facultyData.name}
             onChange={handleChange}
+            placeholder="Enter Name"
             required
-          />
-
-          <label>Specialization:</label>
-          <input
-            type="text"
-            name="specialization"
-            value={facultyData.specialization}
-            onChange={handleChange}
           />
 
           <label>Academic Rank:</label>
@@ -58,7 +52,8 @@ const FacultyAddModal = ({ onClose, onSave }) => {
             value={facultyData.AcademicRank}
             onChange={handleChange}
           >
-            <option value="" disabled>Select Academic Rank</option>
+            {/* Removed 'disabled' so it can be selected to clear the value */}
+            <option value="">Select Academic Rank</option>
             <option value="Instructor 1">Instructor 1</option>
             <option value="Instructor 2">Instructor 2</option>
             <option value="Instructor 3">Instructor 3</option>
@@ -76,7 +71,7 @@ const FacultyAddModal = ({ onClose, onSave }) => {
             value={facultyData.Department}
             onChange={handleChange}
           >
-            <option value="" disabled>Select Department</option>
+            <option value="">Select Department</option>
             <option value="CCS">CCS</option>
             <option value="CEAS">CEAS</option>
             <option value="CHTM">CHTM</option>
@@ -90,6 +85,7 @@ const FacultyAddModal = ({ onClose, onSave }) => {
             name="Educational_attainment"
             value={facultyData.Educational_attainment}
             onChange={handleChange}
+            placeholder="e.g. PhD, Masters"
           />
 
           <label>Sex:</label>
@@ -98,6 +94,7 @@ const FacultyAddModal = ({ onClose, onSave }) => {
             value={facultyData.Sex}
             onChange={handleChange}
           >
+            <option value="">Select Sex</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
@@ -109,6 +106,7 @@ const FacultyAddModal = ({ onClose, onSave }) => {
             value={facultyData.Status}
             onChange={handleChange}
           >
+            <option value="">Select Status</option>
             <option value="Full Time">Full Time</option>
             <option value="Part Time">Part Time</option>
           </select>

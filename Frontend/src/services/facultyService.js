@@ -24,7 +24,7 @@ export const assignFacultyToEvent = async (schedule_id, faculty_id, merged_block
     const payload = { 
       schedule_id: String(schedule_id), 
       faculty_id: Number(faculty_id),
-      merged_blocks: merged_blocks  // Pass the merged blocks array
+      merged_blocks: merged_blocks
     };
     console.log('Assigning faculty with payload:', payload);
     const response = await api.post('/faculty/assign', payload, { headers: { ...getAuthHeader() } });
@@ -55,6 +55,21 @@ export const updateFaculty = async (facultyId, facultyData) => {
   }
 };
 
+// Update only specialization
+export const updateFacultySpecialization = async (facultyId, specialization) => {
+  try {
+    const response = await api.put(
+      `/faculty/update-specialization/${facultyId}`, 
+      { specialization }, 
+      { headers: { ...getAuthHeader() } }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error updating faculty specialization:', error);
+    throw error;
+  }
+};
+
 export const deleteFaculty = async (facultyId) => {
   try {
     const response = await api.delete(`/faculty/delete/${facultyId}`, { headers: { ...getAuthHeader() } });
@@ -67,11 +82,25 @@ export const deleteFaculty = async (facultyId) => {
 
 export const unassignFacultyFromGroup = async (groupParams) => {
   try {
-    // groupParams now includes { ..., merged_blocks: ['A', 'B'] }
     const response = await api.post('/faculty/unassign', groupParams, { headers: { ...getAuthHeader() } });
     return response.data;
   } catch (error) {
     console.error('Error in unassignFacultyFromGroup:', error);
+    throw error;
+  }
+};
+
+export const uploadFacultyRanking = async (formData) => {
+  try {
+    const response = await api.post('/faculty/upload-csv-ranking', formData, { 
+      headers: { 
+        ...getAuthHeader(),
+        'Content-Type': 'multipart/form-data' 
+      } 
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error uploading faculty ranking CSV:', error);
     throw error;
   }
 };

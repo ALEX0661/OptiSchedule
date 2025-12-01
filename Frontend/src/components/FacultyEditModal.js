@@ -2,7 +2,16 @@ import React, { useState } from 'react';
 import '../styles/CreateSchedule.css';
 
 const FacultyEditModal = ({ faculty, onClose, onSave }) => {
-  const [formData, setFormData] = useState({ ...faculty });
+  // Initialize state with existing faculty data
+  const [formData, setFormData] = useState({ 
+    ...faculty,
+    // Ensure values are not null/undefined to avoid controlled input warnings
+    AcademicRank: faculty.AcademicRank || '',
+    Department: faculty.Department || '',
+    Educational_attainment: faculty.Educational_attainment || '',
+    Sex: faculty.Sex || '',
+    Status: faculty.Status || ''
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -11,8 +20,15 @@ const FacultyEditModal = ({ faculty, onClose, onSave }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Simple validation for Name only
+    if (!formData.name || !formData.name.trim()) {
+      alert("Faculty name is required.");
+      return;
+    }
+
     onClose();
-    onSave(faculty.id, formData);
+    onSave(faculty.id, formData); 
   };
 
   return (
@@ -23,20 +39,11 @@ const FacultyEditModal = ({ faculty, onClose, onSave }) => {
       >
         <div className="modal-header">Edit Faculty</div>
         <form onSubmit={handleSubmit}>
-          <label>Name:</label>
+          <label>Name: <span style={{color: 'red'}}>*</span></label>
           <input
             type="text"
             name="name"
             value={formData.name}
-            onChange={handleChange}
-            required
-          />
-
-          <label>Specialization:</label>
-          <input
-            type="text"
-            name="specialization"
-            value={formData.specialization}
             onChange={handleChange}
             required
           />
@@ -46,9 +53,9 @@ const FacultyEditModal = ({ faculty, onClose, onSave }) => {
             name="AcademicRank"
             value={formData.AcademicRank}
             onChange={handleChange}
-            required
           >
-            <option value="" disabled>Select Academic Rank</option>
+            {/* Removed 'disabled' so user can revert to empty */}
+            <option value="">Select Academic Rank</option>
             <option value="Instructor 1">Instructor 1</option>
             <option value="Instructor 2">Instructor 2</option>
             <option value="Instructor 3">Instructor 3</option>
@@ -65,9 +72,8 @@ const FacultyEditModal = ({ faculty, onClose, onSave }) => {
             name="Department"
             value={formData.Department}
             onChange={handleChange}
-            required
           >
-            <option value="" disabled>Select Department</option>
+            <option value="">Select Department</option>
             <option value="CCS">CCS</option>
             <option value="CEAS">CEAS</option>
             <option value="CHTM">CHTM</option>
@@ -81,7 +87,6 @@ const FacultyEditModal = ({ faculty, onClose, onSave }) => {
             name="Educational_attainment"
             value={formData.Educational_attainment}
             onChange={handleChange}
-            required
           />
 
           <label>Sex:</label>
@@ -89,10 +94,11 @@ const FacultyEditModal = ({ faculty, onClose, onSave }) => {
             name="Sex"
             value={formData.Sex}
             onChange={handleChange}
-            required
           >
+            <option value="">Select Sex</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
+            <option value="Other">Other</option>
           </select>
 
           <label>Status:</label>
@@ -100,8 +106,8 @@ const FacultyEditModal = ({ faculty, onClose, onSave }) => {
             name="Status"
             value={formData.Status}
             onChange={handleChange}
-            required
           >
+            <option value="">Select Status</option>
             <option value="Full Time">Full Time</option>
             <option value="Part Time">Part Time</option>
           </select>

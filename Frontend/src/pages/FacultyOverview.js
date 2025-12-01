@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   getFacultyList,
   addFaculty,
   updateFaculty,
   deleteFaculty
 } from '../services/facultyService';
-import { generateSchedule } from '../services/scheduleService';
+import { getGeneratedSchedule } from '../services/scheduleService';
 import {
   parsePeriod,
   computeEventUnits 
@@ -20,9 +20,9 @@ import SuccessModal from '../components/SuccessModal';
 import ConfirmationModal from '../components/ConfirmationModal';
 import noFacultyLogo from '../assets/noFacultyLogo.png';
 import '../styles/FacultyOverview.css';
-import FacultyLoader from '../animations/FacultyLoader';  
+import FacultyLoader from '../animations/FacultyLoader';
 
-
+// ... [Keep helper functions: toMinutes, fromMinutes, mergeConsecutiveEvents same as original] ...
 const toMinutes = timeStr => {
   const [time, meridiem] = timeStr.split(' ');
   let [hours, minutes] = time.split(':').map(Number);
@@ -30,7 +30,6 @@ const toMinutes = timeStr => {
   if (meridiem === "AM" && hours === 12) hours = 0;
   return hours * 60 + minutes;
 };
-
 
 const fromMinutes = mins => {
   let hours = Math.floor(mins / 60);
@@ -40,7 +39,6 @@ const fromMinutes = mins => {
   if (hours === 0) hours = 12;
   return `${hours}:${minutes.toString().padStart(2, '0')} ${meridiem}`;
 };
-
 
 const mergeConsecutiveEvents = events => {
   const eventsCopy = JSON.parse(JSON.stringify(events));
@@ -106,25 +104,32 @@ const FacultyOverviewContainer = () => {
     year: 'all',
     courseQuery: '',
   });
+  
+  // Faculty list filters and sorting
+  const [facultyFilters, setFacultyFilters] = useState({
+    searchQuery: '',
+    departmentSelected: [],
+    rankSelected: [],
+    statusSelected: [],
+    sexSelected: []
+  });
+  
+  const [sortOption, setSortOption] = useState('name'); 
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [error, setError] = useState('');
-  
   const [loading, setLoading] = useState(false);
-  
   const [isFacultyLoading, setIsFacultyLoading] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [facultyToEdit, setFacultyToEdit] = useState(null);
   const [scheduleError, setScheduleError] = useState(false);
-  
   const [showDeleteFacultyConfirmation, setShowDeleteFacultyConfirmation] = useState(false);
   const [facultyToDelete, setFacultyToDelete] = useState(null);
-  
   const [feedbackModal, setFeedbackModal] = useState(null);
 
   const storedScheduleName = localStorage.getItem('scheduleName') || 'Default Schedule';
   const scheduleName = `A.Y. ${storedScheduleName}`;
 
- 
   const dayMapping = {
     "Monday": "M",
     "Tuesday": "T",
@@ -136,38 +141,47 @@ const FacultyOverviewContainer = () => {
   };
   const dayOrder = ["M", "T", "W", "Th", "F", "Sat", "Sun"];
 
- 
-  useEffect(() => {
-    const fetchFaculty = async () => {
-      setIsFacultyLoading(true);
-      try {
-        const data = await getFacultyList();
-        if (data.status === 'success') {
-          setFacultyList(data.faculty);
-        } else {
-          setError('Error fetching faculty.');
-        }
-      } catch (err) {
-        console.error('Error fetching faculty:', err);
+  // Available filter options
+  const departments = useMemo(() => ['CCS', 'CEAS', 'CHTM', 'CBA', 'CAHS'], []);
+  const ranks = useMemo(() => [
+    'Instructor 1', 'Instructor 2', 'Instructor 3',
+    'Professor 1', 'Professor 2', 'Professor 3',
+    'Assistant Professor', 'Assistant Dean', 'Dean'
+  ], []);
+  const statuses = useMemo(() => ['Full Time', 'Part Time'], []);
+  const sexOptions = useMemo(() => ['Male', 'Female', 'Other'], []);
+
+  const fetchFaculty = async () => {
+    setIsFacultyLoading(true);
+    try {
+      const data = await getFacultyList();
+      if (data.status === 'success') {
+        setFacultyList(data.faculty);
+      } else {
         setError('Error fetching faculty.');
-      } finally {
-        setIsFacultyLoading(false);
       }
-    };
+    } catch (err) {
+      console.error('Error fetching faculty:', err);
+      setError('Error fetching faculty.');
+    } finally {
+      setIsFacultyLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchFaculty();
   }, []);
 
-  
   useEffect(() => {
     const fetchSchedule = async () => {
       try {
-        const data = await generateSchedule();
+        const data = await getGeneratedSchedule();
         if (data.status === 'success') {
           setSchedule(data.schedule);
           setScheduleError(false);
         } else {
-          setError('Error fetching schedule events.');
-          setScheduleError(true);
+          setSchedule([]);
+          setScheduleError(data.status !== 'empty');
         }
       } catch (err) {
         console.error('Error fetching schedule events:', err);
@@ -178,7 +192,6 @@ const FacultyOverviewContainer = () => {
     fetchSchedule();
   }, []);
 
-  
   useEffect(() => {
     if (selectedFaculty) {
       const events = schedule.filter(e => e.faculty === selectedFaculty.name);
@@ -188,13 +201,104 @@ const FacultyOverviewContainer = () => {
     }
   }, [selectedFaculty, schedule]);
 
-  
+  // ... [Keep filters and sorting logic the same] ...
+  const filteredFacultyList = useMemo(() => {
+    let result = facultyList.filter(faculty => {
+      const { searchQuery, departmentSelected, rankSelected, statusSelected, sexSelected } = facultyFilters;
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const matchesName = faculty.name?.toLowerCase().includes(query);
+        const matchesSpecialization = faculty.specialization?.toLowerCase().includes(query);
+        const matchesRank = faculty.AcademicRank?.toLowerCase().includes(query);
+        const matchesDept = faculty.Department?.toLowerCase().includes(query);
+        if (!matchesName && !matchesSpecialization && !matchesRank && !matchesDept) return false;
+      }
+      if (departmentSelected.length > 0 && !departmentSelected.includes(faculty.Department)) return false;
+      if (rankSelected.length > 0 && !rankSelected.includes(faculty.AcademicRank)) return false;
+      if (statusSelected.length > 0 && !statusSelected.includes(faculty.Status)) return false;
+      if (sexSelected.length > 0 && !sexSelected.includes(faculty.Sex)) return false;
+      return true;
+    });
+
+    return result.sort((a, b) => {
+      if (sortOption === 'name') {
+        return (a.name || '').localeCompare(b.name || '');
+      } else if (sortOption === 'rank') {
+        const rankA = ranks.indexOf(a.AcademicRank);
+        const rankB = ranks.indexOf(b.AcademicRank);
+        const rA = rankA === -1 ? 999 : rankA;
+        const rB = rankB === -1 ? 999 : rankB;
+        if (rA !== rB) return rA - rB;
+        return (a.name || '').localeCompare(b.name || '');
+      } else if (sortOption === 'department') {
+        const deptCompare = (a.Department || '').localeCompare(b.Department || '');
+        if (deptCompare !== 0) return deptCompare;
+        return (a.name || '').localeCompare(b.name || '');
+      } else if (sortOption === 'status') {
+        const statusCompare = (a.Status || '').localeCompare(b.Status || '');
+        if (statusCompare !== 0) return statusCompare;
+        return (a.name || '').localeCompare(b.name || '');
+      }
+      return 0;
+    });
+  }, [facultyList, facultyFilters, sortOption, ranks]);
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
   };
 
-  
+  const handleFacultyFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFacultyFilters(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleCheckboxChange = (category, value) => {
+    setFacultyFilters(prev => {
+      const key = `${category}Selected`;
+      const currentValues = prev[key] || [];
+      const newValues = currentValues.includes(value)
+        ? currentValues.filter(v => v !== value)
+        : [...currentValues, value];
+      return { ...prev, [key]: newValues };
+    });
+  };
+
+  const handleSortChange = (option) => {
+    setSortOption(prev => prev === option ? 'name' : option);
+  };
+
+  const handleSelectAll = (category, allValues) => {
+    setFacultyFilters(prev => {
+      const key = `${category}Selected`;
+      const currentValues = prev[key] || [];
+      const newValues = currentValues.length === allValues.length ? [] : allValues;
+      return { ...prev, [key]: newValues };
+    });
+  };
+
+  const handleClearAll = () => {
+    setFacultyFilters({
+      searchQuery: '',
+      departmentSelected: [],
+      rankSelected: [],
+      statusSelected: [],
+      sexSelected: []
+    });
+    setSortOption('name'); 
+  };
+
+  const getActiveFilterCount = () => {
+    let count = 0;
+    if (facultyFilters.departmentSelected.length > 0) count++;
+    if (facultyFilters.rankSelected.length > 0) count++;
+    if (facultyFilters.statusSelected.length > 0) count++;
+    if (facultyFilters.sexSelected.length > 0) count++;
+    if (sortOption !== 'name') count++; 
+    return count;
+  };
+
+  // ... [Keep Event Processing Logic Same] ...
   const filteredEvents = facultyEvents.filter(event => {
     const { program, block, year, courseQuery } = filters;
     let matches = true;
@@ -210,14 +314,12 @@ const FacultyOverviewContainer = () => {
     return matches;
   });
 
-  
   const sortedEvents = filteredEvents.slice().sort((a, b) => {
     const aStart = toMinutes(a.period.split(' - ')[0]);
     const bStart = toMinutes(b.period.split(' - ')[0]);
     return aStart - bStart;
   });
 
-  
   const mergedEventsMap = sortedEvents.reduce((acc, event) => {
     const key = `${event.courseCode}-${event.session}-${event.program}-${event.year}-${event.block}-${event.room}-${event.faculty}-${event.period}`;
     const dayAbbrev = dayMapping[event.day] || event.day;
@@ -236,10 +338,8 @@ const FacultyOverviewContainer = () => {
     return { ...event, day: sortedDayAbbrevs.join('') };
   });
 
-  
   const finalMergedEvents = mergeConsecutiveEvents(mergedEvents);
 
-  
   const handleSelectFaculty = fac => {
     setSelectedFaculty(fac);
   };
@@ -248,13 +348,18 @@ const FacultyOverviewContainer = () => {
     setSelectedFaculty(null);
   };
 
-  const openAddModal = () => {
-    setIsAddModalOpen(true);
+  // --- NEW: Update faculty state locally without reload ---
+  const handleFacultyUpdate = (updatedFaculty) => {
+    // 1. Update the list
+    setFacultyList(prevList => 
+      prevList.map(f => f.id === updatedFaculty.id ? updatedFaculty : f)
+    );
+    // 2. Update the selected view
+    setSelectedFaculty(updatedFaculty);
   };
 
-  const closeAddModal = () => {
-    setIsAddModalOpen(false);
-  };
+  const openAddModal = () => setIsAddModalOpen(true);
+  const closeAddModal = () => setIsAddModalOpen(false);
 
   const handleSaveFaculty = async facultyData => {
     try {
@@ -262,7 +367,6 @@ const FacultyOverviewContainer = () => {
       const response = await addFaculty(facultyData);
       if (response.status === 'success') {
         setFacultyList(prev => [...prev, response.faculty]);
-        
         await new Promise(resolve => setTimeout(resolve, 500));
         closeAddModal();
         setFeedbackModal({ message: "Faculty added successfully!", type: "success" });
@@ -292,11 +396,7 @@ const FacultyOverviewContainer = () => {
       setLoading(true);
       const response = await updateFaculty(facultyId, updatedData);
       if (response.status === 'success') {
-        setFacultyList(prev => prev.map(f => (f.id === facultyId ? response.faculty : f)));
-        if (selectedFaculty && selectedFaculty.id === facultyId) {
-          setSelectedFaculty(response.faculty);
-        }
-        
+        handleFacultyUpdate(response.faculty); // Use the new handler
         await new Promise(resolve => setTimeout(resolve, 500));
         closeEditModal();
         setFeedbackModal({ message: "Faculty updated successfully!", type: "success" });
@@ -311,7 +411,6 @@ const FacultyOverviewContainer = () => {
     }
   };
 
-  
   const handleDeleteFaculty = facultyId => {
     setFacultyToDelete(facultyId);
     setShowDeleteFacultyConfirmation(true);
@@ -346,26 +445,24 @@ const FacultyOverviewContainer = () => {
     setFacultyToDelete(null);
   };
 
+  const activeFilterCount = getActiveFilterCount();
+
   return (
     <div className="faculty-overview-container">
-      {/* Overview Header: Always show the schedule name */}
-      <div className="overview-header">
+      <div className="overview-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1>{scheduleName}</h1>
       </div>
 
       {loading && (
         <div className="loading-overlay">
-          {/* Global schedule-related loading spinner */}
           <div className="spinner"></div>
           <p>Loading...</p>
         </div>
       )}
 
       {selectedFaculty ? (
-        
         <div className="faculty-panel">
           <div className="faculty-panel-header">
-            {}
             <button className="back-btn" onClick={handleBack} title="Back to Faculty List">
               <span className="back-logo">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -376,11 +473,16 @@ const FacultyOverviewContainer = () => {
             </button>
           </div>
           <div className="faculty-details">
+            {/* Pass the update handler and the feedback modal setter 
+                so FacultyDetails can update state and show success properly.
+            */}
             <FacultyDetails
               faculty={selectedFaculty}
               schedule={schedule}
               onEdit={handleEditFaculty}
               onDelete={handleDeleteFaculty}
+              onFacultyUpdate={handleFacultyUpdate} 
+              onShowFeedback={setFeedbackModal}
             />
             <FacultyEventsFilter filters={filters} onFilterChange={handleFilterChange} />
             <ExportButtons
@@ -403,45 +505,238 @@ const FacultyOverviewContainer = () => {
           </div>
         </div>
       ) : (
-        
-        facultyList.length === 0 ? (
-          <div className="no-faculty-container">
-            {isFacultyLoading ? (
-              <FacultyLoader />
-            ) : (
-              <>
-                <img src={noFacultyLogo} alt="No Faculty Found" className="no-faculty-logo" />
-                <p>{error ? "Error fetching faculty." : "No faculty found."}</p>
-              </>
-            )}
-          </div>
-        ) : (
-          <div className="faculty-grid">
-            {facultyList.map(fac => (
-              <div
-                key={fac.id}
-                className="faculty-grid-card improved-grid-card"
-                onClick={() => handleSelectFaculty(fac)}
-                title={fac.name}
-              >
-                <div className="card-header">
-                  <div className="card-title-container">
-                    <h3 className="card-title">{fac.name}</h3>
-                    <p className="card-subtitle">
-                      {fac.AcademicRank || 'Academic Rank N/A'}
-                    </p>
-                  </div>
-                </div>
-                <div className="card-footer">
-                  <span className="card-action-text">Click to view details</span>
+        // ... [Keep the faculty list view the same] ...
+        <>
+            {/* Faculty List Filters */}
+          {facultyList.length > 0 && (
+            <div className="cards filters-card faculty-filters-card-container">
+              <div className="filters-header">
+                <h2 style={{ fontSize: '0.95rem' }}>Filters</h2>
+                <button 
+                  className={`filter-icon-btn ${showAdvancedFilters ? 'active' : ''}`}
+                  onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                  title={showAdvancedFilters ? "Hide Filters" : "Advanced Filters"}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                  </svg>
+                  {activeFilterCount > 0 && (
+                    <span className="filter-badge-count">{activeFilterCount}</span>
+                  )}
+                </button>
+              </div>
+
+              <div className="filters-container" style={{ marginBottom: showAdvancedFilters ? '12px' : '0' }}>
+                <div className="filter-group" style={{ flex: 1 }}>
+                  <input
+                    className="filter-select"
+                    type="text"
+                    name="searchQuery"
+                    placeholder="Search by name, specialization, rank, or department..."
+                    value={facultyFilters.searchQuery}
+                    onChange={handleFacultyFilterChange}
+                    style={{ padding: '8px 12px', fontSize: '0.85rem' }}
+                  />
                 </div>
               </div>
-            ))}
-          </div>
-        )
+
+              {showAdvancedFilters && (
+                <div className="advanced-filter-panel" style={{ marginTop: '12px', padding: '12px' }}>
+                  <div className="advanced-filter-header" style={{ marginBottom: '10px', paddingBottom: '8px' }}>
+                    <h3 style={{ fontSize: '0.85rem' }}>Advanced Filters</h3>
+                    <div className="advanced-actions">
+                      <button className="clear-btn" onClick={handleClearAll} style={{ padding: '4px 10px', fontSize: '0.7rem' }}>Clear All</button>
+                    </div>
+                  </div>
+
+                  {/* SORTING SECTION */}
+                  <div className="advanced-section-sorting" style={{ marginBottom: '15px', padding: '10px', borderBottom: '1px solid #eee' }}>
+                    <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
+                      <h4 style={{ fontSize: '0.75rem', fontWeight: 'bold' }}>Arrange By</h4>
+                    </div>
+                    <div className="sorting-options" style={{ display: 'flex', gap: '15px', flexDirection: 'row' }}>
+  
+                      <label className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.75rem', cursor: 'pointer' }}>
+                        <input 
+                          type="checkbox" 
+                          checked={sortOption === 'rank'} 
+                          onChange={() => handleSortChange('rank')}
+                          style={{ width: '12px', height: '12px', marginRight: '5px' }}
+                        />
+                        <span>Rank</span>
+                      </label>
+
+                      <label className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.75rem', cursor: 'pointer' }}>
+                        <input 
+                          type="checkbox" 
+                          checked={sortOption === 'department'} 
+                          onChange={() => handleSortChange('department')}
+                          style={{ width: '12px', height: '12px', marginRight: '5px' }}
+                        />
+                        <span>Department</span>
+                      </label>
+
+                      <label className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.75rem', cursor: 'pointer' }}>
+                        <input 
+                          type="checkbox" 
+                          checked={sortOption === 'status'} 
+                          onChange={() => handleSortChange('status')}
+                          style={{ width: '12px', height: '12px', marginRight: '5px' }}
+                        />
+                        <span>Status</span>
+                      </label>
+
+                    </div>
+                  </div>
+
+                  <div className="advanced-sections" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+                    <div className="advanced-section" style={{ padding: '10px' }}>
+                      <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
+                        <h4 style={{ fontSize: '0.7rem' }}>Department</h4>
+                        <button className="select-all-btn" onClick={() => handleSelectAll('department', departments)} style={{ fontSize: '0.65rem' }}>
+                          {facultyFilters.departmentSelected.length === departments.length ? 'Deselect' : 'Select All'}
+                        </button>
+                      </div>
+                      <div className="checkbox-grid" style={{ maxHeight: '120px', gap: '6px' }}>
+                        {departments.map(dept => (
+                          <label key={dept} className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.7rem' }}>
+                            <input 
+                              type="checkbox" 
+                              checked={facultyFilters.departmentSelected.includes(dept)} 
+                              onChange={() => handleCheckboxChange('department', dept)}
+                              style={{ width: '12px', height: '12px' }}
+                            />
+                            <span>{dept}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="advanced-section" style={{ padding: '10px' }}>
+                      <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
+                        <h4 style={{ fontSize: '0.7rem' }}>Rank</h4>
+                        <button className="select-all-btn" onClick={() => handleSelectAll('rank', ranks)} style={{ fontSize: '0.65rem' }}>
+                          {facultyFilters.rankSelected.length === ranks.length ? 'Deselect' : 'Select All'}
+                        </button>
+                      </div>
+                      <div className="checkbox-grid" style={{ maxHeight: '120px', gap: '6px' }}>
+                        {ranks.map(rank => (
+                          <label key={rank} className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.7rem' }}>
+                            <input 
+                              type="checkbox" 
+                              checked={facultyFilters.rankSelected.includes(rank)} 
+                              onChange={() => handleCheckboxChange('rank', rank)}
+                              style={{ width: '12px', height: '12px' }}
+                            />
+                            <span>{rank}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="advanced-section" style={{ padding: '10px' }}>
+                      <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
+                        <h4 style={{ fontSize: '0.7rem' }}>Status</h4>
+                        <button className="select-all-btn" onClick={() => handleSelectAll('status', statuses)} style={{ fontSize: '0.65rem' }}>
+                          {facultyFilters.statusSelected.length === statuses.length ? 'Deselect' : 'Select All'}
+                        </button>
+                      </div>
+                      <div className="checkbox-grid compact" style={{ maxHeight: '120px', gap: '6px' }}>
+                        {statuses.map(status => (
+                          <label key={status} className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.7rem' }}>
+                            <input 
+                              type="checkbox" 
+                              checked={facultyFilters.statusSelected.includes(status)} 
+                              onChange={() => handleCheckboxChange('status', status)}
+                              style={{ width: '12px', height: '12px' }}
+                            />
+                            <span>{status}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="advanced-section" style={{ padding: '10px' }}>
+                      <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
+                        <h4 style={{ fontSize: '0.7rem' }}>Gender</h4>
+                        <button className="select-all-btn" onClick={() => handleSelectAll('sex', sexOptions)} style={{ fontSize: '0.65rem' }}>
+                          {facultyFilters.sexSelected.length === sexOptions.length ? 'Deselect' : 'Select All'}
+                        </button>
+                      </div>
+                      <div className="checkbox-grid compact" style={{ maxHeight: '120px', gap: '6px' }}>
+                        {sexOptions.map(sex => (
+                          <label key={sex} className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.7rem' }}>
+                            <input 
+                              type="checkbox" 
+                              checked={facultyFilters.sexSelected.includes(sex)} 
+                              onChange={() => handleCheckboxChange('sex', sex)}
+                              style={{ width: '12px', height: '12px' }}
+                            />
+                            <span>{sex}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {filteredFacultyList.length === 0 ? (
+            <div className="no-faculty-container">
+              {isFacultyLoading ? (
+                <FacultyLoader />
+              ) : (
+                <>
+                  <img src={noFacultyLogo} alt="No Faculty Found" className="no-faculty-logo" />
+                  <p>{error ? "Error fetching faculty." : facultyList.length === 0 ? "No faculty found." : "No faculty match the current filters."}</p>
+                  {facultyList.length > 0 && (
+                    <button 
+                      onClick={handleClearAll}
+                      style={{
+                        marginTop: '10px',
+                        padding: '8px 16px',
+                        backgroundColor: '#2E7D32',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Clear Filters
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+          ) : (
+            <div className="faculty-grid">
+              {filteredFacultyList.map(fac => (
+                <div
+                  key={fac.id}
+                  className="faculty-grid-card improved-grid-card"
+                  onClick={() => handleSelectFaculty(fac)}
+                  title={fac.name}
+                >
+                  <div className="card-header">
+                    <div className="card-title-container">
+                      <h3 className="card-title">{fac.name}</h3>
+                      <p className="card-subtitle">
+                        {fac.AcademicRank || 'Academic Rank N/A'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="card-footer">
+                    <span className="card-action-text">Click to view details</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
       )}
 
-      {/* Floating Add Button */}
       <button className="floating-add-btn" onClick={openAddModal} title="Add Faculty">
         +
       </button>

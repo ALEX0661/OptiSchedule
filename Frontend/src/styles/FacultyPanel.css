@@ -135,8 +135,8 @@
 .faculty-cards {
   display: flex;
   flex-direction: column;
-  gap: 7px; 
-  max-height: 352px; 
+  gap: 5px; 
+  max-height: 380px; 
   overflow-y: auto;
   padding-right: 4px;
   scrollbar-width: thin;
@@ -160,18 +160,18 @@
 /* ========== FACULTY CARD BASE ========== */
 .faculty-card {
   width: 100%;
-  padding: 12px;
-  min-height: 60px;
+  padding: 8px 10px;
+  min-height: 52px;
   background: white;
   border: 1px solid var(--border-gray);
-  border-radius: 6px;
+  border-radius: 5px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  position: relative; /* Essential for overlay */
-  overflow: hidden;   /* Ensures shimmer doesn't bleed */
+  position: relative;
+  overflow: hidden;
 }
 
 .faculty-card:hover {
@@ -180,11 +180,11 @@
 }
 
 .faculty-card.disabled {
-  opacity: 0.5; /* Slightly more visible than before */
+  opacity: 0.5;
   cursor: not-allowed;
   background: #fafafa;
   transition: opacity 0.2s ease;
-  pointer-events: none; /* Prevents clicks */
+  pointer-events: none;
 }
 
 .faculty-card.disabled:hover {
@@ -192,11 +192,10 @@
   box-shadow: none;
 }
 
-/* ========== NEW: CONFLICT STATE ========== */
-/* Red border and tint, but still clickable (pointer events not disabled) */
+/* ========== CONFLICT STATE ========== */
 .faculty-card.conflict {
-  border-color: #e57373; /* Red border */
-  background-color: rgba(229, 115, 115, 0.05); /* Slight red tint */
+  border-color: #e57373;
+  background-color: rgba(229, 115, 115, 0.05);
 }
 
 .faculty-card.conflict:hover {
@@ -206,13 +205,16 @@
 }
 
 .conflict-text {
-  font-size: 8px;
+  font-size: 7px;
   color: #d32f2f;
   font-weight: 600;
-  margin-left: auto; /* Pushes to right side of flex container */
-  padding: 1px 4px;
+  padding: 1px 3px;
   background: rgba(211, 47, 47, 0.1);
   border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ========== ASSIGNING STATE ANIMATIONS ========== */
@@ -228,7 +230,6 @@
 }
 
 .faculty-card.assigning {
-  /* Green shimmer background */
   background: linear-gradient(
     90deg, 
     #ffffff 0%, 
@@ -237,20 +238,16 @@
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite linear;
-  
-  /* Lock the card */
   pointer-events: none;
   border-color: var(--primary);
   cursor: wait;
 }
 
-/* Fade content when assigning */
 .faculty-info.faded {
   opacity: 0.3;
   transition: opacity 0.2s ease;
 }
 
-/* Centered Spinner Overlay */
 .assignment-spinner-overlay {
   position: absolute;
   top: 0;
@@ -278,46 +275,61 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
+  gap: 3px;
   margin-left: 0px;
   transition: opacity 0.2s ease;
+  min-width: 0; /* Allow text truncation */
+}
+
+/* UPDATED: Faculty Name Row - Horizontal Layout */
+.faculty-name-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  min-width: 0; /* Allow flex children to shrink */
 }
 
 .faculty-name-text {
   font-weight: 600;
-  font-size: 9.5px;
-  line-height: 1.3;
+  font-size: 9px;
+  line-height: 1.2;
   color: #222;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0; /* Allow text to truncate */
 }
 
 .faculty-status {
-  font-size: 8px;
+  font-size: 7.5px;
   color: var(--dark-gray);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   flex-wrap: wrap;
+  line-height: 1.2;
 }
 
 .faculty-workload {
   font-weight: 500;
-  padding: 2px 6px;
+  padding: 1px 4px;
   background-color: rgba(46, 125, 50, 0.08);
-  border-radius: 3px;
+  border-radius: 2px;
   color: var(--primary-dark);
-  font-size: 8px;
+  font-size: 7px;
+  white-space: nowrap;
 }
 
 /* ========== STATUS INDICATOR ========== */
 .status-indicator {
-  width: 9px;
-  height: 9px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  margin-left: 2px;
+  margin-left: 0px;
   transition: opacity 0.2s ease;
+  flex-shrink: 0;
 }
 
 .status-green {
@@ -335,6 +347,71 @@
 .unassigned-indicator {
   font-style: italic;
   color: var(--dark-gray);
+}
+
+/* =========================================
+   UPDATED SPECIALIST BADGE - COMPACT DESIGN
+   ========================================= */
+
+.specialist-badge {
+  font-size: 7px;
+  padding: 1px 3px;
+  border-radius: 2px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1;
+  letter-spacing: -0.3px;
+  border: 1px solid currentColor;
+  transition: all 0.2s ease;
+}
+
+/* Star Rating Colors */
+.specialist-badge.rating-5 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-color: #2e7d32;
+}
+
+.specialist-badge.rating-4 {
+  background-color: #e3f2fd;
+  color: #1565c0;
+  border-color: #1565c0;
+}
+
+.specialist-badge.rating-3 {
+  background-color: #fff3e0;
+  color: #ef6c00;
+  border-color: #ef6c00;
+}
+
+.specialist-badge.rating-2 {
+  background-color: #fce4ec;
+  color: #c2185b;
+  border-color: #c2185b;
+}
+
+.specialist-badge.rating-1 {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+  border-color: #7b1fa2;
+}
+
+.faculty-card:hover .specialist-badge {
+  transform: scale(1.05);
+}
+
+/* Recommended Card Styling */
+.recommended-card {
+  border-left: 3px solid #4caf50 !important;
+  background: linear-gradient(to right, #f1f8f1 0%, #ffffff 100%) !important;
+}
+
+.recommended-card:hover {
+  background: linear-gradient(to right, #e8f5e9 0%, #ffffff 100%) !important;
 }
 
 /* =========================================
@@ -435,7 +512,7 @@
   background-color: var(--primary); 
 }
 
-/* Group Info Button - Small and professional */
+/* Group Info Button */
 .group-info-btn {
   padding: 6px 10px;
   background-color: var(--primary);
@@ -467,7 +544,6 @@
   line-height: 1;
 }
 
-/* Conflict Warning */
 .conflict-warning {
   font-size: 0.75em;
   color: var(--red);
@@ -487,7 +563,7 @@
     align-items: center;
     justify-content: center;
     z-index: 9999;
-    animation: fadeIn var(--animation-medium) ease-out;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .group-modal {
@@ -840,7 +916,6 @@
 /* --- CONFLICT POPOVER STYLES (Specific to Modal) --- */
 
 .conflict-popover {
-  /* Updated: Defaults only. Positioning is now handled by JS inline styles */
   background: white;
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.25);
