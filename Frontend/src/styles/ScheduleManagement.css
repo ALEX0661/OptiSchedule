@@ -882,3 +882,35 @@
     margin-right: 6px;
     cursor: pointer;
 }
+
+
+.faculty-info-grid .info-card p {
+  font-size: 0.75rem; 
+  margin: 0;
+  color: var(--dark-gray);
+  line-height: 1.2;
+}
+
+.faculty-info-grid .info-card.spec-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.view-spec-btn {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 4px;
+}
+
+.view-spec-btn:hover {
+  background: var(--primary);
+  color: white;
+}

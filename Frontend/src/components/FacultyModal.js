@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
-import ReactDOM from 'react-dom'; // Import ReactDOM for Portals
+import ReactDOM from 'react-dom';
 import { computeGroupKey, parsePeriod } from '../utils/scheduleHelpers';
+import SpecializationModal from './SpecializationModal';
 import "../styles/ScheduleManagement.css";
 
 const toMinutes = timeStr => {
@@ -11,7 +12,6 @@ const toMinutes = timeStr => {
   return hours * 60 + minutes;
 };
 
-// Helper to combine consecutive time slots
 const mergeConsecutiveEvents = events => {
   const eventsCopy = JSON.parse(JSON.stringify(events));
   eventsCopy.sort((a, b) => {
@@ -70,7 +70,6 @@ const shortenSession = (session) => {
   return session.replace(/Laboratory/gi, 'LAB').replace(/Lecture/gi, 'LEC');
 };
 
-// --- Conflict Badge Component (Consistent Design) ---
 const ConflictBadge = ({ type, conflicts, eventId, cellType }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
@@ -250,10 +249,9 @@ const ConflictBadge = ({ type, conflicts, eventId, cellType }) => {
   );
 };
 
-// Added onOverride prop
 const FacultyModal = ({ faculty, assignedEvents, schedule = [], onClose, onRequestUnassignGroup, onOverride }) => {
+  const [isSpecModalOpen, setIsSpecModalOpen] = useState(false);
   
-  // Calculate conflicts for all assigned events
   const conflictMap = useMemo(() => {
     const map = {};
     if (!assignedEvents || assignedEvents.length === 0 || !schedule || schedule.length === 0) return map;
@@ -286,7 +284,6 @@ const FacultyModal = ({ faculty, assignedEvents, schedule = [], onClose, onReque
             currentEvent.session === other.session;
 
           if (isRoomOverlap) {
-            // FIX: Ensure Online classes never get marked as mergedWith
             if (matchesMergeCriteria && !isOnline) {
               mergedWith.push(other);
             } else {
@@ -355,228 +352,255 @@ const FacultyModal = ({ faculty, assignedEvents, schedule = [], onClose, onReque
     return mergedDaysEvents.length > 0 ? mergeConsecutiveEvents(mergedDaysEvents) : [];
   }, [assignedEvents]);
 
+  const getSpecializationCount = (specs) => {
+    if (!specs || typeof specs !== 'string') return 0;
+    const regex = /([^(,]+)\((\d+)\)/g;
+    let count = 0;
+    while (regex.exec(specs) !== null) {
+      count++;
+    }
+    return count;
+  };
+
+  const specializationCount = getSpecializationCount(faculty?.specialization);
+
   if (!faculty) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="faculty-modal" onClick={e => e.stopPropagation()}>
-        <div className="faculty-modal-header">
-          {faculty?.name || '—'}
-        </div>
-
-        <div className="faculty-modal-content">
-          <div className="faculty-info-grid">
-            <div className="info-card"><h4>Rank</h4><p>{faculty?.AcademicRank || 'N/A'}</p></div>
-            <div className="info-card"><h4>Department</h4><p>{faculty?.Department || faculty?.department || 'N/A'}</p></div>
-            <div className="info-card"><h4>Education</h4><p>{faculty?.Educational_attainment || 'N/A'}</p></div>
-            <div className="info-card"><h4>Sex</h4><p>{faculty?.Sex || 'N/A'}</p></div>
-            <div className="info-card"><h4>Status</h4><p>{faculty?.Status || 'N/A'}</p></div>
-            <div className="info-card"><h4>Specialization</h4><p>{faculty?.specialization || 'N/A'}</p></div>
+    <>
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="faculty-modal" onClick={e => e.stopPropagation()}>
+          <div className="faculty-modal-header">
+            {faculty?.name || '—'}
           </div>
 
-          <hr className="modal-divider" />
+          <div className="faculty-modal-content">
+            <div className="faculty-info-grid">
+              <div className="info-card"><h4>Rank</h4><p>{faculty?.AcademicRank || 'N/A'}</p></div>
+              <div className="info-card"><h4>Department</h4><p>{faculty?.Department || faculty?.department || 'N/A'}</p></div>
+              <div className="info-card"><h4>Education</h4><p>{faculty?.Educational_attainment || 'N/A'}</p></div>
+              <div className="info-card"><h4>Sex</h4><p>{faculty?.Sex || 'N/A'}</p></div>
+              <div className="info-card"><h4>Status</h4><p>{faculty?.Status || 'N/A'}</p></div>
+              <div className="info-card spec-card">
+                <h4>Specializations</h4>
+                <button 
+                  onClick={() => setIsSpecModalOpen(true)}
+                  className="view-spec-btn"
+                  title="View specializations"
+                >
+                  {specializationCount > 0 
+                    ? `View ${specializationCount} Item${specializationCount !== 1 ? 's' : ''}`
+                    : 'None'}
+                </button>
+              </div>
+            </div>
 
-          <h3 className="section-title">Assigned Schedule Events</h3>
-          
-          {finalMergedEvents.length > 0 ? (
-            <div className="modal-table-container">
-              <table className="assigned-events-table">
-                {/* Adjusted widths to accommodate new column */}
-                <colgroup>
-                  <col style={{ width: '5%' }} /> {/* Adjust */}
-                  <col style={{ width: '7%' }} /> {/* Session */}
-                  <col style={{ width: '15%' }} /> {/* Section */}
-                  <col style={{ width: '30%' }} /> {/* Course */}
-                  <col style={{ width: '11%' }} /> {/* Day */}
-                  <col style={{ width: '18%' }} /> {/* Time */}
-                  <col style={{ width: '8%' }} /> {/* Room */}
-                  <col style={{ width: '6%' }} /> {/* Unassign */}
-                </colgroup>
-                <thead>
-                  <tr>
-                    <th></th> {/* Empty header for Adjust button */}
-                    <th>SESS</th>
-                    <th>SECTION</th>
-                    <th>COURSE</th>
-                    <th>DAY</th>
-                    <th>TIME</th>
-                    <th>ROOM</th>
-                    <th>ACT</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {finalMergedEvents.map(event => {
-                    const conflicts = conflictMap[event.schedule_id] || { 
-                      status: 'normal', roomConflicts: [], facultyConflicts: [], timeConflicts: [], mergedWith: [] 
-                    };
-                    
-                    const rowClass = conflicts.status === 'conflict' ? 'overlap-row' : 
-                                     conflicts.status === 'merged' ? 'merged-row' : '';
+            <hr className="modal-divider" />
 
-                    const rowStyle = {
-                      fontFamily: 'Poppins, sans-serif',
-                      backgroundColor: conflicts.status === 'conflict' ? 'rgba(198, 40, 40, 0.25)' : 
-                                       conflicts.status === 'merged' ? 'rgba(25, 118, 210, 0.08)' : 'inherit'
-                    };
+            <h3 className="section-title">Assigned Schedule Events</h3>
+            
+            {finalMergedEvents.length > 0 ? (
+              <div className="modal-table-container">
+                <table className="assigned-events-table">
+                  <colgroup>
+                    <col style={{ width: '5%' }} />
+                    <col style={{ width: '7%' }} />
+                    <col style={{ width: '15%' }} />
+                    <col style={{ width: '30%' }} />
+                    <col style={{ width: '11%' }} />
+                    <col style={{ width: '18%' }} />
+                    <col style={{ width: '8%' }} />
+                    <col style={{ width: '6%' }} />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>SESS</th>
+                      <th>SECTION</th>
+                      <th>COURSE</th>
+                      <th>DAY</th>
+                      <th>TIME</th>
+                      <th>ROOM</th>
+                      <th>ACT</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {finalMergedEvents.map(event => {
+                      const conflicts = conflictMap[event.schedule_id] || { 
+                        status: 'normal', roomConflicts: [], facultyConflicts: [], timeConflicts: [], mergedWith: [] 
+                      };
+                      
+                      const rowClass = conflicts.status === 'conflict' ? 'overlap-row' : 
+                                       conflicts.status === 'merged' ? 'merged-row' : '';
 
-                    return (
-                      <tr key={event.schedule_id} className={rowClass} style={rowStyle}>
-                        {/* New Adjust Column */}
-                        <td className="center-text">
-                           <div style={{ textAlign: 'center' }}>
-                              <button 
-                                className="override-btn" 
-                                onClick={() => onOverride && onOverride(event.schedule_id)}
-                                title="Adjust Schedule"
-                              >
-                                ⇄
-                              </button>
-                              <div style={{ color: 'var(--green)', fontSize: '0.6em', marginTop: '2px', fontWeight: 600 }}>
-                                Adjust
+                      const rowStyle = {
+                        fontFamily: 'Poppins, sans-serif',
+                        backgroundColor: conflicts.status === 'conflict' ? 'rgba(198, 40, 40, 0.25)' : 
+                                         conflicts.status === 'merged' ? 'rgba(25, 118, 210, 0.08)' : 'inherit'
+                      };
+
+                      return (
+                        <tr key={event.schedule_id} className={rowClass} style={rowStyle}>
+                          <td className="center-text">
+                             <div style={{ textAlign: 'center' }}>
+                                <button 
+                                  className="override-btn" 
+                                  onClick={() => onOverride && onOverride(event.schedule_id)}
+                                  title="Adjust Schedule"
+                                >
+                                  ⇄
+                                </button>
+                                <div style={{ color: 'var(--green)', fontSize: '0.6em', marginTop: '2px', fontWeight: 600 }}>
+                                  Adjust
+                                </div>
                               </div>
-                            </div>
-                        </td>
-                        <td className="center-text">
-                          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                            <span>{shortenSession(event.session)}</span>
-                            {conflicts.facultyConflicts.length > 0 && (
-                              <ConflictBadge 
-                                type="conflict"
-                                conflicts={conflicts.facultyConflicts}
-                                eventId={event.schedule_id}
-                                cellType="faculty"
-                              />
-                            )}
-                          </div>
-                        </td>
-                        <td>
-                          <div className="section-cell">
-                            <span>{event.program} {event.year}-{event.block}</span>
-                            {conflicts.mergedWith.length > 0 && (
-                              <ConflictBadge 
-                                type="merged"
-                                conflicts={conflicts.mergedWith}
-                                eventId={event.schedule_id}
-                                cellType="block"
-                              />
-                            )}
-                          </div>
-                        </td>
-                        <td title={`${event.title} (${event.courseCode})`}>
-                          <div className="course-cell">
-                            <span className="course-code">{event.courseCode}</span>
-                            <span className="course-title">{event.title}</span>
-                          </div>
-                        </td>
-                        <td className="center-text">{event.day}</td>
-                        <td className="time-cell">
-                          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                             <span>{event.period}</span>
-                             {conflicts.timeConflicts.length > 0 && (
+                          </td>
+                          <td className="center-text">
+                            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                              <span>{shortenSession(event.session)}</span>
+                              {conflicts.facultyConflicts.length > 0 && (
                                 <ConflictBadge 
                                   type="conflict"
-                                  conflicts={conflicts.timeConflicts}
+                                  conflicts={conflicts.facultyConflicts}
                                   eventId={event.schedule_id}
-                                  cellType="time"
+                                  cellType="faculty"
                                 />
-                             )}
-                          </div>
-                        </td>
-                        <td className="center-text">
-                          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                            <span>{event.room}</span>
-                            {conflicts.roomConflicts.length > 0 && (
-                              <ConflictBadge 
-                                type="conflict"
-                                conflicts={conflicts.roomConflicts}
-                                eventId={event.schedule_id}
-                                cellType="room"
-                              />
-                            )}
-                          </div>
-                        </td>
-                        <td className="center-text">
-                          <button
-                            className="unassign-icon-btn"
-                            onClick={() => {
-                              const baseCode = event.courseCode.replace(/[AL]$/, '');
-                              const clickedEventInOriginal = assignedEvents.find(e => 
-                                e.schedule_id === event.schedule_id
-                              );
-
-                              if (!clickedEventInOriginal) return;
-
-                              // Check for online on the CLICKED event
-                              const isClickedOnline = (clickedEventInOriginal.room || '').toLowerCase() === 'online';
-
-                              const allCourseEvents = assignedEvents.filter(e => {
-                                const eBaseCode = e.courseCode.replace(/[AL]$/, '');
-                                return (
-                                  eBaseCode === baseCode &&
-                                  e.program === event.program &&
-                                  e.year === event.year
+                              )}
+                            </div>
+                          </td>
+                          <td>
+                            <div className="section-cell">
+                              <span>{event.program} {event.year}-{event.block}</span>
+                              {conflicts.mergedWith.length > 0 && (
+                                <ConflictBadge 
+                                  type="merged"
+                                  conflicts={conflicts.mergedWith}
+                                  eventId={event.schedule_id}
+                                  cellType="block"
+                                />
+                              )}
+                            </div>
+                          </td>
+                          <td title={`${event.title} (${event.courseCode})`}>
+                            <div className="course-cell">
+                              <span className="course-code">{event.courseCode}</span>
+                              <span className="course-title">{event.title}</span>
+                            </div>
+                          </td>
+                          <td className="center-text">{event.day}</td>
+                          <td className="time-cell">
+                            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                               <span>{event.period}</span>
+                               {conflicts.timeConflicts.length > 0 && (
+                                  <ConflictBadge 
+                                    type="conflict"
+                                    conflicts={conflicts.timeConflicts}
+                                    eventId={event.schedule_id}
+                                    cellType="time"
+                                  />
+                               )}
+                            </div>
+                          </td>
+                          <td className="center-text">
+                            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                              <span>{event.room}</span>
+                              {conflicts.roomConflicts.length > 0 && (
+                                <ConflictBadge 
+                                  type="conflict"
+                                  conflicts={conflicts.roomConflicts}
+                                  eventId={event.schedule_id}
+                                  cellType="room"
+                                />
+                              )}
+                            </div>
+                          </td>
+                          <td className="center-text">
+                            <button
+                              className="unassign-icon-btn"
+                              onClick={() => {
+                                const baseCode = event.courseCode.replace(/[AL]$/, '');
+                                const clickedEventInOriginal = assignedEvents.find(e => 
+                                  e.schedule_id === event.schedule_id
                                 );
-                              });
 
-                              const timeslotGroups = {};
-                              allCourseEvents.forEach(e => {
-                                const timeslotKey = `${e.session}-${e.day}-${e.period}-${e.room}`;
-                                if (!timeslotGroups[timeslotKey]) {
-                                  timeslotGroups[timeslotKey] = [];
-                                }
-                                timeslotGroups[timeslotKey].push(e);
-                              });
-                              
-                              let hasMergedTimeslot = false;
-                              
-                              Object.values(timeslotGroups).forEach(group => {
-                                const blocksInThisTimeslot = [...new Set(group.map(e => e.block))];
+                                if (!clickedEventInOriginal) return;
+
+                                const isClickedOnline = (clickedEventInOriginal.room || '').toLowerCase() === 'online';
+
+                                const allCourseEvents = assignedEvents.filter(e => {
+                                  const eBaseCode = e.courseCode.replace(/[AL]$/, '');
+                                  return (
+                                    eBaseCode === baseCode &&
+                                    e.program === event.program &&
+                                    e.year === event.year
+                                  );
+                                });
+
+                                const timeslotGroups = {};
+                                allCourseEvents.forEach(e => {
+                                  const timeslotKey = `${e.session}-${e.day}-${e.period}-${e.room}`;
+                                  if (!timeslotGroups[timeslotKey]) {
+                                    timeslotGroups[timeslotKey] = [];
+                                  }
+                                  timeslotGroups[timeslotKey].push(e);
+                                });
                                 
-                                // FIX: Check the room for this specific group
-                                const groupRoom = (group[0].room || '').toLowerCase();
+                                let hasMergedTimeslot = false;
+                                
+                                Object.values(timeslotGroups).forEach(group => {
+                                  const blocksInThisTimeslot = [...new Set(group.map(e => e.block))];
+                                  const groupRoom = (group[0].room || '').toLowerCase();
 
-                                // FIX: Only flag as merged if multiple blocks share a NON-ONLINE room
-                                if (blocksInThisTimeslot.length > 1 && groupRoom !== 'online') {
-                                  hasMergedTimeslot = true;
+                                  if (blocksInThisTimeslot.length > 1 && groupRoom !== 'online') {
+                                    hasMergedTimeslot = true;
+                                  }
+                                });
+                                
+                                let groupEvents;
+                                
+                                if (hasMergedTimeslot && !isClickedOnline) {
+                                  groupEvents = allCourseEvents;
+                                } else {
+                                  groupEvents = allCourseEvents.filter(e => 
+                                    e.block === clickedEventInOriginal.block
+                                  );
                                 }
-                              });
-                              
-                              let groupEvents;
-                              
-                              // FIX: Use the calculated hasMergedTimeslot.
-                              // If I clicked a physical class (isClickedOnline=false) and there are NO physical merges (hasMergedTimeslot=false),
-                              // then it should NOT act as merged, even if online classes are shared.
-                              if (hasMergedTimeslot && !isClickedOnline) {
-                                groupEvents = allCourseEvents;
-                              } else {
-                                // Only current block
-                                groupEvents = allCourseEvents.filter(e => 
-                                  e.block === clickedEventInOriginal.block
-                                );
-                              }
 
-                              const targetGroupKey = computeGroupKey(clickedEventInOriginal);
-                              onRequestUnassignGroup(targetGroupKey, groupEvents, faculty.name);
-                            }}
-                            title="Unassign"
-                          >
-                            ×
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <p className="no-events">No assigned schedule events.</p>
-          )}
+                                const targetGroupKey = computeGroupKey(clickedEventInOriginal);
+                                onRequestUnassignGroup(targetGroupKey, groupEvents, faculty.name);
+                              }}
+                              title="Unassign"
+                            >
+                              ×
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className="no-events">No assigned schedule events.</p>
+            )}
 
-          <button className="close-btn" onClick={onClose}>Close</button>
+            <button className="close-btn" onClick={onClose}>Close</button>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Specialization Modal */}
+      {isSpecModalOpen && (
+        <SpecializationModal
+          isOpen={isSpecModalOpen}
+          onClose={() => setIsSpecModalOpen(false)}
+          specializations={faculty.specialization}
+          onSave={() => {}} // No-op since it's read-only
+          facultyName={faculty.name}
+          readOnly={true}
+        />
+      )}
+    </>
   );
 };
 
