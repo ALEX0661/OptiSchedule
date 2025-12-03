@@ -1,4 +1,4 @@
-/* RoomView.css - Professional Design with Merge/Conflict Detection */
+/* RoomView.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
@@ -134,57 +134,50 @@
   font-size: 1.05rem;
 }
 
-/* Controls */
+/* Controls - Status Bar */
 .z-room-controls {
   background-color: var(--white);
-  padding: 14px 16.8px;
+  padding: 10px 16.8px;
   border-radius: 8.4px;
   margin-bottom: 16.8px;
   box-shadow: var(--shadow-sm);
   display: flex;
-  flex-wrap: wrap;
-  gap: 16.8px;
-  align-items: flex-end;
+  justify-content: space-between; /* Spreads buttons left, legend right */
+  align-items: center;
   animation: fadeIn 0.6s ease-out;
 }
 
-.z-control-group {
+/* Undo/Redo Group */
+.z-undo-redo-controls {
   display: flex;
-  flex-direction: column;
-  gap: 5.6px;
-  min-width: 140px;
+  gap: 8px;
 }
 
-.z-control-group label {
-  font-size: 0.63rem;
-  font-weight: 600;
-  color: var(--dark-gray);
+.z-status-action-btn {
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
-  gap: 4.2px;
-}
-
-.z-control-group select {
-  width: auto;
-  padding: 7px 9.8px;
-  border: 1.4px solid var(--border-gray);
-  border-radius: 5.6px;
-  font-size: 0.665rem;
-  font-family: 'Poppins', sans-serif;
+  justify-content: center;
   background-color: var(--white);
+  border: 1px solid var(--border-gray);
   color: var(--dark-gray);
+  border-radius: 6px;
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.2s ease;
 }
 
-.z-control-group select:focus {
-  outline: none;
+.z-status-action-btn:hover:not(:disabled) {
   border-color: var(--primary);
-  box-shadow: 0 0 0 2.1px var(--primary-light);
+  color: var(--primary);
+  background-color: #f0f7f1; /* Light green tint */
+  transform: translateY(-1px);
 }
 
-.z-control-group select:hover {
-  border-color: var(--primary);
+.z-status-action-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  background-color: #f9f9f9;
 }
 
 /* Legend */
@@ -192,7 +185,7 @@
   display: flex;
   align-items: center;
   gap: 8.4px;
-  margin-left: auto;
+  /* margin-left: auto; REMOVED this so justify-content handles positioning */
   padding: 5.6px 11.2px;
   background-color: var(--light-gray);
   border-radius: 5.6px;
@@ -239,7 +232,6 @@
   border-color: #d84315;
 }
 
-/* NEW: Legend for Conflict Zone */
 .z-legend-box.conflict-zone {
   background-color: rgba(220, 53, 69, 0.15);
   border: 1px dashed #dc3545;
@@ -324,7 +316,6 @@
   transition: background-color 0.2s ease;
 }
 
-/* NEW: Highlight Time Slot when Dragging hits Global Conflict */
 .z-time-slot.global-conflict-time {
   background-color: #fee2e2;
   color: #b91c1c;
@@ -422,9 +413,8 @@
   cursor: copy;
 }
 
-/* NEW: Global Conflict Zone (The Red Glow) */
 .z-time-slot-cell.global-conflict-zone {
-  background-color: rgba(239, 68, 68, 0.15); /* Light red tint */
+  background-color: rgba(239, 68, 68, 0.15); 
   border-bottom: 0.7px solid rgba(239, 68, 68, 0.3);
   background-image: repeating-linear-gradient(
     45deg,
@@ -435,7 +425,6 @@
   );
 }
 
-/* NEW: Room Occupied Zone (Gray/Striped) */
 .z-time-slot-cell.room-occupied-zone {
   background-color: #f3f4f6;
   background-image: radial-gradient(#d1d5db 1px, transparent 1px);
@@ -611,16 +600,6 @@
   -webkit-box-orient: vertical;
 }
 
-.z-merge-indicator,
-.z-conflict-indicator {
-  display: none; 
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(0.98); }
-}
-
 /* Loading State */
 .z-loading-state,
 .z-error-state,
@@ -684,11 +663,15 @@
     gap: 11.2px;
     padding: 14px;
   }
+  .z-header-actions {
+    width: 100%;
+    justify-content: center;
+  }
   .z-room-view-header h2 {
     font-size: 0.945rem;
   }
   .z-close-room-view-btn {
-    width: 100%;
+    width: auto;
   }
   .z-room-controls {
     flex-direction: column;

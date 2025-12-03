@@ -475,15 +475,12 @@
 }
 
 .right-panel {
-  width: 218px;
+  width: 227px;
   position: fixed;
-  top: 68px; 
+  top: 78px; 
   right: 8px; 
   bottom: 32px; 
   z-index: 110;
-  overflow-y: auto;
-  scrollbar-width: thin; 
-  scrollbar-color: transparent transparent;
 }
 
 .right-panel:hover,
@@ -978,4 +975,8 @@
 .faculty-modal-content {
   overflow-y: auto;
   flex: 1;
+}
+
+.faculty-modal-header {
+    background-color: var(--primary);
 }

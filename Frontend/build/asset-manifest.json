@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.ce4306ed.css",
-    "main.js": "/static/js/main.45203f7f.js",
+    "main.css": "/static/css/main.cb990978.css",
+    "main.js": "/static/js/main.d9e500bd.js",
     "static/media/noScheduleLogo.png": "/static/media/noScheduleLogo.f4f0ac126a623a0eaec5.png",
     "static/media/facultyIcon1.png": "/static/media/facultyIcon1.9482cbbc41d89dc1bbec.png",
     "static/media/noFacultyLogo.png": "/static/media/noFacultyLogo.9a9d925e1e7c072c2fe3.png",
@@ -12,11 +12,11 @@
     "static/media/background-leaf.png": "/static/media/background-leaf.dcbd4a8d153e80e51217.png",
     "static/media/GClogo.png": "/static/media/GClogo.19d08dbfb00594f2eab7.png",
     "index.html": "/index.html",
-    "main.ce4306ed.css.map": "/static/css/main.ce4306ed.css.map",
-    "main.45203f7f.js.map": "/static/js/main.45203f7f.js.map"
+    "main.cb990978.css.map": "/static/css/main.cb990978.css.map",
+    "main.d9e500bd.js.map": "/static/js/main.d9e500bd.js.map"
   },
   "entrypoints": [
-    "static/css/main.ce4306ed.css",
-    "static/js/main.45203f7f.js"
+    "static/css/main.cb990978.css",
+    "static/js/main.d9e500bd.js"
   ]
 }

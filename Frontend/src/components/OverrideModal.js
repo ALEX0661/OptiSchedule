@@ -286,69 +286,64 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
   return (
     <>
       <div className="modal-overlay" onClick={onClose}>
+        {/* Changed class to match other modals visually */}
         <div className="override-modal" onClick={(e) => e.stopPropagation()}>
           <div className="override-header">
             <h3>Manual Adjustment</h3>
+            <p style={{ fontSize: '0.9rem', color: '#666', margin: '4px 0 0 0', fontWeight: 'normal' }}>
+               Modify schedule for <strong>{event.courseCode}</strong>
+            </p>
           </div>
+          
           <div className="override-content">
-            <div className="override-field">
-              <label htmlFor="override-day">Select Day:</label>
-              <select id="override-day" value={selectedDay} onChange={handleDayChange}>
-                <option value="Monday">Monday</option>
-                <option value="Tuesday">Tuesday</option>
-                <option value="Wednesday">Wednesday</option>
-                <option value="Thursday">Thursday</option>
-                <option value="Friday">Friday</option>
-                <option value="Saturday">Saturday</option>
-                <option value="Sunday">Sunday</option>
-              </select>
+            
+            {/* Top Row: Day and Time Selection (Grid Layout) */}
+            <div className="override-form-grid">
+               <div className="override-field">
+                <label htmlFor="override-day">Select Day</label>
+                <select id="override-day" value={selectedDay} onChange={handleDayChange}>
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thursday">Thursday</option>
+                  <option value="Friday">Friday</option>
+                  <option value="Saturday">Saturday</option>
+                  <option value="Sunday">Sunday</option>
+                </select>
+              </div>
+
+              <div className="override-field">
+                <label htmlFor="override-start">Start Time</label>
+                <input 
+                  type="time" 
+                  id="override-start" 
+                  value={startTime} 
+                  onChange={handleStartTimeChange} 
+                  step="1800"
+                  list="time-options"
+                />
+                <datalist id="time-options">
+                  <option value="07:00" /><option value="07:30" /><option value="08:00" /><option value="08:30" />
+                  <option value="09:00" /><option value="09:30" /><option value="10:00" /><option value="10:30" />
+                  <option value="11:00" /><option value="11:30" /><option value="12:00" /><option value="12:30" />
+                  <option value="13:00" /><option value="13:30" /><option value="14:00" /><option value="14:30" />
+                  <option value="15:00" /><option value="15:30" /><option value="16:00" /><option value="16:30" />
+                  <option value="17:00" /><option value="17:30" /><option value="18:00" /><option value="18:30" />
+                  <option value="19:00" /><option value="19:30" /><option value="20:00" />
+                </datalist>
+              </div>
+              
+               <div className="override-field">
+                <label htmlFor="override-end">End Time</label>
+                <input type="time" id="override-end" value={endTime} readOnly style={{ backgroundColor: '#f5f5f5', color: '#666' }} />
+              </div>
             </div>
-            <div className="override-field">
-              <label htmlFor="override-start">Start Time:</label>
-              <input 
-                type="time" 
-                id="override-start" 
-                value={startTime} 
-                onChange={handleStartTimeChange} 
-                step="1800"
-                list="time-options"
-              />
-              <datalist id="time-options">
-                <option value="07:00" />
-                <option value="07:30" />
-                <option value="08:00" />
-                <option value="08:30" />
-                <option value="09:00" />
-                <option value="09:30" />
-                <option value="10:00" />
-                <option value="10:30" />
-                <option value="11:00" />
-                <option value="11:30" />
-                <option value="12:00" />
-                <option value="12:30" />
-                <option value="13:00" />
-                <option value="13:30" />
-                <option value="14:00" />
-                <option value="14:30" />
-                <option value="15:00" />
-                <option value="15:30" />
-                <option value="16:00" />
-                <option value="16:30" />
-                <option value="17:00" />
-                <option value="17:30" />
-                <option value="18:00" />
-                <option value="18:30" />
-                <option value="19:00" />
-                <option value="19:30" />
-                <option value="20:00" />
-              </datalist>
-            </div>
-            <div className="override-field">
-              <label htmlFor="override-end">End Time:</label>
-              <input type="time" id="override-end" value={endTime} readOnly />
-            </div>
-            <div className="override-field">
-              <label>Available Rooms:</label>
+
+            <hr style={{ margin: '20px 0', border: '0', borderTop: '1px solid #e0e0e0' }} />
+
+            {/* Middle Section: Room Selection */}
+            <div className="override-field full-width">
+              <label style={{ marginBottom: '10px', display: 'block' }}>Available Rooms</label>
               <div id="override-room-container">
                 {availableRooms.length > 0 ? (
                   availableRooms.map((room) => (
@@ -360,109 +355,112 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
                         defaultChecked={room === availableRooms[0]} 
                         onChange={handleRoomChange}
                       />
-                      {room}
+                      <span>{room}</span>
                     </label>
                   ))
                 ) : (
-                  <span>No rooms available</span>
+                  <div style={{ fontSize: '0.9rem', color: '#888', fontStyle: 'italic', padding: '10px', textAlign: 'center', width: '100%', background: '#f9f9f9', borderRadius: '8px' }}>
+                    No available rooms matching these criteria.
+                  </div>
                 )}
               </div>
             </div>
+            
             {occupiedRooms.length > 0 && (
-              <div className="override-field">
-                <label style={{ color: "var(--red)" }}>Occupied Rooms:</label>
-                <div id="override-room-container">
+              <div className="override-field full-width" style={{ marginTop: '15px' }}>
+                <label style={{ color: "var(--red)", marginBottom: '10px', display: 'block' }}>Occupied Rooms (Conflict)</label>
+                <div id="override-room-container" className="occupied">
                   {occupiedRooms.map((room) => (
-                    <label key={room} className="room-label" style={{ color: "var(--red)", border: "1px solid var(--red)" }}>
+                    <label key={room} className="room-label occupied">
                       <input 
                         type="radio" 
                         name="override-room" 
                         value={room}
                         onChange={handleRoomChange}
                       />
-                      {room}
+                      <span>{room}</span>
                     </label>
                   ))}
                 </div>
               </div>
             )}
+
+            {/* Bottom Section: Warnings */}
             {warningMessage && (
               <div className="warning-message" style={{ 
                 color: "var(--red)", 
-                fontSize: "0.85em", 
-                marginTop: "10px",
-                padding: "8px",
-                backgroundColor: "rgba(198, 40, 40, 0.1)",
+                fontSize: "0.9rem", 
+                marginTop: "15px",
+                padding: "12px",
+                backgroundColor: "rgba(198, 40, 40, 0.08)",
                 borderRadius: "var(--radius)",
-                border: "1px solid var(--red)"
+                border: "1px solid rgba(198, 40, 40, 0.2)",
+                textAlign: "center"
               }}>
                 {warningMessage}
               </div>
             )}
+            
             {hasOverlap && (
               <div className="overlap-warning" style={{ 
                 color: "var(--red)", 
-                fontSize: "0.75em", 
-                marginTop: "10px",
-                padding: "10px",
-                backgroundColor: "rgba(198, 40, 40, 0.1)",
+                fontSize: "0.9rem", 
+                marginTop: "15px",
+                padding: "12px",
+                backgroundColor: "rgba(198, 40, 40, 0.08)",
                 borderRadius: "var(--radius)",
-                border: "1px solid var(--red)",
-                display: "flex",
-                flexDirection: "column",
-                gap: "6px"
+                border: "1px solid rgba(198, 40, 40, 0.2)"
               }}>
-                <div style={{ fontWeight: "800" }}>
-                  Schedule Conflict Detected
-                </div>
+                <strong style={{ display: 'block', marginBottom: '4px' }}>Schedule Conflict Detected</strong>
+                <span style={{ fontSize: '0.85rem' }}>
+                  This change overlaps with another class. You can still save to force the override.
+                </span>
               </div>
             )}
           </div>
+          
           <div className="override-actions">
-            <button onClick={handleSave}>
-              Save Adjustment
-            </button>
-            <button onClick={onClose}>Cancel</button>
+            <button className="modal-btn cancel-btn" onClick={onClose}>Cancel</button>
+            <button className="modal-btn confirm-btn" onClick={handleSave} style={{ backgroundColor: 'var(--primary)' }}>Save Adjustment</button>
           </div>
         </div>
       </div>
 
       {showConfirmModal && (
         <div className="modal-overlay" onClick={handleCancelOverride}>
-          {/* Manually setting wider style for the confirmation modal to match Faculty Modal width */}
           <div className="unassign-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '900px', width: '90%' }}>
             <header className="unassign-modal-header" style={{ backgroundColor: 'var(--primary)', color: 'white' }}>
-              <h2 style={{ fontSize: '1.2em', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <h2 style={{ fontSize: '1.2em', display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
                 Confirm Schedule Override
               </h2>
             </header>
             
-            <div className="unassign-modal-content" style={{ padding: '20px' }}>
-              <p style={{ marginBottom: '15px', color: '#555' }}>
+            <div className="unassign-modal-content" style={{ padding: '24px' }}>
+              <p style={{ marginBottom: '20px', color: '#444', fontSize: '1rem', textAlign: 'center' }}>
                 You are about to move <strong>{event.title} ({event.courseCode})</strong>{isOccupiedRoom && !hasOverlap ? ' to an occupied room' : hasOverlap ? ' to a time slot that conflicts with other classes' : ''}.
               </p>
 
               <div style={{ 
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr",
-                gap: "15px",
-                marginBottom: "20px"
+                gap: "20px",
+                marginBottom: "24px"
               }}>
                 <div style={{ 
-                  padding: "14px", 
+                  padding: "16px", 
                   backgroundColor: "#fff3e0", 
                   borderRadius: "var(--radius)",
                   border: "1px solid #ffb74d",
-                  boxShadow: "0 2px 5px rgba(0,0,0,0.05)"
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.05)"
                 }}>
-                  <div style={{ fontWeight: "600", marginBottom: "8px", color: "#e65100", fontSize: "0.95em", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <div style={{ fontWeight: "600", marginBottom: "10px", color: "#e65100", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                     Current Schedule
                   </div>
-                  <div style={{ fontSize: "0.9em", lineHeight: "1.6", color: "#333" }}>
-                    <div style={{ fontWeight: '600', color: '#222' }}>{event.title}</div>
-                    <div style={{ color: '#666', fontSize: '0.9em' }}>{event.courseCode} • {event.session}</div>
+                  <div style={{ fontSize: "0.95rem", lineHeight: "1.5", color: "#333" }}>
+                    <div style={{ fontWeight: '600', color: '#222', marginBottom: '2px' }}>{event.title}</div>
+                    <div style={{ color: '#666', fontSize: '0.85rem' }}>{event.courseCode} • {event.session}</div>
                     
-                    <div style={{ marginTop: '10px', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 10px', fontSize: '0.9em' }}>
+                    <div style={{ marginTop: '12px', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '6px 12px', fontSize: '0.9rem' }}>
                       <span style={{ color: '#777' }}>Section:</span> <span>{event.program} {event.year}-{event.block}</span>
                       <span style={{ color: '#777' }}>Time:</span> <span>{event.day}, {event.period}</span>
                       <span style={{ color: '#777' }}>Room:</span> <span>{event.room || 'Not assigned'}</span>
@@ -471,20 +469,20 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
                 </div>
 
                 <div style={{ 
-                  padding: "14px", 
+                  padding: "16px", 
                   backgroundColor: "#e8f5e9", 
                   borderRadius: "var(--radius)",
                   border: "1px solid #81c784",
-                  boxShadow: "0 2px 5px rgba(0,0,0,0.05)"
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.05)"
                 }}>
-                  <div style={{ fontWeight: "600", marginBottom: "8px", color: "#2e7d32", fontSize: "0.95em", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <div style={{ fontWeight: "600", marginBottom: "10px", color: "#2e7d32", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                     New Schedule
                   </div>
-                  <div style={{ fontSize: "0.9em", lineHeight: "1.6", color: "#333" }}>
-                    <div style={{ fontWeight: '600', color: '#222' }}>{event.title}</div>
-                    <div style={{ color: '#666', fontSize: '0.9em' }}>{event.courseCode} • {event.session}</div>
+                  <div style={{ fontSize: "0.95rem", lineHeight: "1.5", color: "#333" }}>
+                    <div style={{ fontWeight: '600', color: '#222', marginBottom: '2px' }}>{event.title}</div>
+                    <div style={{ color: '#666', fontSize: '0.85rem' }}>{event.courseCode} • {event.session}</div>
                     
-                    <div style={{ marginTop: '10px', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 10px', fontSize: '0.9em' }}>
+                    <div style={{ marginTop: '12px', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '6px 12px', fontSize: '0.9rem' }}>
                       <span style={{ color: '#777' }}>Section:</span> <span>{event.program} {event.year}-{event.block}</span>
                       <span style={{ color: '#777' }}>Time:</span> <span>{selectedDay || event.day}, {minutesToTime12Hour(timeToMinutes(startTime))} - {minutesToTime12Hour(timeToMinutes(startTime) + fixedDuration)}</span>
                       <span style={{ color: '#777' }}>Room:</span> <span style={{ fontWeight: '600', color: '#2e7d32' }}>{pendingSaveData?.new_room || 'Not selected'}</span>
@@ -495,19 +493,20 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
 
               {conflictingEvents.length > 0 && (
                 <>
-                  <p className="unassign-info" style={{ color: "var(--red)", fontWeight: "600", marginBottom: '8px', fontSize: '0.95em' }}>
-                    ⚠️ The following classes will conflict with this change:
+                  <p className="unassign-info" style={{ color: "var(--red)", fontWeight: "600", marginBottom: '10px', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    The following classes will conflict with this change:
                   </p>
-                  <div className="modal-table-container" style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                  <div className="modal-table-container" style={{ maxHeight: '250px', overflowY: 'auto', border: '1px solid #ddd', borderRadius: '8px' }}>
                     <table className="assigned-events-table" style={{ tableLayout: 'fixed', width: '100%' }}>
                       <colgroup>
-                        <col style={{ width: '8%' }} />  {/* Session */}
-                        <col style={{ width: '26%' }} /> {/* Course (Name + Code) */}
-                        <col style={{ width: '14%' }} /> {/* Section (Prog + Yr + Blk) */}
-                        <col style={{ width: '7%' }} />  {/* Room */}
-                        <col style={{ width: '11%' }} />  {/* Day */}
-                        <col style={{ width: '14%' }} /> {/* Time */}
-                        <col style={{ width: '20%' }} /> {/* Conflict Reason (Wide + Wrap) */}
+                        <col style={{ width: '8%' }} />
+                        <col style={{ width: '26%' }} />
+                        <col style={{ width: '14%' }} />
+                        <col style={{ width: '7%' }} />
+                        <col style={{ width: '11%' }} />
+                        <col style={{ width: '14%' }} />
+                        <col style={{ width: '20%' }} />
                       </colgroup>
                       <thead>
                         <tr>
@@ -537,12 +536,12 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
                             </td>
                             <td className="center-text">{conflict.room || '-'}</td>
                             <td className="center-text">{conflict.day}</td>
-                            <td className="time-cell" style={{ fontSize: '0.7em' }}>{conflict.period}</td>
+                            <td className="time-cell" style={{ fontSize: '0.8rem' }}>{conflict.period}</td>
                             <td style={{ 
                                 color: "var(--red)", 
                                 fontWeight: "600", 
-                                fontSize: "0.85em", 
-                                whiteSpace: "normal", /* Allow text wrap */
+                                fontSize: "0.85rem", 
+                                whiteSpace: "normal",
                                 lineHeight: "1.3",
                                 padding: "8px"
                               }}>
@@ -556,7 +555,7 @@ const OverrideModal = ({ event, schedule, onClose, onSave }) => {
                 </>
               )}
             </div>
-            <footer className="unassign-modal-footer" style={{ padding: '15px 20px', borderTop: '1px solid #eee' }}>
+            <footer className="unassign-modal-footer" style={{ padding: '16px 24px', borderTop: '1px solid #eee' }}>
               <button className="modal-btn cancel-btn" onClick={handleCancelOverride}>
                 Cancel
               </button>

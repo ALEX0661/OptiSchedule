@@ -938,3 +938,19 @@ body {
 .checkbox-grid.compact {
   gap: 4px;
 }
+
+/* Add to FacultyOverview.css */
+
+.faculty-count-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--primary-light); /* Uses your light green */
+  color: var(--primary-dark);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 12px;
+  margin-left: 10px;
+  border: 1px solid rgba(46, 125, 50, 0.2);
+  transition: all 0.3s ease;
+}

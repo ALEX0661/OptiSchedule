@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import '../styles/AdvancedFilters.css';
 
-const ScheduleFilters = ({ filters, onFilterChange, rooms, days: apiDays, mode = 'default' }) => {
+const ScheduleFilters = ({ filters, onFilterChange, rooms, facultyList = [], days: apiDays, mode = 'default' }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
   
   // Local state to hold advanced selections temporarily to prevent lag
@@ -20,7 +20,7 @@ const ScheduleFilters = ({ filters, onFilterChange, rooms, days: apiDays, mode =
   const lectureRooms = useMemo(() => (rooms?.lecture || []).sort(), [rooms]);
   const labRooms = useMemo(() => (rooms?.lab || []).sort(), [rooms]);
   
-  // UPDATED: Include lowercase 'online' in allRooms
+  // Include lowercase 'online' in allRooms
   const allRooms = useMemo(() => ['online', ...lectureRooms, ...labRooms], [lectureRooms, labRooms]);
 
   const programs = useMemo(() => [
@@ -134,7 +134,6 @@ const ScheduleFilters = ({ filters, onFilterChange, rooms, days: apiDays, mode =
     <div className="cards filters-card">
       <div className="filters-header">
         <h2>Filters</h2>
-        {/* UPDATED: Displays number count only if activeCount > 0 */}
         <button 
           className={`filter-icon-btn ${showAdvanced ? 'active' : ''}`}
           onClick={() => setShowAdvanced(!showAdvanced)}
@@ -163,12 +162,36 @@ const ScheduleFilters = ({ filters, onFilterChange, rooms, days: apiDays, mode =
           />
         </div>
 
+        {/* Faculty Search Input (Autocomplete) */}
+        {isRoomView && (
+          <div className="filter-group" style={{ flex: '1.5' }}>
+            <label className="filter-label">Faculty</label>
+            <input
+              className="filter-select"
+              list="faculty-options"
+              name="faculty"
+              placeholder="Search Faculty..."
+              value={filters.faculty === 'all' ? '' : filters.faculty}
+              onChange={onFilterChange}
+            />
+            <datalist id="faculty-options">
+              <option value="Unassigned">Unassigned Only</option>
+              {facultyList
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map(fac => (
+                  <option key={fac.id} value={fac.name} />
+                ))
+              }
+            </datalist>
+          </div>
+        )}
+
         {isRoomView && (
           <>
             <div className="filter-group">
               <label className="filter-label">Day</label>
               <select className="filter-select" name="day" value={filters.day} onChange={handleSimpleFilterChange}>
-                <option value="all">All Days</option>
+                {/* [Modified] "All Days" option removed to enforce single day selection */}
                 {days.map(day => <option key={day} value={day}>{day}</option>)}
               </select>
             </div>

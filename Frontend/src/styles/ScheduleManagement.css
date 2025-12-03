@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
@@ -16,8 +15,8 @@
   --red-dark: #b71c1c;
   --blue: #2196f3;
   --yellow: #FFC107;
-  --radius: 8px; 
-  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --radius: 12px; 
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Unified Shadow */
   --transition: all 0.3s ease;
 }
 
@@ -39,11 +38,233 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px; 
+  padding: 20px; 
   z-index: 2000;
+  animation: fadeIn 0.2s ease-out;
 }
 
-/* --- UPDATED: Faculty Modal Container --- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* --- UPDATED: Override Modal (Manual Adjustment) --- */
+.override-modal {
+  background-color: var(--white);
+  padding: 0; /* Remove internal padding to use flex header/footer */
+  border-radius: var(--radius);
+  width: 90%;
+  max-width: 620px; /* Matched to UnassignModal width */
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--card-shadow);
+  scrollbar-width: thin;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+}
+
+/* Scrollbar styling for Override Modal */
+.override-modal::-webkit-scrollbar {
+  width: 6px;
+}
+.override-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+.override-modal::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 6px;
+}
+.override-modal:hover::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+}
+
+
+/* Consistent Header Style */
+.override-header {
+  background-color: var(--primary);
+  color: var(--white);
+  padding: 16px 24px;
+  text-align: center;
+  border-bottom: 2px solid var(--border-gray);
+  flex-shrink: 0;
+}
+
+.override-header h3 {
+  margin: 0;
+  font-size: 1.3rem; 
+  color: var(--white);
+}
+
+.override-header p {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+
+/* Content Area */
+.override-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+/* New Grid Layout for Inputs */
+.override-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.override-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.override-field.full-width {
+  width: 100%;
+}
+
+.override-field label {
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.override-field input[type="time"],
+.override-field select {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  width: 100%;
+  background-color: #fff;
+  transition: border-color 0.2s;
+}
+
+.override-field input[type="time"]:focus,
+.override-field select:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+
+/* Improved Room Container Grid */
+#override-room-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); /* Slightly wider pills */
+  gap: 10px;
+  padding: 4px 0;
+  background-color: transparent;
+  border: none;
+}
+
+/* "Pill" Style for Room Selection */
+.room-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f1f3f4;
+  padding: 8px 12px;
+  border-radius: 20px; /* Pill shape */
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  font-size: 0.85rem;
+  font-weight: 500;
+  position: relative;
+  text-align: center;
+}
+
+.room-label input {
+  position: absolute;
+  opacity: 0; /* Hide default radio */
+  cursor: pointer;
+}
+
+.room-label:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-1px);
+}
+
+.room-label:has(input:checked) {
+  background-color: rgba(46, 125, 50, 0.15); /* Primary Light */
+  border-color: var(--primary);
+  color: var(--primary-dark);
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(46, 125, 50, 0.15);
+}
+
+/* Occupied Rooms Style */
+#override-room-container.occupied {
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+  margin-top: 5px;
+}
+
+.room-label.occupied {
+  background-color: #ffebee; /* Red Light */
+  color: var(--red);
+  border: 1px solid rgba(198, 40, 40, 0.2);
+}
+
+.room-label.occupied:has(input:checked) {
+  background-color: var(--red);
+  color: white;
+  border-color: var(--red-dark);
+}
+
+
+/* Footer Actions */
+.override-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  background-color: var(--light-gray);
+  border-top: 1px solid var(--border-gray);
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+/* Unified Modal Button Styles (matching UnassignModal/CourseDetailsModal) */
+.modal-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s;
+  font-weight: 500;
+}
+
+.cancel-btn {
+  background-color: #e0e0e0;
+  color: #333;
+}
+.cancel-btn:hover {
+  background-color: #d0d0d0;
+}
+
+.save-btn, .confirm-btn {
+  background-color: var(--primary);
+  color: white;
+}
+.save-btn:hover, .confirm-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+
+/* --- Faculty Modal Container --- */
 .faculty-modal {
   background-color: var(--white);
   padding: 0;
@@ -399,7 +620,7 @@
   margin-top: 2px;
 }
 
-/* --- Override Modal & Buttons --- */
+/* --- Override Button (Trigger) --- */
 .override-btn {
   background-color: var(--green);
   color: var(--white);
@@ -416,104 +637,6 @@
 .override-btn:hover {
   background-color: var(--green);
   transform: scale(1.05);
-}
-
-.override-modal {
-  background-color: var(--white);
-  padding: 11px; 
-  border-radius: var(--radius);
-  width: 100%;
-  max-width: 230px; 
-  max-height: 64vh;
-  overflow-y: auto;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.24);
-  scrollbar-width: thin; 
-  scrollbar-color: transparent transparent;
-}
-
-.override-modal:hover,
-.override-modal:focus,
-.override-modal:active {
-  scrollbar-color: var(--primary) transparent; 
-}
-
-.override-header {
-  text-align: center;
-  margin-bottom: 9px; 
-}
-
-.override-modal h3 {
-  margin-bottom: 9px; 
-  color: #2E7D32;
-  font-size: 0.88em; 
-  text-align: center;
-}
-
-.override-content {
-  display: flex;
-  flex-direction: column;
-  gap: 7px; 
-  margin-bottom: 9px; 
-}
-
-.override-field label {
-  margin-bottom: 2px; 
-  font-weight: bold;
-  font-size: 0.54em; 
-  color: #333;
-}
-
-.override-field input[type="time"],
-.override-field select {
-  padding: 5px; 
-  border: 1px solid #ccc;
-  border-radius: var(--radius);
-  font-size: 0.64em; 
-}
-
-#override-room-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px; 
-  padding: 4px; 
-  border: 1px solid #ccc;
-  border-radius: var(--radius);
-  background-color: #f9f9f9;
-}
-
-#override-room-container .room-label {
-  background-color: #eaeaea;
-  padding: 2px 5px; 
-  border-radius: var(--radius);
-  cursor: pointer;
-}
-
-#override-room-container .room-label:hover {
-  background-color: #d0e4ff;
-}
-
-.override-actions {
-  display: flex;
-  justify-content: center;
-  gap: 6px; 
-}
-
-.override-actions button {
-  background-color: #2E7D32;
-  color: #fff;
-  border: none;
-  padding: 4px 10px; 
-  border-radius: var(--radius);
-  cursor: pointer;
-}
-
-.override-actions button:hover {
-  background-color: #1B5E20;
-}
-
-.override-actions button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 /* --- Control Buttons --- */

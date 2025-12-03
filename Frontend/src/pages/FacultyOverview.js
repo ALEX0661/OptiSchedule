@@ -22,7 +22,6 @@ import noFacultyLogo from '../assets/noFacultyLogo.png';
 import '../styles/FacultyOverview.css';
 import FacultyLoader from '../animations/FacultyLoader';
 
-// ... [Keep helper functions: toMinutes, fromMinutes, mergeConsecutiveEvents same as original] ...
 const toMinutes = timeStr => {
   const [time, meridiem] = timeStr.split(' ');
   let [hours, minutes] = time.split(':').map(Number);
@@ -201,7 +200,6 @@ const FacultyOverviewContainer = () => {
     }
   }, [selectedFaculty, schedule]);
 
-  // ... [Keep filters and sorting logic the same] ...
   const filteredFacultyList = useMemo(() => {
     let result = facultyList.filter(faculty => {
       const { searchQuery, departmentSelected, rankSelected, statusSelected, sexSelected } = facultyFilters;
@@ -298,7 +296,6 @@ const FacultyOverviewContainer = () => {
     return count;
   };
 
-  // ... [Keep Event Processing Logic Same] ...
   const filteredEvents = facultyEvents.filter(event => {
     const { program, block, year, courseQuery } = filters;
     let matches = true;
@@ -348,13 +345,10 @@ const FacultyOverviewContainer = () => {
     setSelectedFaculty(null);
   };
 
-  // --- NEW: Update faculty state locally without reload ---
   const handleFacultyUpdate = (updatedFaculty) => {
-    // 1. Update the list
     setFacultyList(prevList => 
       prevList.map(f => f.id === updatedFaculty.id ? updatedFaculty : f)
     );
-    // 2. Update the selected view
     setSelectedFaculty(updatedFaculty);
   };
 
@@ -396,7 +390,7 @@ const FacultyOverviewContainer = () => {
       setLoading(true);
       const response = await updateFaculty(facultyId, updatedData);
       if (response.status === 'success') {
-        handleFacultyUpdate(response.faculty); // Use the new handler
+        handleFacultyUpdate(response.faculty); 
         await new Promise(resolve => setTimeout(resolve, 500));
         closeEditModal();
         setFeedbackModal({ message: "Faculty updated successfully!", type: "success" });
@@ -473,9 +467,6 @@ const FacultyOverviewContainer = () => {
             </button>
           </div>
           <div className="faculty-details">
-            {/* Pass the update handler and the feedback modal setter 
-                so FacultyDetails can update state and show success properly.
-            */}
             <FacultyDetails
               faculty={selectedFaculty}
               schedule={schedule}
@@ -505,13 +496,31 @@ const FacultyOverviewContainer = () => {
           </div>
         </div>
       ) : (
-        // ... [Keep the faculty list view the same] ...
         <>
-            {/* Faculty List Filters */}
           {facultyList.length > 0 && (
             <div className="cards filters-card faculty-filters-card-container">
               <div className="filters-header">
-                <h2 style={{ fontSize: '0.95rem' }}>Filters</h2>
+                {/* Modified header with Flexbox to align Title and Counter */}
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <h2 style={{ fontSize: '0.95rem', margin: 0 }}>Filters</h2>
+                  {/* New Counter Badge */}
+                  <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                    color: '#1B5E20',
+                    fontSize: '0.75rem',
+                    fontWeight: '600',
+                    padding: '2px 10px',
+                    borderRadius: '12px',
+                    marginLeft: '10px',
+                    border: '1px solid rgba(46, 125, 50, 0.2)',
+                    transition: 'all 0.3s ease'
+                  }}>
+                    {filteredFacultyList.length} {filteredFacultyList.length === 1 ? 'Faculty' : 'Faculties'}
+                  </span>
+                </div>
+
                 <button 
                   className={`filter-icon-btn ${showAdvancedFilters ? 'active' : ''}`}
                   onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}

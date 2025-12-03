@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+//https://optisched.up.railway.app
+
 const api = axios.create({
   baseURL: 'http://127.0.0.1:8000'
 });
@@ -11,13 +13,16 @@ const getAuthHeader = () => {
 
 export const getFacultyList = async () => {
   try {
-    const response = await api.get('/faculty', { headers: { ...getAuthHeader() } });
+    // FIX: Added trailing slash '/' after faculty
+    const response = await api.get('/faculty/', { headers: { ...getAuthHeader() } });
     return response.data;
   } catch (error) {
     console.error('Error fetching faculty list:', error);
     throw error;
   }
 };
+
+// ... keep other functions, but ensure they match your router paths ...
 
 export const assignFacultyToEvent = async (schedule_id, faculty_id, merged_blocks = null) => {
   try {
@@ -26,7 +31,8 @@ export const assignFacultyToEvent = async (schedule_id, faculty_id, merged_block
       faculty_id: Number(faculty_id),
       merged_blocks: merged_blocks
     };
-    console.log('Assigning faculty with payload:', payload);
+    // Ensure this path matches your python router exactly. 
+    // If python is @router.post("/assign"), then '/faculty/assign' is correct (no trailing slash needed usually for named endpoints)
     const response = await api.post('/faculty/assign', payload, { headers: { ...getAuthHeader() } });
     return response.data;
   } catch (error) {
@@ -35,6 +41,7 @@ export const assignFacultyToEvent = async (schedule_id, faculty_id, merged_block
   }
 };
 
+// ... rest of the file ...
 export const addFaculty = async (facultyData) => {
   try {
     const response = await api.post('/faculty/add', facultyData, { headers: { ...getAuthHeader() } });
@@ -55,7 +62,6 @@ export const updateFaculty = async (facultyId, facultyData) => {
   }
 };
 
-// Update only specialization
 export const updateFacultySpecialization = async (facultyId, specialization) => {
   try {
     const response = await api.put(

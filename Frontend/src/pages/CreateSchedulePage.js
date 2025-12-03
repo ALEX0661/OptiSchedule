@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   getCourses, 
@@ -78,6 +78,35 @@ const CreateSchedulePage = () => {
   const [semester, setSemester] = useState('1st Sem');
   const academicYear = `${startingYear}-${startingYear + 1}`;
   const scheduleName = `${academicYear} ${semester}`;
+
+  // --- Merged Dropdown Logic ---
+  const termOptions = useMemo(() => {
+    const semesters = [
+      { value: '1st Sem', label: '1st Semester' },
+      { value: '2nd Sem', label: '2nd Semester' },
+      { value: 'Midyear', label: 'Midyear' }
+    ];
+    
+    const options = [];
+    validYears.forEach(year => {
+      semesters.forEach(sem => {
+        options.push({
+          value: `${year}|${sem.value}`,
+          label: `A.Y. ${year}-${year + 1} ${sem.label}`,
+          year: year,
+          semester: sem.value
+        });
+      });
+    });
+    return options;
+  }, [validYears]);
+
+  const handleTermChange = (e) => {
+    const [yearStr, semStr] = e.target.value.split('|');
+    setStartingYear(parseInt(yearStr, 10));
+    setSemester(semStr);
+  };
+  // -----------------------------
 
   const [courses, setCourses] = useState([]);
   const [importedCourses, setImportedCourses] = useState([]);
@@ -165,6 +194,11 @@ const CreateSchedulePage = () => {
 
   const handleImportExcel = async (e) => {
     const file = e.target.files[0];
+    
+    // --- FIX START: Reset input value to allow re-uploading the same file ---
+    e.target.value = null; 
+    // --- FIX END ---
+
     if (!file) return;
     
     // Map semester values to sheet names
@@ -462,25 +496,20 @@ const CreateSchedulePage = () => {
   return (
     <div className="create-schedule-page">
       <div className="schedule-name-card">
-        <label className="section-label">Select Academic Year</label>
+        <label className="section-label">Select Schedule Term</label>
         <div className="academic-year-group">
           <select
-            value={startingYear}
-            onChange={(e) => setStartingYear(parseInt(e.target.value, 10))}
+            value={`${startingYear}|${semester}`}
+            onChange={handleTermChange}
+            style={{ width: '100%', padding: '8px' }}
           >
-            {validYears.map(year => (
-              <option key={year} value={year}>
-                {year} - {year + 1}
+            {termOptions.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>
         </div>
-        <label className="section-label" style={{ marginTop: '15px' }}>Semester</label>
-        <select value={semester} onChange={(e) => setSemester(e.target.value)}>
-          <option value="1st Sem">1st Semester</option>
-          <option value="2nd Sem">2nd Semester</option>
-          <option value="Midyear">Midyear</option>
-        </select>
       </div>
 
       <div className="filters-card">

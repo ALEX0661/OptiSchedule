@@ -1,4 +1,3 @@
-
 import React from 'react';
 import '../styles/SuccessModal.css';
 
@@ -9,7 +8,6 @@ const SuccessModal = ({ message, onClose, type = "success" }) => {
       <div className="success-modal-content">
         <div className="success-logo">
           {isError ? (
-            
             <svg
               width="60"
               height="60"
@@ -25,7 +23,6 @@ const SuccessModal = ({ message, onClose, type = "success" }) => {
               <line x1="9" y1="9" x2="15" y2="15" />
             </svg>
           ) : (
-            
             <svg
               width="60"
               height="60"
@@ -73,8 +70,9 @@ const SuccessModal = ({ message, onClose, type = "success" }) => {
               strokeLinejoin="round"
             >
               <circle cx="12" cy="12" r="10" />
-              <polyline points="12 8 8 12 12 16" />
-              <line x1="16" y1="12" x2="8" y2="12" />
+              {/* Arrow flipped to point right */}
+              <polyline points="12 8 16 12 12 16" />
+              <line x1="8" y1="12" x2="16" y2="12" />
             </svg>
           )}
         </button>

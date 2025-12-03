@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "OptiSched",
+  "name": "optiSchedule",
   "icons": [
     {
       "src": "favicon.ico",

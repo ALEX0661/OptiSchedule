@@ -149,14 +149,19 @@
 
 .section-label {
   display: block;
-  font-weight: 600;
-  margin-bottom: 8px;         
-  animation: fadeIn var(--animation-medium) ease-out;
+  font-weight: 700;
   animation-delay: 0.1s;
+  font-size: 1.28rem;
+    color: var(--primary);
+    margin-bottom: 12px;
+    animation: fadeIn var(--animation-medium) 
+ease-out;
 }
 
 
+/* Updated Selector List to include .schedule-name-card select */
 .schedule-name-card input,
+.schedule-name-card select,
 .filters-card input,
 .filters-card select,
 .course-management-card input,
@@ -169,8 +174,13 @@
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+
+
+/* Updated Focus State List to include .schedule-name-card select */
 .schedule-name-card input:focus,
+.schedule-name-card select:focus,
 .filters-card input:focus,
+.filters-card select:focus,
 .filters-card select:focus,
 .course-management-card input:focus,
 .course-management-card select:focus {
