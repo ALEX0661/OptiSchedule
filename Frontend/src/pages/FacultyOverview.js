@@ -3,7 +3,9 @@ import {
   getFacultyList,
   addFaculty,
   updateFaculty,
-  deleteFaculty
+  deleteFaculty,
+  getArchivedFacultyList,
+  restoreFaculty
 } from '../services/facultyService';
 import { getGeneratedSchedule } from '../services/scheduleService';
 import {
@@ -28,15 +30,6 @@ const toMinutes = timeStr => {
   if (meridiem === "PM" && hours !== 12) hours += 12;
   if (meridiem === "AM" && hours === 12) hours = 0;
   return hours * 60 + minutes;
-};
-
-const fromMinutes = mins => {
-  let hours = Math.floor(mins / 60);
-  let minutes = mins % 60;
-  const meridiem = hours >= 12 ? "PM" : "AM";
-  hours = hours % 12;
-  if (hours === 0) hours = 12;
-  return `${hours}:${minutes.toString().padStart(2, '0')} ${meridiem}`;
 };
 
 const mergeConsecutiveEvents = events => {
@@ -94,6 +87,9 @@ const mergeConsecutiveEvents = events => {
 
 const FacultyOverviewContainer = () => {
   const [facultyList, setFacultyList] = useState([]);
+  const [archivedFacultyList, setArchivedFacultyList] = useState([]); 
+  const [viewMode, setViewMode] = useState('active'); // 'active' or 'archived'
+  
   const [selectedFaculty, setSelectedFaculty] = useState(null);
   const [schedule, setSchedule] = useState([]);
   const [facultyEvents, setFacultyEvents] = useState([]);
@@ -167,9 +163,34 @@ const FacultyOverviewContainer = () => {
     }
   };
 
+  const fetchArchived = async () => {
+    setIsFacultyLoading(true);
+    try {
+      const data = await getArchivedFacultyList();
+      if (data.status === 'success') {
+        setArchivedFacultyList(data.faculty);
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Error fetching archived faculty.');
+    } finally {
+      setIsFacultyLoading(false);
+    }
+  };
+
+  // Initial fetch
   useEffect(() => {
     fetchFaculty();
   }, []);
+
+  // Fetch when switching views
+  useEffect(() => {
+    if (viewMode === 'archived') {
+      fetchArchived();
+    } else {
+      fetchFaculty();
+    }
+  }, [viewMode]);
 
   useEffect(() => {
     const fetchSchedule = async () => {
@@ -201,7 +222,10 @@ const FacultyOverviewContainer = () => {
   }, [selectedFaculty, schedule]);
 
   const filteredFacultyList = useMemo(() => {
-    let result = facultyList.filter(faculty => {
+    // Determine which source list to use based on viewMode
+    const sourceList = viewMode === 'active' ? facultyList : archivedFacultyList;
+
+    let result = sourceList.filter(faculty => {
       const { searchQuery, departmentSelected, rankSelected, statusSelected, sexSelected } = facultyFilters;
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
@@ -239,7 +263,7 @@ const FacultyOverviewContainer = () => {
       }
       return 0;
     });
-  }, [facultyList, facultyFilters, sortOption, ranks]);
+  }, [facultyList, archivedFacultyList, viewMode, facultyFilters, sortOption, ranks]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -338,7 +362,10 @@ const FacultyOverviewContainer = () => {
   const finalMergedEvents = mergeConsecutiveEvents(mergedEvents);
 
   const handleSelectFaculty = fac => {
-    setSelectedFaculty(fac);
+    // Only allow selection if in active mode
+    if (viewMode === 'active') {
+      setSelectedFaculty(fac);
+    }
   };
 
   const handleBack = () => {
@@ -439,12 +466,48 @@ const FacultyOverviewContainer = () => {
     setFacultyToDelete(null);
   };
 
+  // Restore Handler
+  const handleRestoreFaculty = async (e, fac) => {
+    e.stopPropagation();
+    try {
+      setLoading(true);
+      const response = await restoreFaculty(fac.id);
+      if (response.status === 'success') {
+        setArchivedFacultyList(prev => prev.filter(f => f.id !== fac.id));
+        setFeedbackModal({ message: "Faculty restored successfully!", type: "success" });
+      } else {
+        setFeedbackModal({ message: "Error restoring: " + response.message, type: "error" });
+      }
+    } catch (err) {
+      setFeedbackModal({ message: "Error restoring faculty.", type: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const activeFilterCount = getActiveFilterCount();
 
   return (
     <div className="faculty-overview-container">
-      <div className="overview-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="overview-header">
         <h1>{scheduleName}</h1>
+        {/* Conditional rendering: Hide segmented control if a faculty is selected */}
+        {!selectedFaculty && (
+          <div className="segmented-control">
+            <button 
+              className={`tab-segment ${viewMode === 'active' ? 'active' : ''}`}
+              onClick={() => setViewMode('active')}
+            >
+              Active Faculty
+            </button>
+            <button 
+              className={`tab-segment ${viewMode === 'archived' ? 'active' : ''}`}
+              onClick={() => setViewMode('archived')}
+            >
+              Archived
+            </button>
+          </div>
+        )}
       </div>
 
       {loading && (
@@ -454,7 +517,7 @@ const FacultyOverviewContainer = () => {
         </div>
       )}
 
-      {selectedFaculty ? (
+      {selectedFaculty && viewMode === 'active' ? (
         <div className="faculty-panel">
           <div className="faculty-panel-header">
             <button className="back-btn" onClick={handleBack} title="Back to Faculty List">
@@ -497,200 +560,183 @@ const FacultyOverviewContainer = () => {
         </div>
       ) : (
         <>
-          {facultyList.length > 0 && (
-            <div className="cards filters-card faculty-filters-card-container">
-              <div className="filters-header">
-                {/* Modified header with Flexbox to align Title and Counter */}
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <h2 style={{ fontSize: '0.95rem', margin: 0 }}>Filters</h2>
-                  {/* New Counter Badge */}
-                  <span style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    backgroundColor: 'rgba(46, 125, 50, 0.1)',
-                    color: '#1B5E20',
-                    fontSize: '0.75rem',
-                    fontWeight: '600',
-                    padding: '2px 10px',
-                    borderRadius: '12px',
-                    marginLeft: '10px',
-                    border: '1px solid rgba(46, 125, 50, 0.2)',
-                    transition: 'all 0.3s ease'
-                  }}>
-                    {filteredFacultyList.length} {filteredFacultyList.length === 1 ? 'Faculty' : 'Faculties'}
-                  </span>
-                </div>
-
-                <button 
-                  className={`filter-icon-btn ${showAdvancedFilters ? 'active' : ''}`}
-                  onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                  title={showAdvancedFilters ? "Hide Filters" : "Advanced Filters"}
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                  </svg>
-                  {activeFilterCount > 0 && (
-                    <span className="filter-badge-count">{activeFilterCount}</span>
-                  )}
-                </button>
+          {/* Always show filters if we have list items or filters active, works for both Active and Archive */}
+          <div className="cards filters-card faculty-filters-card-container">
+            <div className="filters-header">
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <h2 style={{ fontSize: '0.95rem', margin: 0 }}>Filters</h2>
+                <span className="faculty-count-badge">
+                  {filteredFacultyList.length} {filteredFacultyList.length === 1 ? 'Faculty' : 'Faculties'}
+                </span>
               </div>
 
-              <div className="filters-container" style={{ marginBottom: showAdvancedFilters ? '12px' : '0' }}>
-                <div className="filter-group" style={{ flex: 1 }}>
-                  <input
-                    className="filter-select"
-                    type="text"
-                    name="searchQuery"
-                    placeholder="Search by name, specialization, rank, or department..."
-                    value={facultyFilters.searchQuery}
-                    onChange={handleFacultyFilterChange}
-                    style={{ padding: '8px 12px', fontSize: '0.85rem' }}
-                  />
-                </div>
-              </div>
-
-              {showAdvancedFilters && (
-                <div className="advanced-filter-panel" style={{ marginTop: '12px', padding: '12px' }}>
-                  <div className="advanced-filter-header" style={{ marginBottom: '10px', paddingBottom: '8px' }}>
-                    <h3 style={{ fontSize: '0.85rem' }}>Advanced Filters</h3>
-                    <div className="advanced-actions">
-                      <button className="clear-btn" onClick={handleClearAll} style={{ padding: '4px 10px', fontSize: '0.7rem' }}>Clear All</button>
-                    </div>
-                  </div>
-
-                  {/* SORTING SECTION */}
-                  <div className="advanced-section-sorting" style={{ marginBottom: '15px', padding: '10px', borderBottom: '1px solid #eee' }}>
-                    <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
-                      <h4 style={{ fontSize: '0.75rem', fontWeight: 'bold' }}>Arrange By</h4>
-                    </div>
-                    <div className="sorting-options" style={{ display: 'flex', gap: '15px', flexDirection: 'row' }}>
-  
-                      <label className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.75rem', cursor: 'pointer' }}>
-                        <input 
-                          type="checkbox" 
-                          checked={sortOption === 'rank'} 
-                          onChange={() => handleSortChange('rank')}
-                          style={{ width: '12px', height: '12px', marginRight: '5px' }}
-                        />
-                        <span>Rank</span>
-                      </label>
-
-                      <label className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.75rem', cursor: 'pointer' }}>
-                        <input 
-                          type="checkbox" 
-                          checked={sortOption === 'department'} 
-                          onChange={() => handleSortChange('department')}
-                          style={{ width: '12px', height: '12px', marginRight: '5px' }}
-                        />
-                        <span>Department</span>
-                      </label>
-
-                      <label className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.75rem', cursor: 'pointer' }}>
-                        <input 
-                          type="checkbox" 
-                          checked={sortOption === 'status'} 
-                          onChange={() => handleSortChange('status')}
-                          style={{ width: '12px', height: '12px', marginRight: '5px' }}
-                        />
-                        <span>Status</span>
-                      </label>
-
-                    </div>
-                  </div>
-
-                  <div className="advanced-sections" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
-                    <div className="advanced-section" style={{ padding: '10px' }}>
-                      <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
-                        <h4 style={{ fontSize: '0.7rem' }}>Department</h4>
-                        <button className="select-all-btn" onClick={() => handleSelectAll('department', departments)} style={{ fontSize: '0.65rem' }}>
-                          {facultyFilters.departmentSelected.length === departments.length ? 'Deselect' : 'Select All'}
-                        </button>
-                      </div>
-                      <div className="checkbox-grid" style={{ maxHeight: '120px', gap: '6px' }}>
-                        {departments.map(dept => (
-                          <label key={dept} className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.7rem' }}>
-                            <input 
-                              type="checkbox" 
-                              checked={facultyFilters.departmentSelected.includes(dept)} 
-                              onChange={() => handleCheckboxChange('department', dept)}
-                              style={{ width: '12px', height: '12px' }}
-                            />
-                            <span>{dept}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="advanced-section" style={{ padding: '10px' }}>
-                      <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
-                        <h4 style={{ fontSize: '0.7rem' }}>Rank</h4>
-                        <button className="select-all-btn" onClick={() => handleSelectAll('rank', ranks)} style={{ fontSize: '0.65rem' }}>
-                          {facultyFilters.rankSelected.length === ranks.length ? 'Deselect' : 'Select All'}
-                        </button>
-                      </div>
-                      <div className="checkbox-grid" style={{ maxHeight: '120px', gap: '6px' }}>
-                        {ranks.map(rank => (
-                          <label key={rank} className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.7rem' }}>
-                            <input 
-                              type="checkbox" 
-                              checked={facultyFilters.rankSelected.includes(rank)} 
-                              onChange={() => handleCheckboxChange('rank', rank)}
-                              style={{ width: '12px', height: '12px' }}
-                            />
-                            <span>{rank}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="advanced-section" style={{ padding: '10px' }}>
-                      <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
-                        <h4 style={{ fontSize: '0.7rem' }}>Status</h4>
-                        <button className="select-all-btn" onClick={() => handleSelectAll('status', statuses)} style={{ fontSize: '0.65rem' }}>
-                          {facultyFilters.statusSelected.length === statuses.length ? 'Deselect' : 'Select All'}
-                        </button>
-                      </div>
-                      <div className="checkbox-grid compact" style={{ maxHeight: '120px', gap: '6px' }}>
-                        {statuses.map(status => (
-                          <label key={status} className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.7rem' }}>
-                            <input 
-                              type="checkbox" 
-                              checked={facultyFilters.statusSelected.includes(status)} 
-                              onChange={() => handleCheckboxChange('status', status)}
-                              style={{ width: '12px', height: '12px' }}
-                            />
-                            <span>{status}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="advanced-section" style={{ padding: '10px' }}>
-                      <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
-                        <h4 style={{ fontSize: '0.7rem' }}>Gender</h4>
-                        <button className="select-all-btn" onClick={() => handleSelectAll('sex', sexOptions)} style={{ fontSize: '0.65rem' }}>
-                          {facultyFilters.sexSelected.length === sexOptions.length ? 'Deselect' : 'Select All'}
-                        </button>
-                      </div>
-                      <div className="checkbox-grid compact" style={{ maxHeight: '120px', gap: '6px' }}>
-                        {sexOptions.map(sex => (
-                          <label key={sex} className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.7rem' }}>
-                            <input 
-                              type="checkbox" 
-                              checked={facultyFilters.sexSelected.includes(sex)} 
-                              onChange={() => handleCheckboxChange('sex', sex)}
-                              style={{ width: '12px', height: '12px' }}
-                            />
-                            <span>{sex}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+              <button 
+                className={`filter-icon-btn ${showAdvancedFilters ? 'active' : ''}`}
+                onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                title={showAdvancedFilters ? "Hide Filters" : "Advanced Filters"}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                </svg>
+                {activeFilterCount > 0 && (
+                  <span className="filter-badge-count">{activeFilterCount}</span>
+                )}
+              </button>
             </div>
-          )}
+
+            <div className="filters-container" style={{ marginBottom: showAdvancedFilters ? '12px' : '0' }}>
+              <div className="filter-group" style={{ flex: 1 }}>
+                <input
+                  className="filter-select"
+                  type="text"
+                  name="searchQuery"
+                  placeholder="Search by name, specialization, rank, or department..."
+                  value={facultyFilters.searchQuery}
+                  onChange={handleFacultyFilterChange}
+                  style={{ padding: '8px 12px', fontSize: '0.85rem' }}
+                />
+              </div>
+            </div>
+
+            {showAdvancedFilters && (
+              <div className="advanced-filter-panel" style={{ marginTop: '12px', padding: '12px' }}>
+                <div className="advanced-filter-header" style={{ marginBottom: '10px', paddingBottom: '8px' }}>
+                  <h3 style={{ fontSize: '0.85rem' }}>Advanced Filters</h3>
+                  <div className="advanced-actions">
+                    <button className="clear-btn" onClick={handleClearAll} style={{ padding: '4px 10px', fontSize: '0.7rem' }}>Clear All</button>
+                  </div>
+                </div>
+
+                {/* SORTING SECTION */}
+                <div className="advanced-section-sorting" style={{ marginBottom: '15px', padding: '10px', borderBottom: '1px solid #eee' }}>
+                  <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
+                    <h4 style={{ fontSize: '0.75rem', fontWeight: 'bold' }}>Arrange By</h4>
+                  </div>
+                  <div className="sorting-options" style={{ display: 'flex', gap: '15px', flexDirection: 'row' }}>
+                    <label className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.75rem', cursor: 'pointer' }}>
+                      <input 
+                        type="checkbox" 
+                        checked={sortOption === 'rank'} 
+                        onChange={() => handleSortChange('rank')}
+                        style={{ width: '12px', height: '12px', marginRight: '5px' }}
+                      />
+                      <span>Rank</span>
+                    </label>
+
+                    <label className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.75rem', cursor: 'pointer' }}>
+                      <input 
+                        type="checkbox" 
+                        checked={sortOption === 'department'} 
+                        onChange={() => handleSortChange('department')}
+                        style={{ width: '12px', height: '12px', marginRight: '5px' }}
+                      />
+                      <span>Department</span>
+                    </label>
+
+                    <label className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.75rem', cursor: 'pointer' }}>
+                      <input 
+                        type="checkbox" 
+                        checked={sortOption === 'status'} 
+                        onChange={() => handleSortChange('status')}
+                        style={{ width: '12px', height: '12px', marginRight: '5px' }}
+                      />
+                      <span>Status</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="advanced-sections" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+                  <div className="advanced-section" style={{ padding: '10px' }}>
+                    <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
+                      <h4 style={{ fontSize: '0.7rem' }}>Department</h4>
+                      <button className="select-all-btn" onClick={() => handleSelectAll('department', departments)} style={{ fontSize: '0.65rem' }}>
+                        {facultyFilters.departmentSelected.length === departments.length ? 'Deselect' : 'Select All'}
+                      </button>
+                    </div>
+                    <div className="checkbox-grid" style={{ maxHeight: '120px', gap: '6px' }}>
+                      {departments.map(dept => (
+                        <label key={dept} className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.7rem' }}>
+                          <input 
+                            type="checkbox" 
+                            checked={facultyFilters.departmentSelected.includes(dept)} 
+                            onChange={() => handleCheckboxChange('department', dept)}
+                            style={{ width: '12px', height: '12px' }}
+                          />
+                          <span>{dept}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="advanced-section" style={{ padding: '10px' }}>
+                    <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
+                      <h4 style={{ fontSize: '0.7rem' }}>Rank</h4>
+                      <button className="select-all-btn" onClick={() => handleSelectAll('rank', ranks)} style={{ fontSize: '0.65rem' }}>
+                        {facultyFilters.rankSelected.length === ranks.length ? 'Deselect' : 'Select All'}
+                      </button>
+                    </div>
+                    <div className="checkbox-grid" style={{ maxHeight: '120px', gap: '6px' }}>
+                      {ranks.map(rank => (
+                        <label key={rank} className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.7rem' }}>
+                          <input 
+                            type="checkbox" 
+                            checked={facultyFilters.rankSelected.includes(rank)} 
+                            onChange={() => handleCheckboxChange('rank', rank)}
+                            style={{ width: '12px', height: '12px' }}
+                          />
+                          <span>{rank}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="advanced-section" style={{ padding: '10px' }}>
+                    <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
+                      <h4 style={{ fontSize: '0.7rem' }}>Status</h4>
+                      <button className="select-all-btn" onClick={() => handleSelectAll('status', statuses)} style={{ fontSize: '0.65rem' }}>
+                        {facultyFilters.statusSelected.length === statuses.length ? 'Deselect' : 'Select All'}
+                      </button>
+                    </div>
+                    <div className="checkbox-grid compact" style={{ maxHeight: '120px', gap: '6px' }}>
+                      {statuses.map(status => (
+                        <label key={status} className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.7rem' }}>
+                          <input 
+                            type="checkbox" 
+                            checked={facultyFilters.statusSelected.includes(status)} 
+                            onChange={() => handleCheckboxChange('status', status)}
+                            style={{ width: '12px', height: '12px' }}
+                          />
+                          <span>{status}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="advanced-section" style={{ padding: '10px' }}>
+                    <div className="section-header" style={{ marginBottom: '8px', paddingBottom: '6px' }}>
+                      <h4 style={{ fontSize: '0.7rem' }}>Gender</h4>
+                      <button className="select-all-btn" onClick={() => handleSelectAll('sex', sexOptions)} style={{ fontSize: '0.65rem' }}>
+                        {facultyFilters.sexSelected.length === sexOptions.length ? 'Deselect' : 'Select All'}
+                      </button>
+                    </div>
+                    <div className="checkbox-grid compact" style={{ maxHeight: '120px', gap: '6px' }}>
+                      {sexOptions.map(sex => (
+                        <label key={sex} className="checkbox-item" style={{ padding: '4px 6px', fontSize: '0.7rem' }}>
+                          <input 
+                            type="checkbox" 
+                            checked={facultyFilters.sexSelected.includes(sex)} 
+                            onChange={() => handleCheckboxChange('sex', sex)}
+                            style={{ width: '12px', height: '12px' }}
+                          />
+                          <span>{sex}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
 
           {filteredFacultyList.length === 0 ? (
             <div className="no-faculty-container">
@@ -699,8 +745,8 @@ const FacultyOverviewContainer = () => {
               ) : (
                 <>
                   <img src={noFacultyLogo} alt="No Faculty Found" className="no-faculty-logo" />
-                  <p>{error ? "Error fetching faculty." : facultyList.length === 0 ? "No faculty found." : "No faculty match the current filters."}</p>
-                  {facultyList.length > 0 && (
+                  <p>{error ? "Error fetching faculty." : (viewMode === 'active' && facultyList.length === 0) ? "No faculty found." : "No faculty match the current filters."}</p>
+                  {((viewMode === 'active' && facultyList.length > 0) || (viewMode === 'archived' && archivedFacultyList.length > 0)) && (
                     <button 
                       onClick={handleClearAll}
                       style={{
@@ -724,9 +770,10 @@ const FacultyOverviewContainer = () => {
               {filteredFacultyList.map(fac => (
                 <div
                   key={fac.id}
-                  className="faculty-grid-card improved-grid-card"
-                  onClick={() => handleSelectFaculty(fac)}
+                  className={`faculty-grid-card improved-grid-card ${viewMode === 'archived' ? 'archived-card' : ''}`}
+                  onClick={() => viewMode === 'active' && handleSelectFaculty(fac)}
                   title={fac.name}
+                  style={{ cursor: viewMode === 'active' ? 'pointer' : 'default' }}
                 >
                   <div className="card-header">
                     <div className="card-title-container">
@@ -734,10 +781,37 @@ const FacultyOverviewContainer = () => {
                       <p className="card-subtitle">
                         {fac.AcademicRank || 'Academic Rank N/A'}
                       </p>
+                      {viewMode === 'archived' && (
+                         <span style={{ fontSize: '0.7rem', color: '#ffcdd2', fontWeight: 'bold', marginTop: '4px', display: 'block' }}>ARCHIVED</span>
+                      )}
                     </div>
                   </div>
-                  <div className="card-footer">
-                    <span className="card-action-text">Click to view details</span>
+                  
+                  <div className="card-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    {viewMode === 'active' ? (
+                       <span className="card-action-text">Click to view details</span>
+                    ) : (
+                       <button 
+                          onClick={(e) => handleRestoreFaculty(e, fac)}
+                          style={{
+                            padding: '6px 12px',
+                            backgroundColor: '#2E7D32',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            fontSize: '0.8rem',
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: '5px'
+                          }}
+                       >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                          Restore Faculty
+                       </button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -746,9 +820,12 @@ const FacultyOverviewContainer = () => {
         </>
       )}
 
-      <button className="floating-add-btn" onClick={openAddModal} title="Add Faculty">
-        +
-      </button>
+      {/* Only show Add button in Active view */}
+      {viewMode === 'active' && (
+        <button className="floating-add-btn" onClick={openAddModal} title="Add Faculty">
+          +
+        </button>
+      )}
 
       {isAddModalOpen && (
         <FacultyAddModal onClose={closeAddModal} onSave={handleSaveFaculty} />

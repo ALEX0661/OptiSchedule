@@ -87,17 +87,20 @@ body {
   to { transform: rotate(360deg); }
 }
 
+/* --- UPDATED HEADER STYLES --- */
 .overview-header {
   background-color: var(--white);
-  padding: 10px 40px;
+  padding: 12px 40px;
   box-shadow: 0 2px 4px var(--shadow-light);
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   animation: slideInFromTop var(--animation-medium) ease-out;
 }
 
 .overview-header h1 {
   margin: 0;
-  font-size: 2em;
+  font-size: 1.5em; /* Slightly smaller for cleaner header look */
   color: var(--primary);
   animation: fadeIn var(--animation-medium) ease-out;
 }
@@ -329,7 +332,6 @@ body {
   animation: slideInFromRight var(--animation-medium) ease-out;
 }
 
-/* --- NEW ACTION BUTTON STYLES (SIMPLIFIED) --- */
 .action-btn {
   display: inline-flex;
   align-items: center;
@@ -339,7 +341,7 @@ body {
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease; /* Only animate color */
+  transition: background-color 0.2s ease, color 0.2s ease;
   position: relative;
   overflow: hidden;
 }
@@ -350,7 +352,6 @@ body {
   transition: all 0.2s ease;
 }
 
-/* Edit Button Specifics (GREEN) */
 .edit-faculty-btn {
   background-color: var(--primary-light);
   color: var(--primary);
@@ -359,10 +360,8 @@ body {
 .edit-faculty-btn:hover {
   background-color: var(--primary);
   color: var(--white);
-  /* Removed transform and box-shadow for simple effect */
 }
 
-/* Delete Button Specifics (RED) */
 .delete-btn {
   background-color: var(--danger-light);
   color: var(--danger);
@@ -371,15 +370,11 @@ body {
 .delete-btn:hover {
   background-color: var(--danger);
   color: white;
-  /* Removed transform and box-shadow for simple effect */
 }
 
 .action-btn:active {
-  /* No transform needed if we removed the hover lift */
   opacity: 0.9;
 }
-
-/* --- END ACTION BUTTON STYLES --- */
 
 .faculty-info p {
   margin: 8px 0;
@@ -428,22 +423,6 @@ body {
   margin: 5px 5px;
   box-shadow: 0 3px 10px var(--shadow-light);
   transition: box-shadow var(--transition-speed);
-}
-
-@media (max-width: 768px) {
-  .faculty-filters-card-container, 
-  .faculty-grid {
-    margin: 10px 15px !important;
-    padding: 20px !important;
-  }
-  
-  .overview-header {
-    padding: 10px 20px;
-  }
-  
-  .faculty-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 .filters-grid {
@@ -939,12 +918,10 @@ body {
   gap: 4px;
 }
 
-/* Add to FacultyOverview.css */
-
 .faculty-count-badge {
   display: inline-flex;
   align-items: center;
-  background-color: var(--primary-light); /* Uses your light green */
+  background-color: var(--primary-light);
   color: var(--primary-dark);
   font-size: 0.75rem;
   font-weight: 600;
@@ -953,4 +930,72 @@ body {
   margin-left: 10px;
   border: 1px solid rgba(46, 125, 50, 0.2);
   transition: all 0.3s ease;
+}
+
+/* --- REVISED COMPACT HEADER CONTROLS --- */
+.segmented-control {
+  background-color: #f0f0f0;
+  border-radius: 20px; /* Reduced for smaller look */
+  padding: 3px; /* Tighter padding */
+  display: inline-flex;
+  position: relative;
+  border: 1px solid #e0e0e0;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.tab-segment {
+  padding: 4px 12px; /* Much smaller padding */
+  font-size: 0.8rem; /* Smaller font */
+  font-weight: 500;
+  color: #757575;
+  background: transparent;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 1;
+  position: relative;
+  font-family: var(--font-family);
+  white-space: nowrap;
+}
+
+.tab-segment.active {
+  background-color: var(--white);
+  color: var(--primary);
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.tab-segment:hover:not(.active) {
+  color: var(--primary-dark);
+}
+
+/* Specific styling for the card when it is in archived mode */
+.archived-card {
+  border: 1px dashed var(--medium-gray);
+  background-color: #fafafa;
+}
+
+.archived-card .card-header {
+  background-color: #757575;
+}
+
+.archived-card:hover {
+  border-color: #757575;
+}
+
+.archived-card:hover .card-header {
+  background-color: #616161;
+}
+
+.archived-card .card-footer::after {
+  display: none; 
+}
+
+/* Mobile check: if screen is very small, stack header */
+@media (max-width: 500px) {
+  .overview-header {
+    flex-direction: column;
+    gap: 10px;
+  }
 }

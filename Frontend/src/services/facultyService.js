@@ -110,3 +110,23 @@ export const uploadFacultyRanking = async (formData) => {
     throw error;
   }
 };
+
+export const getArchivedFacultyList = async () => {
+  try {
+    const response = await api.get('/faculty/archived', { headers: { ...getAuthHeader() } });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching archived faculty:', error);
+    throw error;
+  }
+};
+
+export const restoreFaculty = async (facultyId) => {
+  try {
+    const response = await api.post(`/faculty/restore/${facultyId}`, {}, { headers: { ...getAuthHeader() } });
+    return response.data;
+  } catch (error) {
+    console.error('Error restoring faculty:', error);
+    throw error;
+  }
+};
